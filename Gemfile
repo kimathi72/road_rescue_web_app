@@ -38,3 +38,5 @@ gem "active_model_serializers", "~> 0.10.13"
 gem "jwt", "~> 2.7"
 gem 'sendgrid-ruby'
 gem 'redis', '~> 4.0'
+gem 'net-http'
+gem 'uri', '0.10.0' 
