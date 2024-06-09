@@ -12,10 +12,12 @@ function App() {
     <Router>
     <NavBar/>
     <Routes>
-     <Route path='/drivers/signin' element={<Signin role ={role}/>}/> 
-    <Route path="/drivers/:id" element={<ViewDriver user = {user} />}/>  
-    <Route path="/drivers/create" element={<Signup role = {role} />}/> 
-    <Route path="/drivers/:id/update" element={<UpdateDriver user = {user} />}/>  
+
+    <Route path='/' element={<Home setRole ={setRole} setUser= {setUser}/>}/> 
+    <Route path='/driver/signin' element={<Signin role ={role}/>}/> 
+    <Route path="/driver/:id" element={<ViewDriver user = {user} />}/>  
+    <Route path="/driver/create" element={<Signup role = {role} />}/> 
+    <Route path="/driver/:id/update" element={<UpdateDriver user = {user} />}/>  
 
     </Routes>
   </Router>
