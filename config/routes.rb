@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   resources :drivers
+
+  post '/driver_login', to: 'drivers#login'
+  post 'driver_logout', to: 'drivers#logout'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

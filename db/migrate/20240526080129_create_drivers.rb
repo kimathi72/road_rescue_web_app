@@ -3,9 +3,10 @@ class CreateDrivers < ActiveRecord::Migration[7.0]
     create_table :drivers do |t|
       t.string :email
       t.string :password_digest
-      t.integer :phone
+      t.bigint :phone
       t.integer :vehicle_id
       t.integer :location_id
+      
 
       t.timestamps
     end
