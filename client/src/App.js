@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState} from 'react'
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Home from "./components/Home.js"
+import Signin from "./components/Signin.js"
+import Signup from "./components/Signup.js"
+import NavBar from "./components/NavBar.js"
 function App() {
+  const [role, setRole] = useState("")
+  const [user, setUser] = useState({})
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+    <NavBar/>
+    <Routes>
+     <Route path='/drivers/signin' element={<Signin role ={role}/>}/> 
+    <Route path="/drivers/:id" element={<ViewDriver user = {user} />}/>  
+    <Route path="/drivers/create" element={<Signup role = {role} />}/> 
+    <Route path="/drivers/:id/update" element={<UpdateDriver user = {user} />}/>  
+
+    </Routes>
+  </Router>
   );
 }
 
