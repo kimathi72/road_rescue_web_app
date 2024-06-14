@@ -49,7 +49,7 @@ features_list =  [
             {
                 title: "Profile Management",
                 icon: "fa fa-user",
-                url: "/viewDriver",
+                url: "/profile",
                 description: "Personal information (name, contact details, vehicle details).",
                 role: "driver"
             },
