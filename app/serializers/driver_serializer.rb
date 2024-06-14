@@ -1,3 +1,3 @@
 class DriverSerializer < ActiveModel::Serializer
-  attributes :id, :username, :password
+  attributes :id, :user_id, :photo_url
 end

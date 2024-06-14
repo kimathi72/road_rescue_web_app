@@ -12,7 +12,7 @@ class DriversControllerTest < ActionDispatch::IntegrationTest
 
   test "should create driver" do
     assert_difference("Driver.count") do
-      post drivers_url, params: { driver: { password: @driver.password, username: @driver.username } }, as: :json
+      post drivers_url, params: { driver: { photo_url: @driver.photo_url, user_id: @driver.user_id, username: @driver.username } }, as: :json
     end
 
     assert_response :created
@@ -24,7 +24,7 @@ class DriversControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update driver" do
-    patch driver_url(@driver), params: { driver: { password: @driver.password, username: @driver.username } }, as: :json
+    patch driver_url(@driver), params: { driver: { photo_url: @driver.photo_url, user_id: @driver.user_id, username: @driver.username } }, as: :json
     assert_response :success
   end
 
