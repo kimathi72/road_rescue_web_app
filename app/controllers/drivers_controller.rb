@@ -5,12 +5,12 @@ class DriversController < ApplicationController
   def index
     @drivers = Driver.all
 
-    render json: @drivers
+    render json: @drivers, status: :found
   end
 
   # GET /drivers/1
   def show
-    render json: @driver
+    render json: @driver, status: :found
   end
 
   # POST /drivers
