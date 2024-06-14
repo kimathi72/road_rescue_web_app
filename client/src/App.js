@@ -25,6 +25,7 @@ import PaymentIntegration from "./components/PaymentIntegration.js"
 import AvailabilityStatus from "./components/AvailabilityStatus.js"
 import IncidentReporting from "./components/IncidentReporting.js"
 import JobsList from "./components/JobsList.js"
+import './assets/styles/mystyles.css'
 
 function App() {
   const [user, setUser] = useState({})

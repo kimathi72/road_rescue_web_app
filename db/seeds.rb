@@ -7,6 +7,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 require 'faker'
 
+puts 'start seeding'
 
 features_list =  [
             {
@@ -68,7 +69,7 @@ features_list =  [
             },
             {
                 title: "Communication",
-                icon: "fa fa-envelope-o",
+                icon: "fa fa-envelope",
                 url: "/communication",
                 description: "In-app chat or call with responders.",
                 role: "driver"
@@ -82,7 +83,7 @@ features_list =  [
             },
             {
                 title: "Payment Integration",
-                icon: "fa fa-money",
+                icon: "fa fa-credit-card-alt",
                 url: "/paymentIntegration",
                 description: "Multiple payment options (M-Pesa, credit/debit card, mobile banking)",
                 role: "driver"
@@ -149,15 +150,17 @@ features_list =  [
     
 
 
-
 features_list.map do |feature|
+    puts feature[:title]
         Feature.create(
-            title: feature["title"], 
-            icon: feature["icon"], 
-            url: feature["url"], 
-            description: feature["description"], 
-            role: feature["role"]
+            title: feature[:title], 
+            icon: feature[:icon], 
+            url: feature[:url], 
+            description: feature[:description], 
+            role: feature[:role]
         )
 
 
 end
+
+puts 'end seeding'
