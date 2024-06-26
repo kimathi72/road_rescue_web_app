@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         resources :services
         resources :admins 
         resources :vehicles
-        
+        patch '/locations', to: 'locations#update'
       post  '/users', to: 'users#create'
         post '/auth', to: 'auth#create'
         get '/users/:id', to: 'users#show'

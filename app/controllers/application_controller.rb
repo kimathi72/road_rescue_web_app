@@ -52,7 +52,7 @@ class ApplicationController < ActionController::API
       sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
       response  = sg.client.mail._('send').post(request_body: mail.to_json)    
     end
-    def get_location(latitude:,longitude:)
+    def get_location(latitude:, longitude:)
       url = URI("https://geocodeapi.p.rapidapi.com/GetNearestCities?latitude=#{latitude}&longitude=#{longitude}&range=0")
 
       http = Net::HTTP.new(url.host, url.port)
@@ -64,7 +64,8 @@ class ApplicationController < ActionController::API
 
       response = http.request(request)
       result = JSON.parse(response.read_body)
-      location = {city: result[0]["City"], country: result[0]["Country"]}
-      location
+      city_country = {city: result[0]["City"], country: result[0]["Country"]}
+      city_country 
     end
+    
 end

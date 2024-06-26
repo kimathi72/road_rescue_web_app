@@ -170,20 +170,9 @@ puts 'start seeding'
 latitude = 	-1.14665
 longitude = 	36.96087
 
-url = URI("https://geocodeapi.p.rapidapi.com/GetNearestCities?latitude=#{latitude}&longitude=#{longitude}&range=0")
-
-http = Net::HTTP.new(url.host, url.port)
-http.use_ssl = true
-
-request = Net::HTTP::Get.new(url)
-request["x-rapidapi-key"] = '7f689d933cmshd1f74d015bfa401p106de2jsne64c2d046480'
-request["x-rapidapi-host"] = 'geocodeapi.p.rapidapi.com'
-
-response = http.request(request)
-result = JSON.parse(response.read_body)
-
-location = {city: result[0]["City"], country: result[0]["Country"]}
-puts location
+city_country = get_location(latitude: latitude, longitude: longitude)
+        
+puts city_country
 
 
 puts 'end seeding'
