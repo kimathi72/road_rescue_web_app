@@ -26,6 +26,7 @@ Rails.application.routes.draw do
         resources :messages
         resources :services
         resources :admins 
+        resources :vehicles
         
       post  '/users', to: 'users#create'
         post '/auth', to: 'auth#create'

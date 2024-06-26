@@ -2,8 +2,8 @@ class ApplicationController < ActionController::API
     include ActionController::Cookies
     require 'sendgrid-ruby'
     include SendGrid
-    # require 'net/http'
-    # require 'uri'
+    require 'net/http'
+    require 'uri'
    
     before_action :authorized
 
@@ -50,21 +50,21 @@ class ApplicationController < ActionController::API
       content = Content.new(type: 'text/plain', value: token)
       mail = Mail.new(from, subject, to, content)
       sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
-      reponse  = sg.client.mail._('send').post(request_body: mail.to_json)    
+      response  = sg.client.mail._('send').post(request_body: mail.to_json)    
     end
-    # def get_location(latitude:,longitude:)
-    #   api_key=ENV["GOOGLE_MAPS_API_KEY"]
-    #   url = URI("https://maps.googleapis.com/maps/api/geocode/json?latlng=#{latitude},#{longitude}&key=#{api_key}")
-    #   response = Net::HTTP.get(url)
-    #   json = JSON.parse(response)
-    #     if json["status"] === "OK"
-    #         result = json["results"][0]
-    #         puts (result["formatted_address"])
-    #         street = result["formatted_address"].split(",").first.split(" ")[1]
-    #         city = result["formatted_address"].split(",")[1]
-    #         Location.create(user_id: user.id, street: street, city: city, latitude: latitude, longitude: longitude)
-    #     else 
-    #         puts "Reverse geocoding failed: #{json["status"]}" 
-    #     end
-    # end
+    def get_location(latitude:,longitude:)
+      url = URI("https://geocodeapi.p.rapidapi.com/GetNearestCities?latitude=#{latitude}&longitude=#{longitude}&range=0")
+
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Get.new(url)
+      request["x-rapidapi-key"] = '7f689d933cmshd1f74d015bfa401p106de2jsne64c2d046480'
+      request["x-rapidapi-host"] = 'geocodeapi.p.rapidapi.com'
+
+      response = http.request(request)
+      result = JSON.parse(response.read_body)
+      location = {city: result[0]["City"], country: result[0]["Country"]}
+      location
+    end
 end

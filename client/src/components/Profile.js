@@ -26,10 +26,10 @@ export default function Profile({user}) {
         <h3>Personal Information</h3>
       </Card.Header>
       <Card.Body>
-        <h4>{profile.username}</h4>
-        <p>{profile.email}</p>
-        <p>{profile.phone}</p>
-        <p>{profile.role}</p>
+        <h4>Username: {profile.username}</h4>
+        <p>Email: {profile.email}</p>
+        <p>Phone: {profile.phone}</p>
+        <p>Role: {profile.role}</p>
       </Card.Body>
 
     </Card>
