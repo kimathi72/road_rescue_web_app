@@ -3,5 +3,5 @@ class Responder < ApplicationRecord
     has_many :responses 
     has_one :location, through: :user 
     has_one :vehicle, through: :user  
-    has_many :reviews
+    has_many :reviews, through: :responses 
 end

@@ -4,6 +4,7 @@ class CreateRequests < ActiveRecord::Migration[7.0]
       t.integer :driver_id
       t.string :request_type
       t.string :request_description
+      t.string :status 
 
       t.timestamps
     end

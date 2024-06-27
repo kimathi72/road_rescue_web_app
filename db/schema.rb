@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_14_144413) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_27_102252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,41 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_144413) do
     t.string "city"
     t.string "country"
     t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.integer "driver_id"
+    t.string "request_type"
+    t.string "request_description"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "responders", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.string "bio"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "responses", force: :cascade do |t|
+    t.integer "responder_id"
+    t.integer "request_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "driver_id"
+    t.string "remark"
+    t.integer "rating"
+    t.integer "response_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
