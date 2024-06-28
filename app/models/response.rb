@@ -1,6 +1,6 @@
 class Response < ApplicationRecord
     belongs_to :responder 
-    has_one :request 
+    belongs_to :request 
     has_one :review 
 
 end

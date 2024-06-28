@@ -1,5 +1,4 @@
 class RespondersController < ApplicationController
-    before_action :authorized 
     before_action :set_responder, only: [:show, :update, :destroy]
     def index 
         responders = Responder.all

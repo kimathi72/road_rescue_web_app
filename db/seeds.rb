@@ -268,7 +268,7 @@ end
 puts 'end seeding rescue_services list'
 
 puts 'start seeding responders and location'
-20.times do 
+10.times do 
     name = Faker::Company.name 
     bio = Faker::Lorem.paragraph 
     status = "online"

@@ -1,4 +1,4 @@
 class ServiceSerializer < ActiveModel::Serializer
   attributes :id, :title, :description 
-  belongs_to :responder 
+  has_many :responders 
 end
