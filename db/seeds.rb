@@ -153,16 +153,13 @@ features_list =  [
 
 
 features_list.map do |feature|
-    puts feature[:title]
-        Feature.create(
-            title: feature[:title], 
-            icon: feature[:icon], 
-            url: feature[:url], 
-            description: feature[:description], 
-            role: feature[:role]
-        )
-
-
+    Feature.create(
+        title: feature[:title], 
+        icon: feature[:icon], 
+        url: feature[:url], 
+        description: feature[:description], 
+        role: feature[:role]
+    )
 end
 
 puts 'end seeding features'
@@ -188,7 +185,7 @@ end
 5.times do 
     username = Faker::Internet.username 
     email = Faker::Internet.email(name: "#{username}", domain: "gmail.com")
-    password = 'kim123'
+    password = 'driver'
     phone_number = Faker::PhoneNumber.cell_phone
     avatar = Faker::Avatar.image(slug: "#{username}", size: "50x50", format: "jpg") 
     puts ([username, email, password, phone_number, avatar])
@@ -197,9 +194,99 @@ end
     latitude = rand(min_latitude...max_latitude)
     longitude = rand(min_longitude...max_longitude)
     location = my_location(lat: latitude, long: longitude)
-    puts location 
     Location.create(user_id: @user.id, latitude: latitude, longitude: longitude, city: location[:city], country: location[:country])
 end
 
+puts 'end seeding drivers and location'
 
-puts 'end seeding users and location'
+puts 'start seeding rescue_services list'
+services = [
+    {
+        title: "Towing",
+        description: " They can tow your vehicle to a repair shop or a safe location if it's immobilized due to a breakdown, accident, or other issues."
+    },
+    {
+        title: "Jump Starts",
+        description: "They can jump-start your vehicle's dead battery to get it running again."
+    },
+    {
+        title: "Flat Tire Changes" ,
+        description: "Road rescue personnel can replace a flat tire with a spare or provide assistance with changing the tire."
+    },
+    {
+        title: "Fuel Delivery" ,
+        description: "If you run out of gas, they can provide a limited amount of fuel to help you reach the nearest gas station."
+    },
+    {
+        title: "Lockout Assistance",
+        description: "If you're locked out of your vehicle, they can help you gain access by unlocking the doors."
+    },
+    {
+        title: "Winching and Recovery" ,
+        description: "If your vehicle is stuck in a ditch, mud, snow, or another difficult situation, they can use a winch to recover it."
+
+    },
+    {
+        title: "Battery Replacement",
+        description: "Some providers may offer battery replacement services, where they replace your dead battery with a new one."
+    },
+    {
+        title: "Minor Repairs" ,
+        description: "In some cases, road rescue personnel may be able to perform minor, on-the-spot repairs to get your vehicle back on the road."
+    },
+    {
+        title: "Vehicle Transport",
+        description: "They can transport vehicles to a different location, such as from one city to another, if necessary."
+    },
+    {
+        title: "Motorcycle Towing",
+        description: "Some providers specialize in towing motorcycles and other two-wheeled vehicles."
+    },
+    {
+        title: "RV or Trailer Towing",
+        description: "Roadside assistance for larger vehicles, such as recreational vehicles or trailers, may also be available."
+    },
+    {
+        title: "Long-Distance Towing",
+        description: "For situations where your vehicle needs to be towed a significant distance, some providers offer long-distance towing services."
+    },
+    {
+        title: "Emergency Medical Assistance",
+        description: "In some cases, road rescue personnel may provide basic first aid or contact emergency services if there are injuries involved in an accident."
+    },
+    {
+        title: "On-Scene Vehicle Diagnosis",
+        description: "They may be able to identify and diagnose common vehicle issues to help you understand the problem."
+    },
+    
+]
+
+services.map do |service|
+    Service.create(title: service[:title], description: service[:description])
+end
+
+puts 'end seeding rescue_services list'
+
+puts 'start seeding responders and location'
+2000.times do 
+    name = Faker::Company.name 
+    bio = Faker::Lorem.paragraph 
+    status = "online"
+    email = Faker::Internet.email(name: "#{name}") 
+    password = "responder"
+    role = "responder"
+    phone = Faker::PhoneNumber.cell_phone
+
+    @user = User.create(email: email, password: password, password_confirmation: password, phone: "#{phone}", role: role)
+    @responder = Responder.create(user_id: @user.id, name: name, bio: bio, status: status)
+    6.times do 
+        service_id = rand(0..13)
+        Servicelist.create(responder_id: @responder.id, service_id: service_id, )
+    end
+    latitude = rand(min_latitude...max_latitude)
+    longitude = rand(min_longitude...max_longitude)
+    location = my_location(lat: latitude, long: longitude)
+    Location.create(user_id: @user.id, latitude: latitude, longitude: longitude, city: location[:city], country: location[:country])
+end
+
+puts 'end seeding responders and location'

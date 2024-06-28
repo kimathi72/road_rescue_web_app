@@ -1,6 +1,8 @@
 class Responder < ApplicationRecord
     belongs_to :user 
     has_many :responses 
+    has_many :servicelists
+    has_many :services , through: :servicelists
     has_one :location, through: :user 
     has_one :vehicle, through: :user  
     has_many :reviews, through: :responses 
