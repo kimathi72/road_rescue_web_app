@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_123809) do
 
   create_table "requests", force: :cascade do |t|
     t.integer "driver_id"
-    t.string "request_type"
+    t.integer "service_id"
     t.string "request_description"
     t.string "status"
     t.datetime "created_at", null: false
@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_123809) do
     t.integer "user_id"
     t.string "name"
     t.string "bio"
+    t.string "avatar"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

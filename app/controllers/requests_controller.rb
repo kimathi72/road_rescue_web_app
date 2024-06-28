@@ -39,6 +39,6 @@ class RequestsController < ApplicationController
         @request = Request.find(params[:id])
     end
     def request_params 
-        params.require(:request).permit(:driver_id, :request_type, :request_description, :status)
+        params.require(:request).permit(:driver_id, :service_id, :request_description, :status)
     end
 end

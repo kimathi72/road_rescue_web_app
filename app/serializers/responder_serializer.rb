@@ -1,5 +1,5 @@
 class ResponderSerializer < ActiveModel::Serializer
-  attributes :id, :name, :bio, :summary 
+  attributes :id, :name, :bio, :avatar, :summary 
   has_many :responses 
   has_many :reviews 
   has_many :services 

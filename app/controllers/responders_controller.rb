@@ -34,7 +34,7 @@ class RespondersController < ApplicationController
         @responder = Responder.find(params[:id])
     end
     def responder_params 
-        params.require(:responder).permit(:user_id, :name, :bio)
+        params.require(:responder).permit(:user_id, :avatar, :name, :bio)
     end
     
 end

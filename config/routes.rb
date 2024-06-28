@@ -19,8 +19,8 @@ Rails.application.routes.draw do
         #resources :responders  do 
         #  resources :reviews, only: [:show, :index]
         #end
-        resources :reviews, only: [:show, :index, :create]
-        resources :requests , only: [:show, :index, :create, :update]
+        resources :reviews
+        resources :requests 
         resources :moderators 
         resources :locations
         resources :messages

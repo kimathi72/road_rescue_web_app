@@ -268,7 +268,7 @@ end
 puts 'end seeding rescue_services list'
 
 puts 'start seeding responders and location'
-10.times do 
+30.times do 
     name = Faker::Company.name 
     bio = Faker::Lorem.paragraph 
     status = "online"
@@ -276,9 +276,9 @@ puts 'start seeding responders and location'
     password = "responder"
     role = "responder"
     phone = Faker::PhoneNumber.cell_phone
-
+    avatar = Faker::LoremFlickr.image
     @user = User.create(email: email, password: password, password_confirmation: password, phone: "#{phone}", role: role)
-    @responder = Responder.create(user_id: @user.id, name: name, bio: bio, status: status)
+    @responder = Responder.create(user_id: @user.id, name: name, bio: bio,avatar: avatar, status: status)
     6.times do 
         service_id = rand(0..13)
         Servicelist.create(responder_id: @responder.id, service_id: service_id, )
