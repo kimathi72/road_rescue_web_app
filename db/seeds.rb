@@ -175,14 +175,14 @@ def my_location (lat:, long:)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     request = Net::HTTP::Get.new(url)
-    request["x-rapidapi-key"] = '7f689d933cmshd1f74d015bfa401p106de2jsne64c2d046480'
+    request["x-rapidapi-key"] = '65b94cd137msh3e7b279435fc389p11f9d2jsn319c85beca2f'
     request["x-rapidapi-host"] = 'geocodeapi.p.rapidapi.com'
     response = http.request(request)
     result = JSON.parse(response.read_body)
     city_country = {latitude: lat, longitude: long, city: result[0]["City"], country: result[0]["Country"]}
 end
 
-5.times do 
+3.times do 
     username = Faker::Internet.username 
     email = Faker::Internet.email(name: "#{username}", domain: "gmail.com")
     password = 'driver'
@@ -268,7 +268,7 @@ end
 puts 'end seeding rescue_services list'
 
 puts 'start seeding responders and location'
-2000.times do 
+20.times do 
     name = Faker::Company.name 
     bio = Faker::Lorem.paragraph 
     status = "online"
