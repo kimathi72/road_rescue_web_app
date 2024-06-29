@@ -15,7 +15,7 @@ export default function Signin({ setUser}) {
     localStorage.setItem("jwt", data.jwt);
     console.log(data);
     setUser(data.user);  
-    navigate('/landingPage', {state: {role: role}})
+    navigate('/setLocation') 
 
     
   }

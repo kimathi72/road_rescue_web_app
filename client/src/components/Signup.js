@@ -18,7 +18,7 @@ export default function Signup({setUser}) {
   function handleAuthenticate(data) {    
     localStorage.setItem("jwt", data.jwt);
     setUser(data.user); 
-    navigate('/landingPage', {state: {role: role}})    
+    navigate('/setLocation')    
   }
 
   function handleSubmit(e) {
@@ -46,7 +46,6 @@ export default function Signup({setUser}) {
   
       <Form onSubmit={handleSubmit} style={{display:"flex",flexDirection:"column", justifyContent:"space-evenly", alignItems:"center", height:"500px", margin:"auto", border:"2px solid black", padding:"2rem", backgroundImage: "linear-gradient(to bottom right , #8DA399, rgba(193, 240, 220, 0.61))"}}>
       <h3>Sign Up as A {role} Here</h3>
-      <Form.Control type='text' placeholder='Username' onChange={(e)=>setUsername(e.target.value)}/>
       <Form.Control type='email' placeholder='Enter email address' onChange={(e) => setEmail(e.target.value)}/>
       <Form.Control type="text" placeholder="phone, eg +254700000000" onChange={(e) => setPhone(e.target.value)}/>
       <Form.Control type='password' placeholder = 'Enter Password' onChange={(e) => setPassword(e.target.value)}/>

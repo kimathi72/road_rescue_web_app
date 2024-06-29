@@ -8,7 +8,7 @@ import NavBar from "./components/NavBar.js"
 import Profile from "./components/Profile.js"
 import UpdateProfile from "./components/UpdateProfile.js"
 import DeleteProfile from "./components/DeleteProfile.js"
-
+import SetLocation from './components/SetLocation.js';
 import ManageUsers from "./components/ManageUsers.js"
 import ManageRequests from "./components/ManageRequests.js"
 import ManageServices from "./components/ManageServices.js"
@@ -43,6 +43,7 @@ function App() {
     <Route path="/manageServices" element= {<ManageServices user={user} />} />
     <Route path="/reports" element= {<Reports user={user} />} />
     <Route path="/tickets" element= {<Tickets user={user} />} />
+    <Route path='/setLocation' element={<SetLocation user={user}/>}/>
     <Route path="/makeRequest" element= {<MakeRequest user={user} />} />
     <Route path="/nearbyResponders" element= {<NearbyResponders user={user} />} />
     <Route path="/communication" element= {<Communication user={user} />} />
