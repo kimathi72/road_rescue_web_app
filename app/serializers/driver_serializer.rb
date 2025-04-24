@@ -1,3 +1,5 @@
-class DriverSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :username, :photo_url
+require_relative "./user_serializer.rb"
+
+class DriverSerializer < UserSerializer
+  has_many :requests
 end

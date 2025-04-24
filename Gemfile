@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.4"
+ruby "3.2.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.6"
@@ -32,12 +32,13 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'dotenv-rails'
+  gem "dotenv-rails"
 end
-gem 'faker'
+gem "faker"
 gem "active_model_serializers", "~> 0.10.13"
 gem "jwt", "~> 2.7"
-gem 'sendgrid-ruby'
-gem 'redis', '~> 4.0'
-gem 'net-http'
-gem 'uri', '0.10.0' 
+gem "sendgrid-ruby"
+gem "redis", "~> 4.0"
+gem "net-http"
+gem "uri", "0.10.0"
+gem "pundit"

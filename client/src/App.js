@@ -1,21 +1,45 @@
-import React , {useState} from 'react'
+import React , {useEffect, useState} from 'react'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./components/navigation/Home.js"
 import NavBar from "./components/navigation/NavBar.js"
 import Profile from "./components/auth/Profile.js"
 import Signin from "./components/auth/Signin.js"
-import Signup from "./components/auth/Signup.js"
+import Signup from "./components/auth/Signup.js" 
+import Signout from "./components/auth/Signout.js" 
+import DriverDashboard from './components/driver/DriverDashboard.js';
+import AdminDashboard from './components/admin/AdminDashboard.js';
+import AssessorDashboard from './components/assessor/AssessorDashboard.js';
+import InsuranceDashboard from './components/insurance/InsuranceDashboard.js';
+
 
 export default function App() {
 const [user, setUser] = useState({})
+const token = localStorage.getItem('jwt')
+useEffect(()=>{
+  if(token && !user){
+    fetch('/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(r=>r.json()).then(data=>setUser(data))
+  }
+},[token, user])
   return (
     <Router>
-      <NavBar />
+      <NavBar user={user} />
+      {console.log(token)}
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/driver' element={<DriverDashboard/>}/>
+        <Route path='/admin' element={<AdminDashboard/>} />
+        <Route path='/assessor' element={<AssessorDashboard/>} />
+        <Route path='/insurer' element={<InsuranceDashboard/>} />
+        <Route exact path='/' element={<Home user={user} />} />
         <Route path='/profile' element={<Profile user={user} />}/>
         <Route path='/signin' element={<Signin setUser={setUser}/>} />
         <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
+        <Route path='/signout' element={<Signout setUser={setUser} />}/>
       </Routes>
     </Router>
   )

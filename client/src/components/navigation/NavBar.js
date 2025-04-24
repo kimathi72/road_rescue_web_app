@@ -8,7 +8,7 @@ export default function NavBar({user}) {
 
 
   return (
-    <Navbar id="navBar"  className="d-flex justify-content-between">  
+    <Navbar id="navBar" className="d-flex justify-content-between bg-light">  
     <Container>
         <Navbar.Brand href="/">
         <div id="logo">
@@ -17,14 +17,7 @@ export default function NavBar({user}) {
         </Navbar.Brand>
         <Nav>        
           {
-            user ? <>
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <Nav.Link href="/logout">Logout</Nav.Link>
-            </> :
-            <>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/register">Register</Nav.Link>
-            </> 
+            !user ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <Nav.Link href="/signout">Sign out</Nav.Link>
           }
         </Nav> 
         </Container>        

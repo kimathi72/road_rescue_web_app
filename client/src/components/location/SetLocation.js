@@ -1,7 +1,9 @@
 import React , {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/esm/Col';
+import IncidentLocation from '../incident/IncidentLocation';
 
 export default function SetLocation({user}) {
     const [position, setPosition] = useState({ latitude: null, longitude: null });
@@ -27,8 +29,7 @@ export default function SetLocation({user}) {
 
     }
 
-    function allowLocation (e) {
-        e.preventDefault()
+    function getLocation () {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
               setPosition({
@@ -36,24 +37,29 @@ export default function SetLocation({user}) {
                 longitude: position.coords.longitude,
               });
             });
-            setCurrentLocation()
           } else {
             console.log("Geolocation is not available in your browser.");
           }
     }
-    function declineLocation (e) {
-        e.preventDefault() 
-        navigate('/landingPage', {state: {role: user.role}} )
+    function chooseLocation () {
+        let locationDiv = document.getElementById('chooseLocation')
+        locationDiv.innerHTML = <IncidentLocation location={position}/>
+        return locationDiv
     }
 
   return (
-    <Container>
-        <Button className='btn btn-default' onClick={allowLocation}>
-            Allow access to location service
+    <Row>
+        <Col sm={2} id='getCurrentLocation'>
+        <Button className='btn btn-default' onClick={getLocation}>
+            use your current location
+        </Button></Col>
+        <Col sm={2} id="chooseLocation">
+        <Button className='btn btn-secondary' onClick={chooseLocation}>
+            choose on a map 
         </Button>
-        <Button className='btn btn-warning' onClick={declineLocation}>
-            Skip for now 
-        </Button>
-    </Container>
+        </Col>
+        
+        
+    </Row>
   )
 }

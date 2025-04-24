@@ -1,6 +1,4 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :role , :phone
-  has_one :vehicle 
+  attributes :id, :name, :email, :type, :phone
   has_one :location
-  
 end

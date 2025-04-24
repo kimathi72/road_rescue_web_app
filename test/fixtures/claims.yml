@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  incident: one
+  status: 1
+  insurer: one
+  approved_amount: 1.5
+  payout_date: 2025-04-19
+
+two:
+  incident: two
+  status: 1
+  insurer: two
+  approved_amount: 1.5
+  payout_date: 2025-04-19

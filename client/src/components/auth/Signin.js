@@ -14,7 +14,7 @@ export default function Signin({setUser}) {
   function handleAuthenticate(data) {    
     localStorage.setItem("jwt", data.jwt);  
     setUser(data.user);  
-    navigate('/landingPage')     
+    navigate('/')     
   }
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {
