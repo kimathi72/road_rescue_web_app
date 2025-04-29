@@ -16,7 +16,7 @@ class AuthController < ApplicationController
 
   def destroy
     session.delete :user_id
-    render json: { message: "user logged out successfully" }, status: :ok
+    head :no_content
   end
 
   private

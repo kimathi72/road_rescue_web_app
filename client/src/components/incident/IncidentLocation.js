@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import {AdvancedMarker, APIProvider, Map} from '@vis.gl/react-google-maps' 
+import React from 'react'
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import useQuery from '../../hooks/useQuery';
+import Chip from '@mui/material/Chip';
 
-export default function IncidentLocation ({location}){
-    const [position, setPosition] = useState({lat: 1.2921,lng: 36.8219})
-    useEffect(()=>{
-     location && setPosition(location) 
-    },[location])
+export default function IncidentLocation (){
+    const {data: locations, isLoaded} = useQuery({url: "/locations", method: "GET"})
+    
     return(
-        <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY.toString()}>
-            <Map defaultCenter={position} defaultZoom={10} mapId="DEMO_MAP_ID">
-                <AdvancedMarker position={position}/>
-            </Map>
-        </APIProvider>
+        isLoaded && <Autocomplete
+        disablePortal
+        options={locations.sort((a, b) => a.city.localeCompare(b.city))}
+        getOptionLabel={option => option['city']}
+        renderValue={(value, getItemProps)=>{
+            console.log(value)
+           return <Chip label={value.city} {...getItemProps()} />
+        }}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Location" />}
+      />
     )
 }

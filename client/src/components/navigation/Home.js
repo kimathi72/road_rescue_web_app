@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 export default function Home({ user }) {
   const navigate = useNavigate();
   useEffect(() => {
-    switch ("id" in user) {
+    switch (!user) {
       case true:
-        navigate(`/${user['type'].toLowerCase()}`);
+        navigate('/signin');
         break;
       default:
-        navigate('/signin');
+        navigate(`/${user['type'].toLowerCase()}`);
         break;
     }
   }, [user, navigate]);

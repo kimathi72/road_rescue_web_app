@@ -1,16 +1,13 @@
 Rails.application.routes.draw do
-  get "assessors/index"
-  get "drivers/index"
+  mount ActionCable.server => "/cable"
+
   resources :notifications
   resources :assessments
   resources :claims
   resources :drivers
-
+  resources :locations
   resources :chats
-
-  mount ActionCable.server => "/cable"
-
-  #resources :reviews
+  resources :reviews
   resources :requests
   resources :services
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

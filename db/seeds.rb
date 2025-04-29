@@ -20,3 +20,16 @@ end
 lc.map do |l|
   Location.create(l)
 end
+
+["Towing service",
+ "Mechanical Breakdown Assistance",
+ "Flat Tire / Tire Change",
+ "Fuel Delivery",
+ "Battery Jump Start",
+ "Lockout Assistance",
+ "Stuck Vehicle Recovery",
+ "Insurance Contact Service",
+ "Assessment Request"].map do |s|
+  Service.create(name: s)
+end
+puts "end of seeding #{Location.count} locations, #{Service.count} services"

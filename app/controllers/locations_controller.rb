@@ -1,9 +1,14 @@
 class LocationsController < ApplicationController
   before_action :authorized
 
+  def index
+    locations = Location.all
+    render json: locations, status: :ok
+  end
+
   def create
     location = Location.create(location_params)
-    render json: @location, status: :created
+    render json: location, status: :created
   end
 
   private

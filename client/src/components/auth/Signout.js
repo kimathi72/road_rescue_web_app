@@ -7,10 +7,10 @@ export default function Signout({token, setUser}) {
     fetch('/logout',{
       headers: { 'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json' },
-      method: "DELETE", }).then(r=>r.json()).then(data=>{
+      method: "DELETE", }).then(()=>{
         setUser(null)
         localStorage.clear() 
-        navigate('/signin')
+        navigate('/')
       })
   },[token, navigate, setUser])
   return (

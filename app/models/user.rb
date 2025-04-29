@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   has_secure_password
-  has_one :location
   has_many :notifications
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 

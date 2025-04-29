@@ -2,20 +2,13 @@ import React from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/Form'
 import useQuery from '../../hooks/useQuery'
-import { usePlacesWidget } from "react-google-autocomplete";
+import IncidentLocation from './IncidentLocation'
+
 
 export default function IncidentForm({handleSubmit, setIncidentData}) {
 const {data: emergencyTypes, isLoaded} = useQuery({url:"/services", method: "GET"})
-const { ref } = usePlacesWidget({
-    apiKey:process.env.REACT_APP_GOOGLE_MAPS_KEY,
-    onPlaceSelected: (place) => {
-      console.log(place);
-    },
-    options: {
-      types: ["(regions)"],
-      componentRestrictions: { country: "ke" },
-    },
-  });
+
+
 
     const handleChange= (e) =>{
         setIncidentData(prev => ({...prev, [e.target.name]: e.target.value}))
@@ -35,11 +28,7 @@ const { ref } = usePlacesWidget({
                 })}
             </Form.Select>
         </Form.Group>
-        <Form.Group>
-            <Form.Label>Location</Form.Label>
-            <Form.Control ref={ref} defaultValue="Nairobi"/>
-
-        </Form.Group>
+      <IncidentLocation/>
         <Form.Group>
             <Form.Label>
                 Description:

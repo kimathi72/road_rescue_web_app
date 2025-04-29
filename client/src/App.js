@@ -13,7 +13,7 @@ import InsuranceDashboard from './components/insurance/InsuranceDashboard.js';
 
 
 export default function App() {
-const [user, setUser] = useState({})
+const [user, setUser] = useState(null)
 const token = localStorage.getItem('jwt')
 useEffect(()=>{
   if(token && !user){
@@ -39,7 +39,7 @@ useEffect(()=>{
         <Route path='/profile' element={<Profile user={user} />}/>
         <Route path='/signin' element={<Signin setUser={setUser}/>} />
         <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
-        <Route path='/signout' element={<Signout setUser={setUser} />}/>
+        <Route path='/signout' element={<Signout token={token} setUser={setUser} />}/>
       </Routes>
     </Router>
   )
