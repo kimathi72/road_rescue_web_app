@@ -31,7 +31,7 @@ useEffect(()=>{
       <NavBar user={user} />
       {console.log(token)}
       <Routes>
-        <Route path='/driver' element={<DriverDashboard/>}/>
+        <Route path='/driver' element={<DriverDashboard user={user}/>}/>
         <Route path='/admin' element={<AdminDashboard/>} />
         <Route path='/assessor' element={<AssessorDashboard/>} />
         <Route path='/insurer' element={<InsuranceDashboard/>} />
