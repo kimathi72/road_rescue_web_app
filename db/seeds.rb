@@ -34,10 +34,10 @@ end
 end
 
 [
-  { name: "driver", email: "driver@driver.com", password: "driver123", role: "driver" },
-  { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin" },
-  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", role: "assessor" },
-  { name: "insurer", email: "insurer@driver.com", password: "insurer123", role: "insurer" },
+  { name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129" },
+  { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129" },
+  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", role: "assessor", phone: "+254711808129" },
+  { name: "insurer", email: "insurer@driver.com", password: "insurer123", role: "insurer", phone: "+254711808129" },
 ].map do |user|
   User.create(user)
 end
