@@ -1,8 +1,5 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
-  include Pundit::Authorization
-
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   # require 'sendgrid-ruby'
   # include SendGrid
   # require 'net/http'
@@ -43,6 +40,10 @@ class ApplicationController < ActionController::API
 
   def logged_in?
     !!current_user
+  end
+
+  def driver_authenticated
+    render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:role] == "driver"
   end
 
   def authorized

@@ -1,5 +1,5 @@
 import React , {useEffect, useState} from 'react'
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { Routes, Route, useNavigate} from "react-router-dom";
 import Home from "./components/navigation/Home.js"
 import NavBar from "./components/navigation/NavBar.js"
 import Profile from "./components/auth/Profile.js"
@@ -10,11 +10,13 @@ import DriverDashboard from './components/driver/DriverDashboard.js';
 import AdminDashboard from './components/admin/AdminDashboard.js';
 import AssessorDashboard from './components/assessor/AssessorDashboard.js';
 import InsuranceDashboard from './components/insurance/InsuranceDashboard.js';
-
+import { Container } from '@mui/material';
+import './assets/styles/mystyles.css'
 
 export default function App() {
 const [user, setUser] = useState(null)
 const token = localStorage.getItem('jwt')
+const navigate = useNavigate()
 useEffect(()=>{
   if(token && !user){
     fetch('/me', {
@@ -23,13 +25,20 @@ useEffect(()=>{
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
-    }).then(r=>r.json()).then(data=>setUser(data))
+    }).then(r=>r.json()).then(data=>{
+      if ("id" in data){setUser(data)}
+      else{
+        navigate('/signout')
+      }
+    })
   }
+  if (user){console.log(user.role)}
 },[token, user])
   return (
-    <Router>
+    <div  className='mainDiv'>
       <NavBar user={user} />
       {console.log(token)}
+      <Container>
       <Routes>
         <Route path='/driver' element={<DriverDashboard user={user}/>}/>
         <Route path='/admin' element={<AdminDashboard/>} />
@@ -41,7 +50,9 @@ useEffect(()=>{
         <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
         <Route path='/signout' element={<Signout token={token} setUser={setUser} />}/>
       </Routes>
-    </Router>
+      </Container>
+     
+    </div>
   )
 }
 

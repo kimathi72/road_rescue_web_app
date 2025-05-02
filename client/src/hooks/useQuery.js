@@ -1,30 +1,31 @@
-import  { useState, useEffect } from "react";
+import  { useState, useEffect, useCallback } from "react";
 
-function useQuery({url,method,body}) {
+function useQuery(url) {
   const [isLoaded, setIsLoaded] = useState(false);
   // rename `posts` to a more generic `data`
   const [data, setData] = useState(null);
-  const token =  localStorage.getItem('jwt')
+  const fetchData = useCallback(async()=>{
+    try{    
+      const res = await fetch(url,{
+        method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+          }
+      })
+      const data = await res.json()
+      setData(data)
+      setIsLoaded(true)
+    }catch(error){
+      console.error(error)
+    } 
+  },[url])
   
 
   useEffect(() => {
     setIsLoaded(false);
-    try{    
-   fetch(url,{
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: body && JSON.stringify(body)
-      }).then(r=>r.json()).then(data => {
-        setData(data);
-        setIsLoaded(true);
-      })    
-    }catch(error){
-      console.error(error)
-    }  
-  }, [url,method,body,token]);
+    fetchData()    
+  }, [fetchData]);
   // the url is now a dependency
   // we want to use the side effect whenever the url changes
 

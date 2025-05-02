@@ -1,32 +1,28 @@
 class RequestsController < ApplicationController
   before_action :set_request, only: [:show, :update, :destroy]
+  before_action :driver_authenticated, only: [:create]
 
   def index
     @user = current_user
-    if @user.type == "Driver"
+    if @user.role == "driver"
       @requests = Driver.find(@user.id).requests
-      authorize @requests
       render json: @requests, status: :ok
     else
       @requests = Request.all
-      authorize @requests
       render json: @requests, status: :ok
     end
   end
 
   def show
-    authorize @request
     render @request, status: :ok
   end
 
   def create
     @request = Request.create(request_params)
-    authorize @request
     render json: @request, status: :created
   end
 
   def update
-    authorize @request
     @request.update(request_params)
     render json: @request, status: :updated
   end
@@ -41,6 +37,6 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:driver_id, :service_id, :request_description, :status)
+    params.require(:request).permit(:driver_id, :service_id, :location_id, :request_description, :rescue_provider_id, :status)
   end
 end

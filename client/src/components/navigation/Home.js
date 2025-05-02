@@ -9,7 +9,7 @@ export default function Home({ user }) {
         navigate('/signin');
         break;
       default:
-        navigate(`/${user['type'].toLowerCase()}`);
+        navigate(`/${user['role']}`);
         break;
     }
   }, [user, navigate]);

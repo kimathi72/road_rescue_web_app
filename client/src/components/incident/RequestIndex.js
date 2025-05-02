@@ -3,14 +3,14 @@ import useQuery from '../../hooks/useQuery'
 import RequestsList from './RequestsList'
 import RequestForm from './RequestForm'
 export default function RequestIndex({user}) {
-    const {data: requests , isLoaded} = useQuery({url:"/requests", method:"GET"})
+    const {data: requests , isLoaded} = useQuery("/requests")
     useEffect(()=>{
       console.log(requests)
     },[requests])
   return (
-    isLoaded && <div>
+     <div>
         <RequestForm  user={user}/> 
-        <RequestsList requests={requests}/>
+        {isLoaded && <RequestsList requests={requests}/>}
     </div>
   )
 }

@@ -32,4 +32,13 @@ end
  "Assessment Request"].map do |s|
   Service.create(name: s)
 end
-puts "end of seeding #{Location.count} locations, #{Service.count} services"
+
+[
+  { name: "driver", email: "driver@driver.com", password: "driver123", role: "driver" },
+  { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin" },
+  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", role: "assessor" },
+  { name: "insurer", email: "insurer@driver.com", password: "insurer123", role: "insurer" },
+].map do |user|
+  User.create(user)
+end
+puts "end of seeding #{Location.count} locations, #{Service.count} services, and #{User.count} users"

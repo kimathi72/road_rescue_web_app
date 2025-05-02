@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_28_150559) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_01_181937) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,11 +90,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_150559) do
     t.integer "driver_id"
     t.integer "service_id"
     t.string "request_description"
-    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "location_id", null: false
+    t.bigint "location_id"
+    t.integer "status", default: 0
+    t.bigint "rescue_provider_id"
     t.index ["location_id"], name: "index_requests_on_location_id"
+    t.index ["rescue_provider_id"], name: "index_requests_on_rescue_provider_id"
   end
 
   create_table "rescue_providers", force: :cascade do |t|
@@ -126,7 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_150559) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "type"
+    t.integer "role"
     t.bigint "location_id"
     t.index ["location_id"], name: "index_users_on_location_id"
   end
@@ -139,6 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_150559) do
   add_foreign_key "notifications", "requests"
   add_foreign_key "notifications", "users"
   add_foreign_key "requests", "locations"
+  add_foreign_key "requests", "rescue_providers"
   add_foreign_key "rescue_providers", "insurances"
   add_foreign_key "users", "locations"
 end

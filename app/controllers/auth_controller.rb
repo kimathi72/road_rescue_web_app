@@ -8,6 +8,7 @@ class AuthController < ApplicationController
       # encode token comes from ApplicationController
       token = encode_token({ user_id: @user.id })
       session[:user_id] = @user.id
+      session[:user_role] = @user.role
       render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
     else
       render json: { message: "Invalid email or password" }, status: :unauthorized

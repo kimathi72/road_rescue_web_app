@@ -23,6 +23,7 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
     @token = encode_token(user_id: @user.id)
     session[:user_id] = @user.id
+    session[:user_role] = @user.role
     # send_email = sendgrid_email(email: @user.email, token: @token)
     render json: { user: UserSerializer.new(@user), jwt: @token }, status: :created
   end
@@ -51,6 +52,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :type, :phone)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone)
   end
 end

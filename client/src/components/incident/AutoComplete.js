@@ -5,7 +5,7 @@ import useQuery from '../../hooks/useQuery';
 import Chip from '@mui/material/Chip';
 
 export default function AutoComplete ({url, k, callBackFn, lb}){
-    const {data: results, isLoaded} = useQuery({url: url, method: "GET"})
+    const {data: results, isLoaded} = useQuery(url)
     
     return(
         isLoaded && <Autocomplete
