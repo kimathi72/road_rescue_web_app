@@ -1,7 +1,8 @@
 require_relative "./users_controller.rb"
 
 class DriversController < UsersController
-  before_action :set_driver, only: {:show}
+  before_action :set_driver, only: [:show]
+
   def index
     drivers = Driver.all
     render json: drivers, status: :ok
@@ -11,10 +12,10 @@ class DriversController < UsersController
     @driver = Driver.create(driver_params)
     render json: @driver, status: :ok
   end
-  def show
-  render json: @driver, status: :ok
-  end
 
+  def show
+    render json: @driver, status: :ok
+  end
 
   private
 
