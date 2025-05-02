@@ -33,10 +33,10 @@ useEffect(()=>{
     })
   }
   if (user){console.log(user.role)}
-},[token, user])
+},[token, user, navigate])
   return (
     <div  className='mainDiv'>
-      <NavBar user={user} />
+      <NavBar token={token} />
       {console.log(token)}
       <Container>
       <Routes>
@@ -48,7 +48,7 @@ useEffect(()=>{
         <Route path='/profile' element={<Profile user={user} />}/>
         <Route path='/signin' element={<Signin setUser={setUser}/>} />
         <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
-        <Route path='/signout' element={<Signout token={token} setUser={setUser} />}/>
+        <Route path='/signout' element={<Signout setUser={setUser} />}/>
       </Routes>
       </Container>
      

@@ -2,6 +2,7 @@ class Request < ApplicationRecord
   belongs_to :driver
   belongs_to :service
   belongs_to :location
+  has_one :claim
   enum status: ["reported", "pending", "resolved"]
 
   def service_name

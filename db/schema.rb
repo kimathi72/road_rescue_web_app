@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_01_181937) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_02_085628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,8 +41,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_01_181937) do
     t.date "payout_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "insurance_id", null: false
+    t.bigint "insurance_id", default: 0
+    t.bigint "request_id", default: 0
     t.index ["insurance_id"], name: "index_claims_on_insurance_id"
+    t.index ["request_id"], name: "index_claims_on_request_id"
   end
 
   create_table "drivers", force: :cascade do |t|
@@ -136,6 +138,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_01_181937) do
   add_foreign_key "assessments", "claims"
   add_foreign_key "assessors", "insurances"
   add_foreign_key "claims", "insurances"
+  add_foreign_key "claims", "requests"
   add_foreign_key "drivers", "insurances"
   add_foreign_key "insurers", "insurances"
   add_foreign_key "notifications", "requests"

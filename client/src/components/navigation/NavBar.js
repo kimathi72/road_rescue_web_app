@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
 
 
-export default function NavBar({user}) {
+export default function NavBar({token}) {
 
 
   return (
@@ -17,7 +17,7 @@ export default function NavBar({user}) {
         </Navbar.Brand>
         <Nav>        
           {
-            !user ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <Nav.Link href="/signout">Sign out</Nav.Link>
+            !token ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <Nav.Link href="/signout">Sign out</Nav.Link>
           }
         </Nav> 
         </Container>        
