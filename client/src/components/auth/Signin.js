@@ -1,20 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import Form from'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-export default function Signin({setUser}) {
+export default function Signin({user,setUser, setIsLoaded}) {
   //create user email and password variables
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
   
-  const navigate =useNavigate()
+  const navigate =useNavigate() 
+  useEffect(()=>{
+    if (user && localStorage.getItem('jwt')){
+      navigate(`/${user.role}`)
+    }
+  },[user, navigate])
 
   //callback function set user authentication parameter 
   function handleAuthenticate(data) {    
     localStorage.setItem("jwt", data.jwt);  
     setUser(data.user);  
-    navigate('/')     
+    setIsLoaded(true)
+    navigate(`/${data.user.role}`)     
   }
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {

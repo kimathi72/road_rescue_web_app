@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Alert from '@mui/material/Alert';
 
 export default function Signout({ setUser }) {
+  const [isSignedOut,setIsSignedOut] = useState(false)
   const navigate = useNavigate();
   const logout = useCallback(async()=>{
       await fetch("/logout", {
@@ -10,14 +12,18 @@ export default function Signout({ setUser }) {
           "Content-Type": "application/json",
         },
         method: "DELETE",
+      }).then(()=>{
+        localStorage.clear();
+        setIsSignedOut(true)
       })
       
-      navigate("/");
-  },[navigate])
+      
+  },[])
   useEffect(() => {
-    logout()
     setUser(null);
-    localStorage.clear();
-  }, [logout, setUser]);
-  return <div>LogOut</div>;
+    logout() 
+    navigate("/");   
+  }, [logout,setUser,navigate ]);
+
+  isSignedOut ? <Alert severity="info">Sign out successfull</Alert> : <div>Logging out...</div> 
 }

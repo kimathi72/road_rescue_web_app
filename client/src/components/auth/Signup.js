@@ -4,7 +4,7 @@ import Form from'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 
-export default function Signup({setUser }) {
+export default function Signup({setUser, setIsLoaded }) {
   const [driverData, setData] = useState({type: "Driver"})
   const navigate = useNavigate();
 
@@ -22,7 +22,8 @@ export default function Signup({setUser }) {
         const data = await response.json();
         setUser(data.user);
         localStorage.setItem("jwt", data.jwt);
-        return navigate("/");
+        setIsLoaded(true)
+        return navigate(`/${data.user.role}`) ;
       } catch (error) {
         console.error(error);
       }

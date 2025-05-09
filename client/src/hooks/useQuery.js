@@ -14,6 +14,7 @@ function useQuery(url) {
           }
       })
       const data = await res.json()
+      console.log(data)
       setData(data)
       setIsLoaded(true)
     }catch(error){
