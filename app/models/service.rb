@@ -1,4 +1,4 @@
 class Service < ApplicationRecord
-    has_many :servicelists 
-    has_many :responders , through: :servicelists 
+  has_many :requests
+  validates :name, presence: true, uniqueness: true
 end
