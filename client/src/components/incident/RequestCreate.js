@@ -1,12 +1,10 @@
-import React from 'react'
-import useQuery from '../../hooks/useQuery'
+import React, { useEffect, useState } from 'react'
 import RequestPreview from './RequestPreview'
 
-export default function RequestCreate({request}) {
-    const {data: result, isLoaded } = useQuery({url: '/requests', method: "POST", body: {"request": request}})
+export default function RequestCreate({request, handleSubmit}) {
         
     return (<>
-{(isLoaded) ? <RequestPreview request={result}/> : <p>Creating request.</p>  }
+<p>Creating request.</p>  
     </>)
     
      

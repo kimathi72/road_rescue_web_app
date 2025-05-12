@@ -46,6 +46,10 @@ class ApplicationController < ActionController::API
     render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:role] == "driver"
   end
 
+  def admin_authenticated
+    render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:role] == "admin"
+  end
+
   def authorized
     render json: { message: "Please log in" }, status: :unauthorized unless logged_in?
   end

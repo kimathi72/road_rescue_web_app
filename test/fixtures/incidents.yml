@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle: one
+  location: one
+  date_happened: 2025-05-10 16:46:52
+  description: MyString
+  police_report: MyText
+
+two:
+  vehicle: two
+  location: two
+  date_happened: 2025-05-10 16:46:52
+  description: MyString
+  police_report: MyText

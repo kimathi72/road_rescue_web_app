@@ -3,9 +3,13 @@ class ClaimsController < ApplicationController
 
   # GET /claims
   def index
-    @claims = Claim.all
-
-    render json: @claims
+    if current_user.role == "driver"
+      @claims = Diver.find(current_user["id"]).claims
+      render json: @claims
+    else
+      @claims = Claim.all
+      render json: @claims
+    end
   end
 
   # GET /claims/1
@@ -39,13 +43,14 @@ class ClaimsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_claim
-      @claim = Claim.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def claim_params
-      params.require(:claim).permit(:incident_id, :status, :insurer_id, :approved_amount, :payout_date)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_claim
+    @claim = Claim.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def claim_params
+    params.require(:claim).permit(:incident_id, :status, :insurer_id, :approved_amount, :payout_date)
+  end
 end

@@ -1,4 +1,4 @@
-import React , {useEffect, useState} from 'react'
+import React , {useCallback, useEffect, useState} from 'react'
 import { Routes, Route, useNavigate} from "react-router-dom";
 import Home from "./components/navigation/Home.js"
 import NavBar from "./components/navigation/NavBar.js"
@@ -6,17 +6,41 @@ import Profile from "./components/auth/Profile.js"
 import Signin from "./components/auth/Signin.js"
 import Signup from "./components/auth/Signup.js" 
 import Signout from "./components/auth/Signout.js" 
-import DriverDashboard from './components/driver/DriverDashboard.js';
+import DriverIndex from './components/driver/DriverIndex.js';
 import AdminDashboard from './components/admin/AdminDashboard.js';
 import AssessorDashboard from './components/assessor/AssessorDashboard.js';
 import InsuranceDashboard from './components/insurance/InsuranceDashboard.js';
-import { Container } from '@mui/material';
 import './assets/styles/mystyles.css'
 
 export default function App() {
+
+  //set user State , default to null, update state on sign in/up
 const [user, setUser] = useState(null)
 const token = localStorage.getItem('jwt')
+
+// define navigation pointer 
 const navigate = useNavigate()
+
+// callback function to update state. pass as prop to child component
+ const updateState = useCallback((setData, obj)=>{
+    return setData((prev => ({...prev, obj})))
+  },[])
+
+  // callback function to do async fetch request. pass as prop to child component
+  const handleSubmit= async( url, method, obj) =>{
+    const results = await fetch(url,{
+      "method": method, 
+      "headers": {
+        "Authorization": `Bearer ${token}`, 
+        "Content-Type": "application/json"
+      }, 
+      body: obj && JSON.stringify(obj) 
+    })
+    const data =  await results.json()
+    console.log(data)
+  } 
+
+  //on App load, query for current user, auto login if signed in, otherwise sign in first.
 useEffect(()=>{
   if(token && !user){
     fetch('/me', {
@@ -34,14 +58,15 @@ useEffect(()=>{
   }
   if (user){console.log(user.role)}
 },[token, user, navigate])
+
+
   return (
     <div  className='mainDiv'>
       <NavBar token={token} />
-      {console.log(token)}
-      <Container>
+      
       <Routes>
-        <Route path='/driver' element={<DriverDashboard user={user}/>}/>
-        <Route path='/admin' element={<AdminDashboard/>} />
+        <Route path='/driver/*' element={<DriverIndex user={user} updateState={updateState} handleSubmit={handleSubmit} />}/>
+        <Route path='/admin/' element={<AdminDashboard/>} />
         <Route path='/assessor' element={<AssessorDashboard/>} />
         <Route path='/insurer' element={<InsuranceDashboard/>} />
         <Route exact path='/' element={<Home user={user} />} />
@@ -50,7 +75,7 @@ useEffect(()=>{
         <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
         <Route path='/signout' element={<Signout setUser={setUser} />}/>
       </Routes>
-      </Container>
+      
      
     </div>
   )

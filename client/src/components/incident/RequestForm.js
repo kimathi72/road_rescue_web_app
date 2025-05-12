@@ -1,37 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/Form";
-import AutoComplete from "./AutoComplete";
-import RequestPreview from "./RequestPreview";
 
-export default function RequestForm({ user }) {
+export default function RequestForm({incident}) {
   const [request, setRequest] = useState({});
-  const token = localStorage.getItem("jwt");
-  useEffect(() => {
-    user && setRequest((prev) => ({ ...prev, driver_id: user.id }));
-  }, [user]);
-  const handleChange = (e) => {
-    setRequest((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(request);
-    try {
-      const res = await fetch("/requests", {
-        method: "POST",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({request: {...request}}),
-      });
-      const data = await res.json();
-      console.log(data);
-      return <RequestPreview request={request} />;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
   return (
     <Form onSubmit={handleSubmit} className="form">
       <h1>Report New Incident</h1>
@@ -39,9 +12,9 @@ export default function RequestForm({ user }) {
         <div className="col-4">
           <AutoComplete
             lb={"Location"}
-            callBackFn={(value) => {
-              setRequest((prev) => ({ ...prev, location_id: value }));
-            }}
+            // callBackFn={(value) => {
+            //   setRequest((prev) => ({ ...prev, location_id: value }));
+            // }}
             url={"/locations"}
             k={"city"}
           />
@@ -51,15 +24,15 @@ export default function RequestForm({ user }) {
             lb={"Service Type"}
             url={"/services"}
             k={"name"}
-            callBackFn={(value) => {
-              setRequest((prev) => ({ ...prev, service_id: value }));
-            }}
+            // callBackFn={(value) => {
+            //   setRequest((prev) => ({ ...prev, service_id: value }));
+            // }}
           />
         </div>
       </div>
 
       <Form.Group>
-        <Form.Label>Description:</Form.Label>
+        <Form.Label>Additional notes:</Form.Label>
         <Form.Control
           as="textarea"
           name="request_description"

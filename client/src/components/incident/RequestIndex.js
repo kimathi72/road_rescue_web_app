@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import useQuery from '../../hooks/useQuery'
 import RequestsList from './RequestsList'
-import RequestForm from './RequestForm'
+// import RequestForm from './RequestForm'
 export default function RequestIndex({user}) {
     const {data: requests , isLoaded} = useQuery("/requests")
     useEffect(()=>{
@@ -9,7 +9,7 @@ export default function RequestIndex({user}) {
     },[requests])
   return (
      <div>
-        <RequestForm  user={user}/> 
+        {/* <RequestForm  user={user}/>  */}
         {isLoaded && <RequestsList requests={requests}/>}
     </div>
   )

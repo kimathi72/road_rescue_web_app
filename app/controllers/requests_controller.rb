@@ -3,10 +3,9 @@ class RequestsController < ApplicationController
   before_action :driver_authenticated, only: [:create]
 
   def index
-    @user = current_user
-    if @user.role == "driver"
-      @requests = Driver.find(@user.id).requests
-      render json: @requests, status: :ok
+    if current_user.role == "driver"
+      @requests = Driver.find(current_user["id"])
+      render json: @requests
     else
       @requests = Request.all
       render json: @requests, status: :ok
@@ -37,6 +36,6 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:driver_id, :service_id, :location_id, :request_description, :rescue_provider_id, :status)
+    params.require(:request).permit(:service_id, :location_id, :request_description, :rescue_provider_id, :status)
   end
 end

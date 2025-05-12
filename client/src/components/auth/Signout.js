@@ -10,14 +10,15 @@ export default function Signout({ setUser }) {
           "Content-Type": "application/json",
         },
         method: "DELETE",
-      })
-      
-      navigate("/");
-  },[navigate])
-  useEffect(() => {
-    logout()
+      }).then(()=>{
     setUser(null);
     localStorage.clear();
-  }, [logout, setUser]);
+    navigate("/");
+      })
+      
+  },[navigate,setUser])
+  useEffect(() => {
+    logout()
+  }, [logout]);
   return <div>LogOut</div>;
 }

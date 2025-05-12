@@ -2,7 +2,7 @@ class LocationsController < ApplicationController
   before_action :authorized
 
   def index
-    locations = Location.all
+    locations = Location.all.sort_by { |location| location["city"] }
     render json: locations, status: :ok
   end
 

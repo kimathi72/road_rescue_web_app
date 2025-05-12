@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
-
+  resources :drivers do
+    resources :incidents, only: [:index]
+    resources :claims, only: [:index]
+    resources :requests, only: [:index]
+  end
+  resources :incidents
+  resources :vehicles
   resources :notifications
   resources :assessments
   resources :claims
-  resources :drivers
   resources :locations
   resources :chats
   resources :reviews
