@@ -1,15 +1,14 @@
 import React , {useCallback, useEffect, useState} from 'react'
 import { Routes, Route, useNavigate} from "react-router-dom";
-import Home from "./components/navigation/Home.js"
 import NavBar from "./components/navigation/NavBar.js"
 import Profile from "./components/auth/Profile.js"
 import Signin from "./components/auth/Signin.js"
 import Signup from "./components/auth/Signup.js" 
 import Signout from "./components/auth/Signout.js" 
 import DriverIndex from './components/driver/DriverIndex.js';
-import AdminDashboard from './components/admin/AdminDashboard.js';
-import AssessorDashboard from './components/assessor/AssessorDashboard.js';
-import InsuranceDashboard from './components/insurance/InsuranceDashboard.js';
+import AdminIndex from './components/admin/AdminIndex.js';
+import AssessorIndex from './components/assessor/AssessorIndex.js';
+import InsurerIndex from './components/insurer/InsurerIndex.js';
 import './assets/styles/mystyles.css'
 
 export default function App() {
@@ -17,7 +16,7 @@ export default function App() {
   //set user State , default to null, update state on sign in/up
 const [user, setUser] = useState(null)
 const token = localStorage.getItem('jwt')
-
+const [isLoaded, setIsLoaded] = useState(false)
 // define navigation pointer 
 const navigate = useNavigate()
 
@@ -41,43 +40,74 @@ const navigate = useNavigate()
   } 
 
   //on App load, query for current user, auto login if signed in, otherwise sign in first.
-useEffect(()=>{
-  if(token && !user){
-    fetch('/me', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(r=>r.json()).then(data=>{
-      if ("id" in data){setUser(data)}
-      else{
-        navigate('/signout')
-      }
-    })
+
+const authorized_user = useCallback((role, userRole) => {
+  if ( role!== userRole){
+    alert(`Only authenticated ${role} allowed`) 
+    navigate('/')
   }
-  if (user){console.log(user.role)}
-},[token, user, navigate])
+},[navigate])
+const getUser = useCallback(async()=>{
+        const result = await  fetch('/me', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        const data = await result.json() 
+        setUser(data)
+        setIsLoaded(true)
+        return console.log(data)
+
+},[token,setUser])
+
+useEffect(()=>{
+if (!user && token){ getUser()}
+else if (!token && !user){
+  navigate('/')
+};
+},[getUser, user, token, navigate])
 
 
-  return (
-    <div  className='mainDiv'>
+  return (<>
+    {(isLoaded) ? <div  className='mainDiv'>
       <NavBar token={token} />
       
       <Routes>
-        <Route path='/driver/*' element={<DriverIndex user={user} updateState={updateState} handleSubmit={handleSubmit} />}/>
-        <Route path='/admin/' element={<AdminDashboard/>} />
-        <Route path='/assessor' element={<AssessorDashboard/>} />
-        <Route path='/insurer' element={<InsuranceDashboard/>} />
-        <Route exact path='/' element={<Home user={user} />} />
+        <Route path='/driver/*' element={<DriverIndex 
+        user={user} 
+        updateState={updateState} 
+        handleSubmit={handleSubmit} 
+        authorized_user={authorized_user}
+        />}/>
+        <Route path='/admin/' element={<AdminIndex 
+        user={user} 
+        authorized_user={authorized_user}
+        />} />
+        <Route path='/assessor' element={<AssessorIndex 
+        user={user} 
+        authorized_user={authorized_user}
+        />} 
+        />
+        <Route path='/insurer' element={<InsurerIndex 
+        user={user} 
+        authorized_user={authorized_user}
+        />} />
+        <Route exact path='/' element={<Signin 
+        user={user} 
+        setUser={setUser} 
+        setIsLoaded={setIsLoaded}
+        />} />
         <Route path='/profile' element={<Profile user={user} />}/>
-        <Route path='/signin' element={<Signin setUser={setUser}/>} />
-        <Route path='/signup' element ={<Signup setUser={setUser}/>} /> 
+        <Route path='/signin' element={<Signin user={user} setUser={setUser} setIsLoaded={setIsLoaded}/>} />
+        <Route path='/signup' element ={<Signup setUser={setUser} setIsLoaded={setIsLoaded}/>} /> 
         <Route path='/signout' element={<Signout setUser={setUser} />}/>
       </Routes>
       
      
-    </div>
+    </div> : <p>Loading App. </p>}
+    </>
   )
 }
 

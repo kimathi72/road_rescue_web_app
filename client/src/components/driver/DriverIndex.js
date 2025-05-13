@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DriverDashboard from './DriverDashboard'
 import { Route, Routes } from 'react-router-dom'
 import IncidentIndex from '../incident/IncidentIndex'
@@ -6,7 +6,7 @@ import SideBar from '../navigation/SideBar'
 import ClaimsIndex from '../claim/ClaimsIndex'
 import RequestIndex from '../incident/RequestIndex'
 
-export default function DriverIndex({user,handleSubmit}) {
+export default function DriverIndex({user,handleSubmit, authorized_user}) {
     const links = [
         {
             url: "/driver/dashboard",
@@ -21,6 +21,9 @@ url: "/driver/incident_reporting/*",
         url: "/driver/requests/*",
         label: "Rescue requests"
     },]
+    useEffect(()=>{
+        authorized_user('driver', user.role) 
+    },[user, authorized_user])
   return (
     <div className="innerDiv">
         <SideBar links={links}/>
