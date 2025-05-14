@@ -13,17 +13,20 @@ export default function Signout({ setUser }) {
         },
         method: "DELETE",
       }).then(()=>{
+        setUser(null);
         localStorage.clear();
         setIsSignedOut(true)
+        navigate("/"); 
       })
       
       
-  },[])
+  },[setUser,navigate])
   useEffect(() => {
-    setUser(null);
+    
     logout() 
-    navigate("/");   
-  }, [logout,setUser,navigate ]);
+    isSignedOut && <Alert severity="info">Sign out successfull</Alert>
+      
+  }, [logout ,isSignedOut]);
 
-  isSignedOut ? <Alert severity="info">Sign out successfull</Alert> : <div>Logging out...</div> 
+  return ( <div>Logging out...</div> )
 }

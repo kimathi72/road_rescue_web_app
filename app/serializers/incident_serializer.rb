@@ -3,5 +3,5 @@ class IncidentSerializer < ActiveModel::Serializer
   belongs_to :vehicle
   belongs_to :location
   has_one :claim
-  has_one :driver, through: :vehicle
+  has_many :incident_photos
 end

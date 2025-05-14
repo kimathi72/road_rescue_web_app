@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :incidents, only: [:index]
     resources :claims, only: [:index]
     resources :requests, only: [:index]
+    resources :vehciles, only: [:index, :create]
   end
   resources :incidents
   resources :vehicles

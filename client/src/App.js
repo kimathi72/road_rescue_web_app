@@ -16,14 +16,14 @@ export default function App() {
   //set user State , default to null, update state on sign in/up
 const [user, setUser] = useState(null)
 const token = localStorage.getItem('jwt')
-const [isLoaded, setIsLoaded] = useState(false)
+const [isLoaded,setIsLoaded] = useState(false)
 // define navigation pointer 
 const navigate = useNavigate()
 
 // callback function to update state. pass as prop to child component
- const updateState = useCallback((setData, obj)=>{
-    return setData((prev => ({...prev, obj})))
-  },[])
+//  const updateState = useCallback((setData, obj)=>{
+//     return setData((prev => ({...prev, obj})))
+//   },[])
 
   // callback function to do async fetch request. pass as prop to child component
   const handleSubmit= async( url, method, obj) =>{
@@ -47,12 +47,13 @@ const authorized_user = useCallback((role, userRole) => {
     navigate('/')
   }
 },[navigate])
+
 const getUser = useCallback(async()=>{
         const result = await  fetch('/me', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
           }
         })
         const data = await result.json() 
@@ -60,27 +61,23 @@ const getUser = useCallback(async()=>{
         setIsLoaded(true)
         return console.log(data)
 
-},[token,setUser])
+},[setUser])
 
 useEffect(()=>{
-if (!user && token){ getUser()}
-else if (!token && !user){
-  navigate('/')
-};
-},[getUser, user, token, navigate])
+  getUser()
+
+},[getUser])
 
 
-  return (<>
-    {(isLoaded) ? <div  className='mainDiv'>
+  return ( <div  className='mainDiv'>
       <NavBar token={token} />
       
       <Routes>
-        <Route path='/driver/*' element={<DriverIndex 
+        {isLoaded && <Route path='/driver/*' element={<DriverIndex 
         user={user} 
-        updateState={updateState} 
         handleSubmit={handleSubmit} 
         authorized_user={authorized_user}
-        />}/>
+        />}/>}
         <Route path='/admin/' element={<AdminIndex 
         user={user} 
         authorized_user={authorized_user}
@@ -96,18 +93,17 @@ else if (!token && !user){
         />} />
         <Route exact path='/' element={<Signin 
         user={user} 
-        setUser={setUser} 
         setIsLoaded={setIsLoaded}
+        setUser={setUser} 
         />} />
         <Route path='/profile' element={<Profile user={user} />}/>
-        <Route path='/signin' element={<Signin user={user} setUser={setUser} setIsLoaded={setIsLoaded}/>} />
-        <Route path='/signup' element ={<Signup setUser={setUser} setIsLoaded={setIsLoaded}/>} /> 
+        <Route path='/signin' element={<Signin user={user} setUser={setUser} setIsLoaded={setIsLoaded} />} />
+        <Route path='/signup' element ={<Signup setUser={setUser}  setIsLoaded={setIsLoaded}  />} /> 
         <Route path='/signout' element={<Signout setUser={setUser} />}/>
       </Routes>
       
      
-    </div> : <p>Loading App. </p>}
-    </>
+    </div>
   )
 }
 

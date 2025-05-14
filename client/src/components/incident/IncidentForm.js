@@ -28,7 +28,7 @@ export default function IncidentForm({setIsSubmitted, setIncident}) {
             multiline 
             placeholder='Add Description'
             minRows={3}
-            onChange={(value)=> setIncident((prev)=>({...prev, "description": value}))}
+            onChange={(e)=> setIncident((prev)=>({...prev, "description": e.target.value}))}
             />
             <Button type='submit'>Submit</Button>
             </Stack>

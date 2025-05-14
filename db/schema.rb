@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_10_135909) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_13_103909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -96,12 +96,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_10_135909) do
     t.date "end_date"
     t.integer "coverage_type"
     t.float "premium_amount"
-    t.bigint "vehicle_id", null: false
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["insurer_id"], name: "index_insurance_policies_on_insurer_id"
-    t.index ["vehicle_id"], name: "index_insurance_policies_on_vehicle_id"
   end
 
   create_table "insurances", force: :cascade do |t|
@@ -199,10 +197,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_10_135909) do
     t.string "make"
     t.string "model"
     t.string "plate_number"
-    t.date "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "year"
+    t.bigint "insurance_policy_id"
     t.index ["driver_id"], name: "index_vehicles_on_driver_id"
+    t.index ["insurance_policy_id"], name: "index_vehicles_on_insurance_policy_id"
   end
 
   add_foreign_key "assessment_photos", "assessments"
@@ -217,7 +217,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_10_135909) do
   add_foreign_key "incidents", "locations"
   add_foreign_key "incidents", "vehicles"
   add_foreign_key "insurance_policies", "insurers"
-  add_foreign_key "insurance_policies", "vehicles"
   add_foreign_key "insurers", "insurances"
   add_foreign_key "notifications", "requests"
   add_foreign_key "notifications", "users"
@@ -227,4 +226,5 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_10_135909) do
   add_foreign_key "rescue_providers", "insurances"
   add_foreign_key "users", "locations"
   add_foreign_key "vehicles", "drivers"
+  add_foreign_key "vehicles", "insurance_policies"
 end
