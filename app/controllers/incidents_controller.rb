@@ -3,13 +3,14 @@ class IncidentsController < ApplicationController
   before_action :driver_authenticated, only: [:create]
   # GET /incidents
   def index
-    if current_user.role == "driver"
-      @incidents = Driver.find(current_user["id"]).incidents
-      render json: @incidents
+    @incidents
+    case current_user.role
+    when "driver"
+      @incidents = User.find(current_user["id"]).incidents
     else
       @incidents = Incident.all
-      render json: @incidents
     end
+    render json: @incidents
   end
 
   # GET /incidents/1
@@ -44,6 +45,6 @@ class IncidentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def incident_params
-    params.require(:incident).permit(:vehicle_id, :location_id, :date_time, :description, :police_report_url, :status)
+    params.require(:incident).permit(:vehicle_id, :location_id, :date_happened, :description, :police_report_url, :status)
   end
 end

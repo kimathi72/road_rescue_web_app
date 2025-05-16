@@ -11,7 +11,7 @@ export default function Signin({user,setUser, setIsLoaded}) {
   const navigate =useNavigate() 
   useEffect(()=>{
     if (user && localStorage.getItem('jwt')){
-      navigate(`/${user.role}`)
+      navigate(`/`)
     }
   },[user, navigate])
 
@@ -20,7 +20,7 @@ export default function Signin({user,setUser, setIsLoaded}) {
     localStorage.setItem("jwt", data.jwt);  
     setUser(data.user);  
     setIsLoaded(true)
-    navigate(`/${data.user.role}`)     
+    navigate(`/`)     
   }
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {

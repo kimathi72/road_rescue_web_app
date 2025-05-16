@@ -1,11 +1,8 @@
 Rails.application.routes.draw do
+  resources :incident_photos
   mount ActionCable.server => "/cable"
-  resources :drivers do
-    resources :incidents, only: [:index]
-    resources :claims, only: [:index]
-    resources :requests, only: [:index]
-    resources :vehciles, only: [:index, :create]
-  end
+
+  resources :users
   resources :incidents
   resources :vehicles
   resources :notifications
@@ -16,10 +13,8 @@ Rails.application.routes.draw do
   resources :reviews
   resources :requests
   resources :services
+  resources :drivers
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  get "/users", to: "users#index"
-  patch "/users/:id", to: "users#update"
-  post "/users", to: "users#create"
   post "/auth", to: "auth#create"
   get "/me", to: "users#me"
   delete "/logout", to: "auth#destroy"

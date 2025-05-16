@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Form from'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 
 export default function Signup({setUser, setIsLoaded}) {
-  const [driverData, setData] = useState({type: "Driver"})
+  const [driverData, setData] = useState({})
   const navigate = useNavigate();
+  useEffect(()=>{
+    setData({...driverData, "role": "driver"})
+  },[driverData])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,7 +26,7 @@ export default function Signup({setUser, setIsLoaded}) {
         setUser(data.user);
         localStorage.setItem("jwt", data.jwt);
         setIsLoaded(true)
-        return navigate(`/${data.user.role}`) ;
+        return navigate(`/`) ;
       } catch (error) {
         console.error(error);
       }
@@ -35,7 +38,8 @@ export default function Signup({setUser, setIsLoaded}) {
     }
 return (
   <Form className='authForm' onSubmit={handleSubmit} >
-    <h1> Sign Up {driverData.role}</h1>
+    <h1> Driver Sign Up {driverData.role}</h1>
+    <Form.Control type='text' name='name' placeholder='Enter Full Name' onChange={handleChange}/>
     <Form.Control type='email' name='email' placeholder='Enter email address' onChange={handleChange}/>
     <Form.Control type="text" name="phone" placeholder="phone, eg +254700000000" onChange={handleChange}/>
     <Form.Control type='password' name="password" placeholder = 'Enter Password' onChange={handleChange}/>

@@ -1,26 +1,32 @@
 import { ImageList, ImageListItem } from '@mui/material'
-import React from 'react'
+import useQuery from '../../hooks/useQuery'
+import { useParams } from 'react-router-dom'
 
-export default function IncidentShow({incident}) {
-    const {vehicle,location,driver,claims,photos,  ...rest} = incident
+export default function IncidentShow() {
+    const params = useParams
+    const {data: incident, isLoaded} = useQuery(`/incidents/${params.id}`)
   return (
     <div>
-        <h2>{vehicle['plate_number']}</h2>
-        <p>Make:{vehicle['make']}, model: {vehicle['model']}</p>
-        <p>Location: {location['city']}</p>
-        <p>Driver: {driver['name']}</p>
-        <div>
-            <h3>Incident Photos</h3>
-            <ImageList>
-            {
-                photos.length && photos.map((photo, index) => {
-                    <ImageListItem key={index}>
+       {
+        isLoaded ? <div>
+            show incident
+                       {
+                incident['incident_photos'].length && <ImageList>
+                    <h3>Uploaded Images </h3>
+ {incident['incident_photos'].map((photo, index) => {
+               return     <ImageListItem key={index}>
                         <img
                         src={photo['image_url']}
+                        alt={photo['incident_id']}
                         />
                     </ImageListItem>
                 })  
-            }</ImageList>
+            }</ImageList> }
+        </div> : <p>Loading incident...</p>
+       }
+        <div>
+            <h3>Incident Photos</h3>
+            
         </div>
     </div>
   )

@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react'
 import useQuery from '../../hooks/useQuery'
 import IncidentList from './IncidentList'
 import IncidentCreate from './IncidentCreate'
+import IncidentShow from './IncidentShow'
+import { Route, Routes } from 'react-router-dom'
 
 export default function IncidentIndex({user, handleSubmit}) {
-    const [incidents , setIncidents] = useState(null)
-    
-     const {data: results, isLoaded} = useQuery('/incidents') 
-
-     useEffect(()=>{
-        setIncidents(results)
-     },[results, isLoaded])
+    const {data: incidents, isLoaded} = useQuery('/incidents') 
+      
   return (
     <div className='displayDiv'> 
-        <IncidentCreate handleSubmit={handleSubmit}/>
-        <div>
-        <IncidentList incidents={incidents}/>
-        
-        </div>
+      {user.role === "driver" && <IncidentCreate user={user} handleSubmit={handleSubmit}/>}
+      { isLoaded && <Routes>
+        <Route path='/' exact element={<IncidentList incidents={incidents}/>} />
+        <Route path='/show'element={<IncidentShow/>} />
+      </Routes>}
     </div>
   )
 }

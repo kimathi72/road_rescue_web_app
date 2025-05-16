@@ -3,13 +3,13 @@ class RequestsController < ApplicationController
   before_action :driver_authenticated, only: [:create]
 
   def index
-    if current_user.role == "driver"
-      @requests = Driver.find(current_user["id"])
-      render json: @requests
+    case current_user.role
+    when "driver"
+      @requests = User.find(current_user["id"]).requests
     else
       @requests = Request.all
-      render json: @requests, status: :ok
     end
+    render json: @requests
   end
 
   def show

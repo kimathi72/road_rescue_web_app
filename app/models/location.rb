@@ -1,4 +1,5 @@
 class Location < ApplicationRecord
-  has_many :rescue_providers
+  has_many :requests
+
   validates :city, presence: true, uniqueness: { case_sensitive: false }
 end

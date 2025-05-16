@@ -17,7 +17,12 @@ export default function NavBar({token}) {
         </Navbar.Brand>
         <Nav>        
           {
-            !token ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <Nav.Link href="/signout">Sign out</Nav.Link>
+            !token ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <>
+            <Nav.Link href="/incidents">Incidents</Nav.Link>
+            <Nav.Link href="/requests">Requests</Nav.Link>
+            <Nav.Link href="/vehicles">Vehicles</Nav.Link>
+            <Nav.Link href="/claims">Claims</Nav.Link>
+            <Nav.Link href="/signout">Sign out</Nav.Link></>
           }
         </Nav> 
         </Container>        

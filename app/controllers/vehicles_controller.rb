@@ -3,8 +3,12 @@ class VehiclesController < ApplicationController
   before_action :driver_authenticated, only: [:create]
   # GET /vehicles
   def index
-    @vehicles = Vehicle.all
-
+    case current_user.role
+    when "driver"
+      @vehicles = User.find(current_user.id).vehicles
+    else
+      @vehicle = Vehicle.all
+    end
     render json: @vehicles
   end
 
@@ -15,7 +19,7 @@ class VehiclesController < ApplicationController
 
   # POST /vehicles
   def create
-    # @driver = Driver.all.find_by(id: vehicle_params[:driver_id])
+    # @driver = Driver.find_by(id: vehicle_params[:driver_id])
     @vehicle = Vehicle.create(vehicle_params)
     puts @vehicle.id
     render json: @vehicle, status: :created

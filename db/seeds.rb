@@ -33,12 +33,12 @@ end
   Service.create(name: s)
 end
 
-[
-  { name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129" },
-  { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129" },
-  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", role: "assessor", phone: "+254711808129" },
-  { name: "insurer", email: "insurer@driver.com", password: "insurer123", role: "insurer", phone: "+254711808129" },
-].map do |user|
+[{ name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129" },
+ { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129" },
+ { name: "assessor", email: "assessor@assessor.com", password: "assessor123", role: "assessor", phone: "+254711808129" },
+ { name: "insurer", email: "insurer@insurer.com", password: "insurer123", role: "insurer", phone: "+254711808129" },
+ { name: "provider", email: "provider@provider.com", password: "provider123", role: "provider", phone: "+254711808129" }].map do |user|
   User.create(user)
 end
+
 puts "end of seeding #{Location.count} locations, #{Service.count} services, and #{User.count} users"

@@ -4,14 +4,18 @@ import { Route, Routes } from 'react-router-dom'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import UsersDashboard from './UsersDashboard'
 import SystemLogs from './SystemLogs'
+import AdminDashboard from './AdminDashboard'
 
 export default function AdminIndex({user, authorized_user}) {
   const links = [{
-    url: 'admin/users_dashboard',
-    label: "Users Dashboard",
+    url: 'admin/admin_dashboard',
+    label: "Admin Dashboard",
   },{
 url:"admin/system_logs" ,
     label:"System Logs" ,
+  },{
+ url: 'admin/users_dashboard',
+    label: "Users Dashboard",
   },{
 url: "admin/analytics_dashboad ",
     label:"Analytics Dashboard" ,
@@ -26,6 +30,7 @@ url: "admin/analytics_dashboad ",
       <SideBar links={links}/>
       <div>
         <Routes>
+          <Route path='/' element={<AdminDashboard/>}/>
           <Route path='/analytics_dashboard' element={<AnalyticsDashboard/>}/>
           <Route path='/users_dashboard' element={<UsersDashboard/>}/>
           <Route path='/system_logs' element={<SystemLogs/>}/>

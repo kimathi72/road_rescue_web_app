@@ -1,5 +1,6 @@
 class Vehicle < ApplicationRecord
-  belongs_to :driver
-  belongs_to :insurance_policy
-  has_many :incidents
+  belongs_to :user
+  has_many :incidents, dependent: :destroy
+  validates :user_id, presence: true
+  validates :plate_number, uniqueness: { case_sensitive: false }
 end

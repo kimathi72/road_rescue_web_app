@@ -9,7 +9,7 @@ import VehicleIndex from '../vehicle/VehicleIndex'
 import useQuery from '../../hooks/useQuery'
 
 export default function DriverIndex({user,handleSubmit, authorized_user}) {
-    const {data: driver, isLoaded} = useQuery(`/drivers/${user.id}`)
+    const {data: driver, isLoaded} = useQuery(`/users/${user.id}`)
     const links = [
         {
             url: "/driver/dashboard",
@@ -35,7 +35,7 @@ url: "/driver/incident_reporting/*",
         <SideBar links={links}/>
         <div>
        {isLoaded && <Routes>
-            <Route path={'/incident_reporting/*'} element={<IncidentIndex user={driver} handleSubmit={handleSubmit} />}/>
+            <Route path={'/incident_reporting/*'} element={<IncidentIndex handleSubmit={handleSubmit} />}/>
             <Route path={'/claims_tracking/*'} element= {<ClaimsIndex user={driver}/>} />
             <Route path='/' exact element={<DriverDashboard user={driver}/>} />
             <Route path='/dashboard' exact element={<DriverDashboard user={driver}/>} />

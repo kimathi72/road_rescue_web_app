@@ -5,11 +5,9 @@ import Profile from "./components/auth/Profile.js"
 import Signin from "./components/auth/Signin.js"
 import Signup from "./components/auth/Signup.js" 
 import Signout from "./components/auth/Signout.js" 
-import DriverIndex from './components/driver/DriverIndex.js';
-import AdminIndex from './components/admin/AdminIndex.js';
-import AssessorIndex from './components/assessor/AssessorIndex.js';
-import InsurerIndex from './components/insurer/InsurerIndex.js';
+
 import './assets/styles/mystyles.css'
+import Home from './components/navigation/Home.js';
 
 export default function App() {
 
@@ -57,12 +55,15 @@ const getUser = useCallback(async()=>{
           }
         })
         const data = await result.json() 
-        setUser(data)
+        setUser(data.user)
         setIsLoaded(true)
-        return console.log(data)
+        return console.log(data.user)
 
 },[setUser])
-
+useEffect(()=>{
+  console.log(`user ${user} token ${token}`)
+        if(!user && !token){navigate('/signin')}
+      },[user,token, navigate])
 useEffect(()=>{
   getUser()
 
@@ -73,29 +74,7 @@ useEffect(()=>{
       <NavBar token={token} />
       
       <Routes>
-        {isLoaded && <Route path='/driver/*' element={<DriverIndex 
-        user={user} 
-        handleSubmit={handleSubmit} 
-        authorized_user={authorized_user}
-        />}/>}
-        <Route path='/admin/' element={<AdminIndex 
-        user={user} 
-        authorized_user={authorized_user}
-        />} />
-        <Route path='/assessor' element={<AssessorIndex 
-        user={user} 
-        authorized_user={authorized_user}
-        />} 
-        />
-        <Route path='/insurer' element={<InsurerIndex 
-        user={user} 
-        authorized_user={authorized_user}
-        />} />
-        <Route exact path='/' element={<Signin 
-        user={user} 
-        setIsLoaded={setIsLoaded}
-        setUser={setUser} 
-        />} />
+        <Route path='/*' element={<Home isLoaded={isLoaded} handleSubmit={handleSubmit} user={user} authorized_user={authorized_user}/>} />       
         <Route path='/profile' element={<Profile user={user} />}/>
         <Route path='/signin' element={<Signin user={user} setUser={setUser} setIsLoaded={setIsLoaded} />} />
         <Route path='/signup' element ={<Signup setUser={setUser}  setIsLoaded={setIsLoaded}  />} /> 
