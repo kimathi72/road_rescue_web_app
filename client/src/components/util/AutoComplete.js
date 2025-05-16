@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import useQuery from '../../hooks/useQuery';
 import Chip from '@mui/material/Chip';
 
-export default function AutoComplete ({url, k, callBackFn, lb}){
+export default function AutoComplete ({url, k, setData, lb}){
 
     const {data: results, isLoaded} = useQuery(url)
     //prop 'lb' expects two worded string, the secong word references db table 
@@ -18,7 +18,8 @@ export default function AutoComplete ({url, k, callBackFn, lb}){
         renderValue={(value, getItemProps)=>{
            return <Chip label={value[`${k}`]} {...getItemProps()} />
         }}
-        onChange={( e ,value)=>{value && callBackFn((prev) => ({...prev, [`${objKey}`]: value.id}))}}
+        onChange={( e ,value)=>{setData((prev) => ({...prev, [`${objKey}`]: value.id}))
+        }}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label={lb} />}
       />

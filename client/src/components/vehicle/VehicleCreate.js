@@ -6,7 +6,7 @@ export default function VehicleCreate({driver, setIsSubmitted, setVehicle}) {
     setVehicle((prev) => ({...prev, [`${e.target.name}`]: e.target.value}))
   }
   useEffect(()=>{
-    if(driver){setVehicle((prev)=>({...prev, "driver_id": driver.id}))}
+    if(driver){setVehicle((prev)=>({...prev, "user_id": driver.id}))}
   },[driver, setVehicle])
   return (
     <form className='form' onSubmit={(e)=>{

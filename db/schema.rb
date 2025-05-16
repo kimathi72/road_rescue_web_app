@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_15_064646) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_16_191635) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -126,13 +126,15 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_15_064646) do
     t.integer "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "location_id"
+    t.index ["location_id"], name: "index_users_on_location_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "make"
     t.string "model"
-    t.integer "year"
+    t.string "year"
     t.string "plate_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -148,5 +150,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_15_064646) do
   add_foreign_key "notifications", "requests"
   add_foreign_key "requests", "incidents"
   add_foreign_key "requests", "locations"
+  add_foreign_key "users", "locations"
   add_foreign_key "vehicles", "users"
 end

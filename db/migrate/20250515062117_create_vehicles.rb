@@ -4,7 +4,7 @@ class CreateVehicles < ActiveRecord::Migration[7.0]
       t.references :user, null: false, foreign_key: true
       t.string :make
       t.string :model
-      t.integer :year
+      t.string :year
       t.string :plate_number
 
       t.timestamps

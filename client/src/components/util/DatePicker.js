@@ -3,14 +3,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'; 
 import dayjs from 'dayjs';
 
-export default function DatePicker({setData}) {
+export default function DatePicker({value, setData}) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DateTimePicker
-    value={dayjs(new Date())}
+    value={dayjs(value || new Date())}
     label="Pick date and time"
-    onChange={value => setData((prev)=>({...prev, "date_time": value})) }
+    onChange={value => setData((prev)=>({...prev, "date_happened": value})) }
     />
     </LocalizationProvider>
   )

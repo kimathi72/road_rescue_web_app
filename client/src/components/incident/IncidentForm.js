@@ -3,7 +3,7 @@ import AutoComplete from '../util/AutoComplete'
 import { Button, Stack, TextField } from '@mui/material'
 import DatePicker from '../util/DatePicker'
 
-export default function IncidentForm({setIsSubmitted, setIncident}) {
+export default function IncidentForm({setIsSubmitted,incident, setIncident}) {
   return (
     <form className='form' onSubmit={(e)=>{
         e.preventDefault()
@@ -13,16 +13,16 @@ export default function IncidentForm({setIsSubmitted, setIncident}) {
             <AutoComplete
             url='/vehicles' 
             k={'plate_number'}
-            callBackfn={setIncident}
+            setData={setIncident}
             lb='Select Vehicle'
             />
             <AutoComplete
             url='/locations' 
             k={'city'}
-            callBackfn={setIncident}
+            setData={setIncident}
             lb='Select Location'
             />
-            <DatePicker setData={setIncident}/>
+            <DatePicker setData={setIncident} value={incident["date_happened"]}/>
             </Stack>
             <TextField
             multiline 
