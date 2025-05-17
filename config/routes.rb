@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :requests
   resources :services
   resources :drivers
+  resources :incident_photos
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"
   get "/me", to: "users#me"

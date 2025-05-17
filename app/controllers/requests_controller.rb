@@ -36,6 +36,6 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:service_id, :location_id, :request_description, :rescue_provider_id, :status)
+    params.require(:request).permit(:incident_id, :service_id, :location_id, :request_description, :user_id, :status)
   end
 end

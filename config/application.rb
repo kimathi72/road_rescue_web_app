@@ -6,6 +6,11 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load dotenv only in development or test environment
+if ["development", "test"].include? ENV["RAILS_ENV"]
+  Dotenv::Railtie.load
+end
+
 module ForthYearProject
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -27,6 +32,6 @@ module ForthYearProject
     config.middleware.use ActionDispatch::Session::CookieStore
 
     # Use SameSite=Strict for all cookies to help protect against CSRF
-   
+
   end
 end

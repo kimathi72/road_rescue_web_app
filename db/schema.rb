@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_16_191635) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_17_060203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,8 +99,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_16_191635) do
     t.datetime "updated_at", null: false
     t.bigint "location_id"
     t.bigint "incident_id", null: false
+    t.bigint "user_id"
     t.index ["incident_id"], name: "index_requests_on_incident_id"
     t.index ["location_id"], name: "index_requests_on_location_id"
+    t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -150,6 +152,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_16_191635) do
   add_foreign_key "notifications", "requests"
   add_foreign_key "requests", "incidents"
   add_foreign_key "requests", "locations"
+  add_foreign_key "requests", "users"
   add_foreign_key "users", "locations"
   add_foreign_key "vehicles", "users"
 end

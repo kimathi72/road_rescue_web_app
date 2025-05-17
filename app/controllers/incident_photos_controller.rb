@@ -15,13 +15,9 @@ class IncidentPhotosController < ApplicationController
 
   # POST /incident_photos
   def create
-    @incident_photo = IncidentPhoto.new(incident_photo_params)
-
-    if @incident_photo.save
-      render json: @incident_photo, status: :created, location: @incident_photo
-    else
-      render json: @incident_photo.errors, status: :unprocessable_entity
-    end
+    @image = Cloudinary::Uploader.upload(incident_photo_params[:image])
+    @incident_photo = IncidentPhoto.create(incident_id: incident_photo_params[:incident_id], image_url: @image["url"])
+    render json: @incident_photo, status: :created
   end
 
   # PATCH/PUT /incident_photos/1
@@ -39,13 +35,14 @@ class IncidentPhotosController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_incident_photo
-      @incident_photo = IncidentPhoto.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def incident_photo_params
-      params.require(:incident_photo).permit(:incident_id, :image_url)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_incident_photo
+    @incident_photo = IncidentPhoto.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def incident_photo_params
+    params.require(:incident_photo).permit(:incident_id, :image_url)
+  end
 end
