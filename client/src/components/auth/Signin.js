@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom'
-import Form from'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { Button, Stack, TextField } from '@mui/material'
 
-export default function Signin({user,setUser, setIsLoaded}) {
+export default function Signin({user,setUser,setIsLoaded}) {
   //create user email and password variables
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
-  
   const navigate =useNavigate() 
   useEffect(()=>{
-    if (user && localStorage.getItem('jwt')){
-      navigate(`/`)
+    if (localStorage.getItem('jwt') && user) {
+      setIsLoaded(true)
+      navigate(`${user.role}`)
+
     }
-  },[user, navigate])
+  },[user, setIsLoaded, navigate])
 
   //callback function set user authentication parameter 
   function handleAuthenticate(data) {    
     localStorage.setItem("jwt", data.jwt);  
     setUser(data.user);  
     setIsLoaded(true)
-    navigate(`/`)     
+    navigate(`/${data.user.role}`)    
   }
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {
@@ -41,12 +41,23 @@ export default function Signin({user,setUser, setIsLoaded}) {
   }
 
   return (
-    <Form className='authForm' onSubmit={handleSubmit}>
-      <h3>Sign In As A  Here</h3>    
-      <Form.Control type='email' placeholder='Enter email address' onChange={(e) => setEmail(e.target.value) }/>
-      <Form.Control type='password' placeholder = 'Enter Password' onChange={(e) => setPassword(e.target.value) }/>
-      <Button variant="success" type="submit">Sign In</Button>
-      <Button onClick={()=> navigate('/signup')}>Don't have an account yet?</Button>
-    </Form>    
+    <form className='form' onSubmit={handleSubmit}>
+      <h3>Sign In As A  Here</h3> 
+      <Stack direction={'column'} spacing={2}>
+        <TextField
+        label='Email'
+        type='email'
+        placeholder='enter email address'
+        onChange={(e) => setEmail(e.target.value) }
+        />
+        <TextField
+        label='Password'
+        type='password'
+        placeholder='enter password'
+        onChange={(e) => setPassword(e.target.value) }
+        />
+        <Button type='submit'>Sign In</Button>
+      </Stack>
+    </form>    
   )
 }

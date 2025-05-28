@@ -3,31 +3,33 @@ class IncidentsController < ApplicationController
   before_action :driver_authenticated, only: [:create]
   # GET /incidents
   def index
-    @incidents
     case current_user.role
     when "driver"
       @incidents = User.find(current_user["id"]).incidents
     else
       @incidents = Incident.all
     end
-    render json: @incidents
+    render json: @incidents, status: :ok
   end
 
   # GET /incidents/1
   def show
-    render json: @incident
+    render json: @incident, include: [:vehicle, :location, :claim, :incident_photos], status: :ok
   end
 
   # POST /incidents
   def create
     @incident = Incident.create(incident_params)
+    serialized_incident = @incident.serialize
+    puts serialized_incident
+    ActionCable.server.broadcast("incident_channel", serialized_incident)
     render json: @incident, status: :created
   end
 
   # PATCH/PUT /incidents/1
   def update
     @incident.update(incident_params)
-    render json: @incident
+    render json: @incident, include: [:vehicle, :location, :claim, :incident_photos], status: :ok
   end
 
   # DELETE /incidents/1

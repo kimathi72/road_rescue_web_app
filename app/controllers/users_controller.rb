@@ -1,10 +1,17 @@
 class UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
   before_action :set_user, only: %i[ show update destroy ]
+  before_action :insurer_admin_authenticated, only: [:index]
+  before_action :admin_authenticated, only: [:update]
 
   # GET /users
   def index
-    @users = User.all
+    case current_user.role
+    when "insurer"
+      @users = User.all.select { |user| user.role != "insurer" || user.role != "admin" }
+    else
+      @users = User.all
+    end
     render json: @users, status: :ok
   end
 

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::API
   # require 'uri'
 
   before_action :authorized
+  before_action :cookie_set
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid_response
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
@@ -42,16 +43,38 @@ class ApplicationController < ActionController::API
     !!current_user
   end
 
+  def insurer_authenticated
+    render json: { message: "Only authenticated insurer allowed" }, status: :unauthorized unless current_user[:role] == "insurer"
+  end
+
+  def insurer_admin_authenticated
+    render json: { message: "Only authenticated assessor or admin allowed" }, status: :unauthorized unless current_user[:role] == "insurer" || current_user[:role] == "admin"
+  end
+
+  def insurer_assessor_authenticated
+    render json: { message: "Only authenticated assessor or insurer allowed" }, status: :unauthorized unless current_user[:role] == "insurer" || current_user[:role] == "assessor"
+  end
+
   def driver_authenticated
     render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:role] == "driver"
   end
 
   def admin_authenticated
-    render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:role] == "admin"
+    render json: { message: "Only authenticated admin allowed" }, status: :unauthorized unless current_user[:role] == "admin"
+  end
+
+  def assessor_authenticated
+    render json: { message: "Only authenticated assessor allowed" }, status: :unauthorized unless current_user[:role] == "assessor"
   end
 
   def authorized
     render json: { message: "Please log in" }, status: :unauthorized unless logged_in?
+  end
+
+  def cookie_set
+    @user = current_user
+    return unless current_user
+    cookies[:user_name] = @user.id
   end
 
   # def sendgrid_email (email:, token:)

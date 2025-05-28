@@ -9,28 +9,24 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
       e.preventDefault()
       setIsSubmitted(true)
     }} className="form">
-      <h1>Report New Incident</h1>
+      <Stack direction={"column"} spacing={2}>
+      <h1>Request Road Rescue services</h1>
       <Stack direction={"row"} spacing={2}>
           <AutoComplete
-            lb={"Vehicle Select"}
-            callBackFn={setRequest}
+            lb={"Select Vehicle"}
+            setData={setRequest}
             url={"/vehicles"}
             k={"plate_number"}
           />
           
           <AutoComplete
-            lb={"Service Type"}
+            lb={"Choose Service"}
             url={"/services"}
             k={"name"}
-            callBackFn={setRequest}
-          />
-          <AutoComplete
-            lb={"Location Select"}
-            callBackFn={setRequest}
-            url={"/locations"}
-            k={"city"}
+            setData={setRequest}
           />
 </Stack>
+
         <TextField
         label= "Additional notes: "
           multiline
@@ -38,7 +34,9 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
           minRows={3}
           placeholder="Enter description"
         />
-      <Button type="submit">submit</Button>
+        <Button type="submit">submit</Button>
+        </Stack>
+      
     </form>
   );
 }

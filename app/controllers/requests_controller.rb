@@ -5,6 +5,8 @@ class RequestsController < ApplicationController
   def index
     case current_user.role
     when "driver"
+      @requests = User.find(current_user["id"]).vehicles.requests
+    when "provider"
       @requests = User.find(current_user["id"]).requests
     else
       @requests = Request.all
@@ -13,7 +15,7 @@ class RequestsController < ApplicationController
   end
 
   def show
-    render @request, status: :ok
+    render @request, include: [:service, :vehicle, :location], status: :ok
   end
 
   def create
@@ -23,7 +25,7 @@ class RequestsController < ApplicationController
 
   def update
     @request.update(request_params)
-    render json: @request, status: :updated
+    render json: @request, include: [:service, :vehicle, :location], status: :updated
   end
 
   def destroy
@@ -36,6 +38,6 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:incident_id, :service_id, :location_id, :request_description, :user_id, :status)
+    params.require(:request).permit(:vehicle_id, :service_id, :location_id, :request_description, :user_id, :status)
   end
 end

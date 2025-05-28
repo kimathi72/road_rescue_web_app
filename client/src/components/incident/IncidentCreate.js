@@ -6,7 +6,7 @@ export default function IncidentCreate({handleSubmit}) {
     const [isSubmitted, setIsSubmitted] = useState(false)
     useEffect(()=>{
       console.log(incident)
-        isSubmitted && handleSubmit('incidents', "POST", incident)
+        isSubmitted && handleSubmit('/incidents', "POST", incident)
     },[isSubmitted, incident, handleSubmit])
   return (
     <div>

@@ -1,40 +1,35 @@
 class ClaimsController < ApplicationController
   before_action :set_claim, only: %i[ show update destroy ]
-
+  before_action :insurer_authenticated, only: [:create]
+  before_action :insurer_assessor_authenticated, only: [:update, :delete]
   # GET /claims
   def index
-    if current_user.role == "driver"
-      @claims = Diver.find(current_user["id"]).claims
-      render json: @claims
+    case current_user.role
+    when "driver"
+      @claims = User.find(current_user["id"]).claims
+    when "assessor"
+      @claims = User.find(current_user["id"]).assessments.claims
     else
       @claims = Claim.all
-      render json: @claims
     end
+    render json: @claims
   end
 
   # GET /claims/1
   def show
-    render json: @claim
+    render json: @claim, include: [:incident, :assessment], status: :ok
   end
 
   # POST /claims
   def create
-    @claim = Claim.new(claim_params)
-
-    if @claim.save
-      render json: @claim, status: :created, location: @claim
-    else
-      render json: @claim.errors, status: :unprocessable_entity
-    end
+    @claim = Claim.create(claim_params)
+    render json: @claim, status: :created
   end
 
   # PATCH/PUT /claims/1
   def update
-    if @claim.update(claim_params)
-      render json: @claim
-    else
-      render json: @claim.errors, status: :unprocessable_entity
-    end
+    @claim.update(claim_params)
+    render json: @claim
   end
 
   # DELETE /claims/1
@@ -51,6 +46,6 @@ class ClaimsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def claim_params
-    params.require(:claim).permit(:incident_id, :status, :insurer_id, :approved_amount, :payout_date)
+    params.require(:claim).permit(:incident_id, :status, :approved_amount, :payout_date)
   end
 end

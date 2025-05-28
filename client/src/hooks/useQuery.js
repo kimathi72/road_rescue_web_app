@@ -2,6 +2,7 @@ import  { useState, useEffect, useCallback } from "react";
 
 function useQuery(url) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const token = localStorage.getItem('jwt')
   // rename `posts` to a more generic `data`
   const [data, setData] = useState(null);
   const fetchData = useCallback(async()=>{
@@ -10,7 +11,7 @@ function useQuery(url) {
         method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+            "Authorization": !!`Bearer ${token}` && `Bearer ${token}`
           }
       })
       const data = await res.json()
@@ -19,7 +20,7 @@ function useQuery(url) {
     }catch(error){
       console.error(error)
     } 
-  },[url])
+  },[url, token])
   
 
   useEffect(() => {

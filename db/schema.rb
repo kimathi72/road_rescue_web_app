@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_17_060203) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_27_153107) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +20,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_17_060203) do
     t.float "estimated_cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["claim_id"], name: "index_assessments_on_claim_id"
+    t.index ["user_id"], name: "index_assessments_on_user_id"
   end
 
   create_table "claims", force: :cascade do |t|
@@ -95,14 +97,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_17_060203) do
     t.integer "service_id"
     t.string "request_description"
     t.integer "status"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
-    t.bigint "incident_id", null: false
-    t.bigint "user_id"
-    t.index ["incident_id"], name: "index_requests_on_incident_id"
+    t.bigint "vehicle_id", null: false
     t.index ["location_id"], name: "index_requests_on_location_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
+    t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -144,15 +146,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_17_060203) do
   end
 
   add_foreign_key "assessments", "claims"
+  add_foreign_key "assessments", "users"
   add_foreign_key "claims", "incidents"
   add_foreign_key "incident_photos", "incidents"
   add_foreign_key "incidents", "locations"
   add_foreign_key "incidents", "vehicles"
   add_foreign_key "insurance_policies", "vehicles"
   add_foreign_key "notifications", "requests"
-  add_foreign_key "requests", "incidents"
   add_foreign_key "requests", "locations"
   add_foreign_key "requests", "users"
+  add_foreign_key "requests", "vehicles"
   add_foreign_key "users", "locations"
   add_foreign_key "vehicles", "users"
 end

@@ -1,16 +1,22 @@
 class AssessmentsController < ApplicationController
   before_action :set_assessment, only: %i[ show update destroy ]
-
+  before_action :assessor_authenticated, only: [:update, :delete]
   # GET /assessments
   def index
-    @assessments = Assessment.all
-
+    case current_user.role
+    when "driver"
+      @assessments = User.find(current_user[:id]).claims.assessments
+    when "assessor"
+      @assessments = Assessment.select { |assessment| assessment.user_id == current_user.id }
+    else
+      @assessments = Assessment.all
+    end
     render json: @assessments
   end
 
   # GET /assessments/1
   def show
-    render json: @assessment
+    render json: @assessment, include: :claim, status: :ok
   end
 
   # POST /assessments
@@ -39,13 +45,14 @@ class AssessmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_assessment
-      @assessment = Assessment.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def assessment_params
-      params.require(:assessment).permit(:claim_id, :assessor_id, :report_url, :estimated_cost)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_assessment
+    @assessment = Assessment.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def assessment_params
+    params.require(:assessment).permit(:claim_id, :assessor_id, :report_url, :estimated_cost)
+  end
 end

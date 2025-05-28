@@ -15,19 +15,18 @@ class IncidentPhotosController < ApplicationController
 
   # POST /incident_photos
   def create
-    @image = Cloudinary::Uploader.upload(incident_photo_params[:image])
-    @incident_photo = IncidentPhoto.create(incident_id: incident_photo_params[:incident_id], image_url: @image["url"])
+    @incident_photo = IncidentPhoto.create(incident_photo_params)
     render json: @incident_photo, status: :created
   end
 
   # PATCH/PUT /incident_photos/1
-  def update
-    if @incident_photo.update(incident_photo_params)
-      render json: @incident_photo
-    else
-      render json: @incident_photo.errors, status: :unprocessable_entity
-    end
-  end
+  # def update
+  #   if @incident_photo.update(incident_photo_params)
+  #     render json: @incident_photo
+  #   else
+  #     render json: @incident_photo.errors, status: :unprocessable_entity
+  #   end
+  # end
 
   # DELETE /incident_photos/1
   def destroy
@@ -43,6 +42,6 @@ class IncidentPhotosController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def incident_photo_params
-    params.require(:incident_photo).permit(:incident_id, :image_url)
+    params.permit(:incident_id, :image_url)
   end
 end

@@ -1,18 +1,41 @@
 import useQuery from '../../hooks/useQuery'
-import IncidentList from './IncidentList'
 import IncidentCreate from './IncidentCreate'
-import IncidentShow from './IncidentShow'
-import { Route, Routes } from 'react-router-dom'
-
+import { Route, Routes} from 'react-router-dom'
+import { useEffect, useContext, useState } from 'react' 
+import { CableContext } from '../../context/cable';
+import IncidentList from './IncidentList'
+import IncidentPreview from './IncidentPreview'
 export default function IncidentIndex({user, handleSubmit}) {
-    const {data: incidents, isLoaded} = useQuery('/incidents') 
+    const {data: results, isLoaded} = useQuery('/incidents') 
+    const [incidents, setIncidents] = useState(null)
+    const cableContext = useContext(CableContext)
+
+    useEffect(()=>{
+        if (isLoaded) {setIncidents(results)}
+       
+    },[isLoaded,results])
+
+
+    useEffect(()=>{
+        const newChannel = cableContext.cable.subscriptions.create(
+    {
+      channel: "IncidentChannel",
+    },
+    {
+      // remember, the data being received and passed to the received
+      // callback is an object structured like this:
+      // { message: "some message" }
+      received: (data) => console.log(data)
+    })
+    console.log(newChannel)
+    },[cableContext, incidents])
       
   return (
-    <div className='displayDiv'> 
-      {user.role === "driver" && <IncidentCreate user={user} handleSubmit={handleSubmit}/>}
-      { isLoaded && <Routes>
-        <Route path='/' exact element={<IncidentList incidents={incidents}/>} />
-        <Route path='/show'element={<IncidentShow/>} />
+    <div className='displayDiv '> 
+      { incidents && <Routes>
+        <Route path='/create' element={<IncidentCreate user={user} handleSubmit={handleSubmit}/>} />
+        <Route path='/*' exact element={<IncidentList incidents={incidents} user={user}/>} />
+        <Route path='/:id' element={<IncidentPreview/>} />
       </Routes>}
     </div>
   )

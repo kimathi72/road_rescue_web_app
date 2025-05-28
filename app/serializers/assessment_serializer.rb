@@ -1,5 +1,5 @@
 class AssessmentSerializer < ActiveModel::Serializer
   attributes :id, :report_url, :estimated_cost
-  has_one :claim
-  has_one :assessor
+  belongs_to :claim
+  belongs_to :user
 end

@@ -1,31 +1,44 @@
-import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container"
+import { useLocation } from "react-router-dom";
+import Link from '@mui/material/Link';
+import { Stack } from "@mui/material";
 
-
-export default function NavBar({token}) {
-
+export default function NavBar({user}) {
+  const location = useLocation()
+  const {pathname} = location
+  const preventDefault = (event) => event.preventDefault();
 
   return (
-    <Navbar id="navBar" className="d-flex justify-content-between bg-light">  
-    <Container>
-        <Navbar.Brand href="/">
-        <div id="logo">
-          <b id="appName">Road Rescue Web App</b>
-        </div>
-        </Navbar.Brand>
-        <Nav>        
-          {
-            !token ? <Nav.Link href="/signup">Sign up</Nav.Link> :  <>
-            <Nav.Link href="/incidents">Incidents</Nav.Link>
-            <Nav.Link href="/requests">Requests</Nav.Link>
-            <Nav.Link href="/vehicles">Vehicles</Nav.Link>
-            <Nav.Link href="/claims">Claims</Nav.Link>
-            <Nav.Link href="/signout">Sign out</Nav.Link></>
+    <Stack
+      alignItems={'end'}
+      sx={{
+        width: '100%',
+        typography: 'body1',
+        '& > :not(style) ~ :not(style)': {
+          ml: 2,
+        },
+        padding: "1rem",
+        borderBottom: "1px solid #000" 
+      }}
+      onClick={preventDefault}
+    >
+      {
+            !user ? pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">Sign in</Link> : <Link href="/signup" color="info" underline="hover">Sign up</Link>  : <Link href="/signout"  color="warning" underline="hover">Sign out</Link>
           }
-        </Nav> 
-        </Container>        
-    </Navbar>
+
+    </Stack>
   );
 }
+
+
+// <Navbar id="navBar" className="d-flex justify-content-between bg-light">  
+//     <Container>
+//         <Navbar.Brand href="/">
+//         <div id="logo">
+//           <b id="appName">Road Rescue Web App</b>
+//         </div>
+//         </Navbar.Brand>
+//         <Nav>        
+          
+//         </Nav> 
+//         </Container>        
+//     </Navbar>

@@ -19,9 +19,7 @@ class VehiclesController < ApplicationController
 
   # POST /vehicles
   def create
-    # @driver = Driver.find_by(id: vehicle_params[:driver_id])
     @vehicle = Vehicle.create(vehicle_params)
-    puts @vehicle.id
     render json: @vehicle, status: :created
   end
 

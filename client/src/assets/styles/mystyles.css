@@ -21,11 +21,17 @@
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    height: 90vh;
 }
 .displayDiv{
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin: 1rem;
+    padding: 1rem; 
+    flex-direction: row;
+    flex-wrap: wrap; 
+    justify-content: space-around;
 }
 .sideBar {
     padding: 1rem;

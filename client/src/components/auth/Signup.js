@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Form from'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-
+import { Button, Stack, TextField } from '@mui/material'
+import AutoComplete from '../util/AutoComplete'
 
 export default function Signup({setUser, setIsLoaded}) {
   const [driverData, setData] = useState({})
   const navigate = useNavigate();
   useEffect(()=>{
-    setData({...driverData, "role": "driver"})
-  },[driverData])
+    setData((prev)=>({...prev, "role": "driver"}))
+  },[])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -26,7 +25,7 @@ export default function Signup({setUser, setIsLoaded}) {
         setUser(data.user);
         localStorage.setItem("jwt", data.jwt);
         setIsLoaded(true)
-        return navigate(`/`) ;
+        navigate(`/`) ;
       } catch (error) {
         console.error(error);
       }
@@ -37,15 +36,47 @@ export default function Signup({setUser, setIsLoaded}) {
       setData((prevUser) => ({...prevUser, [name]: value}))
     }
 return (
-  <Form className='authForm' onSubmit={handleSubmit} >
-    <h1> Driver Sign Up {driverData.role}</h1>
-    <Form.Control type='text' name='name' placeholder='Enter Full Name' onChange={handleChange}/>
-    <Form.Control type='email' name='email' placeholder='Enter email address' onChange={handleChange}/>
-    <Form.Control type="text" name="phone" placeholder="phone, eg +254700000000" onChange={handleChange}/>
-    <Form.Control type='password' name="password" placeholder = 'Enter Password' onChange={handleChange}/>
-    <Form.Control type='password' name="password_confirmation" placeholder = 'Enter Password Confirmation' onChange={handleChange}/>
-    <Button variant="success" type="submit">Sign Up</Button>
-    <Button onClick={()=> navigate('/signin')}>Already have an account?</Button>
-  </Form>
+  <form className='form' onSubmit={handleSubmit} >
+    <h1> Driver Sign Up Here</h1>
+    <Stack direction={'column'} spacing={2}>
+      <AutoComplete
+      setData={setData}
+      url='/locations' 
+            k={'city'}
+            lb='Select Location'
+      />
+      <TextField
+    name="name"
+    placeholder="enter full name"
+    type="text"
+    onChange={handleChange}
+    />
+    <TextField
+    name="email"
+    placeholder="enter email address"
+    type="email"
+    onChange={handleChange}
+    />
+    <TextField
+    name="phone"
+    placeholder="enter phone number +254XXXXXXXXX"
+    type="text"
+    onChange={handleChange}
+    />
+    <TextField
+    name="password"
+    placeholder="enter password"
+    type="password"
+    onChange={handleChange}
+    />
+    <TextField
+    name="password_confirmation"
+    placeholder="password confirmation"
+    type="password"
+    onChange={handleChange}
+    />
+    <Button type='submit' >Sign up</Button>
+    </Stack>
+  </form>
 )
 }

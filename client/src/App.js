@@ -1,148 +1,118 @@
-import React , {useCallback, useEffect, useState} from 'react'
-import { Routes, Route, useNavigate} from "react-router-dom";
-import NavBar from "./components/navigation/NavBar.js"
-import Profile from "./components/auth/Profile.js"
-import Signin from "./components/auth/Signin.js"
-import Signup from "./components/auth/Signup.js" 
-import Signout from "./components/auth/Signout.js" 
+import { useCallback, useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import NavBar from "./components/navigation/NavBar.js";
+import Signin from "./components/auth/Signin.js";
+import Signup from "./components/auth/Signup.js";
+import Signout from "./components/auth/Signout.js";
+import "./assets/styles/mystyles.css";
+import DriverIndex from "./components/driver/DriverIndex.js";
+import InsurerIndex from "./components/insurer/InsurerIndex.js";
+import AssessorIndex from "./components/assessor/AssessorIndex.js";
+import ProviderIndex from "./components/provider/ProviderIndex.js";
 
-import './assets/styles/mystyles.css'
-import Home from './components/navigation/Home.js';
 
 export default function App() {
-
   //set user State , default to null, update state on sign in/up
-const [user, setUser] = useState(null)
-const token = localStorage.getItem('jwt')
-const [isLoaded,setIsLoaded] = useState(false)
-// define navigation pointer 
-const navigate = useNavigate()
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("jwt");
+  const [isLoaded, setIsLoaded] = useState(false)
+  // define navigation pointer
+  const navigate = useNavigate();
 
-// callback function to update state. pass as prop to child component
-//  const updateState = useCallback((setData, obj)=>{
-//     return setData((prev => ({...prev, obj})))
-//   },[])
+  const getUser = useCallback(async () => {
+    // await fetch api call for current_user data
+    const result = await fetch("/me", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+    });
+    //await promise results.json() 
+    const data = await result.json();
+    setUser(data.user);
+    setIsLoaded(true)
+    return console.log(data.user);
+  }, [setUser]);
+  
+  useEffect(() => {
+    getUser(); //call our  current user usecallback function 
+  }, [getUser]);
 
   // callback function to do async fetch request. pass as prop to child component
-  const handleSubmit= async( url, method, obj) =>{
-    const results = await fetch(url,{
-      "method": method, 
-      "headers": {
-        "Authorization": `Bearer ${token}`, 
-        "Content-Type": "application/json"
-      }, 
-      body: obj && JSON.stringify(obj) 
-    })
-    const data =  await results.json()
-    console.log(data)
-  } 
+  const handleSubmit = async (url, method, obj) => {
+    const results = await fetch(url, {
+      method: method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: obj && JSON.stringify(obj),
+    });
+    const data = await results.json();
+    console.log(data);
+  };
 
   //on App load, query for current user, auto login if signed in, otherwise sign in first.
 
-const authorized_user = useCallback((role, userRole) => {
-  if ( role!== userRole){
-    alert(`Only authenticated ${role} allowed`) 
-    navigate('/')
-  }
-},[navigate])
-
-const getUser = useCallback(async()=>{
-        const result = await  fetch('/me', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-          }
-        })
-        const data = await result.json() 
-        setUser(data.user)
-        setIsLoaded(true)
-        return console.log(data.user)
-
-},[setUser])
-useEffect(()=>{
-  console.log(`user ${user} token ${token}`)
-        if(!user && !token){navigate('/signin')}
-      },[user,token, navigate])
-useEffect(()=>{
-  getUser()
-
-},[getUser])
+  const authorized_user = useCallback(
+    (role, userRole) => {
+      if (role !== userRole) {
+        alert(`Only authenticated ${role} allowed`);
+        navigate("/");
+      }
+    },
+    [navigate]
+  );
 
 
-  return ( <div  className='mainDiv'>
-      <NavBar token={token} />
-      
+  return (
+    <div className="mainDiv">
+      <NavBar user={user}/>
+
       <Routes>
-        <Route path='/*' element={<Home isLoaded={isLoaded} handleSubmit={handleSubmit} user={user} authorized_user={authorized_user}/>} />       
-        <Route path='/profile' element={<Profile user={user} />}/>
-        <Route path='/signin' element={<Signin user={user} setUser={setUser} setIsLoaded={setIsLoaded} />} />
-        <Route path='/signup' element ={<Signup setUser={setUser}  setIsLoaded={setIsLoaded}  />} /> 
-        <Route path='/signout' element={<Signout setUser={setUser} />}/>
+        <Route path="/signin" element={<Signin user={user} setUser={setUser}  setIsLoaded={setIsLoaded} />}/>
+        <Route path="/" exact element={<Signin  user={user} setUser={setUser}  setIsLoaded={setIsLoaded} />}/>
+        <Route path="/signup" element={<Signup setUser={setUser} setIsLoaded={setIsLoaded}  />}/>
+        <Route path="/signout" element={<Signout setUser={setUser} />} />
+
+          <Route
+            path="/driver/*"
+            element={
+              isLoaded && <DriverIndex user={user} authorized_user={authorized_user} handleSubmit={handleSubmit}/>
+            }
+          />
+          <Route
+            path="/assessor/*"
+            element={
+             isLoaded &&  <AssessorIndex
+                user={user}
+                authorized_user={authorized_user}
+                handleSubmit={handleSubmit}
+              />
+            }
+          />
+          <Route
+            path="/provider/*"
+            element={
+              isLoaded && <ProviderIndex
+                user={user}
+                authorized_user={authorized_user}
+                handleSubmit={handleSubmit}
+              />
+            }
+          />
+          <Route
+            path="/insurer/*"
+            element={
+            isLoaded &&   <InsurerIndex user={user} handleSubmit={handleSubmit} authorized_user={authorized_user} />
+            }
+          />
       </Routes>
-      
-     
+
     </div>
-  )
+  );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState} from 'react'
 // import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
@@ -161,7 +131,7 @@ useEffect(()=>{
 // import Reports from "./components/Reports.js"
 // import Tickets from "./components/Tickets.js"
 // import MakeRequest from "./components/MakeRequest.js"
-// import ViewRequest from "./components/ViewRequest.js" 
+// import ViewRequest from "./components/ViewRequest.js"
 // import NearbyResponders from "./components/NearbyResponders.js"
 // import Communication from "./components/Communication.js"
 // import EmergencySoS from "./components/EmergencySoS.js"
@@ -179,11 +149,11 @@ useEffect(()=>{
 //     <Router>
 //     <NavBar user={user} isLoggedIn={isLoggedIn}/>
 //     <Routes>
-//     <Route path='/' element={<Home  setUser= {setUser}/>}/> 
-//     <Route path='/signin' element={<Signin setUser ={setUser} setIsLoggedIn={setIsLoggedIn} />}/> 
-//     <Route path="/profile" element={<Profile user = {user} />}/>  
-//     <Route path="/signup" element={<Signup setUser= {setUser} setIsLoggedIn={setIsLoggedIn}  />}/> 
-//     <Route path="/updateProfile" element={<UpdateProfile user = {user} />}/>  
+//     <Route path='/' element={<Home  setUser= {setUser}/>}/>
+//     <Route path='/signin' element={<Signin setUser ={setUser} setIsLoggedIn={setIsLoggedIn} />}/>
+//     <Route path="/profile" element={<Profile user = {user} />}/>
+//     <Route path="/signup" element={<Signup setUser= {setUser} setIsLoggedIn={setIsLoggedIn}  />}/>
+//     <Route path="/updateProfile" element={<UpdateProfile user = {user} />}/>
 //     <Route path="/deleteProfile" element={<DeleteProfile user = {user}/>}/>
 //     <Route path="/manageUsers" element= {<ManageUsers user={user} />} />
 //     <Route path="/manageRequests" element= {<ManageRequests user={user} />} />
@@ -209,4 +179,3 @@ useEffect(()=>{
 // }
 
 // export default App;
-
