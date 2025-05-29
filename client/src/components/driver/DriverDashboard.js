@@ -1,9 +1,13 @@
 import { Card, CardContent, Stack, Typography } from '@mui/material'
 import VehicleCreate from '../vehicle/VehicleCreate.js'
 import VehicleList from '../vehicle/VehicleList.js'
+import { useEffect } from 'react'
 
 
-export default function DriverDashboard({user, handleSubmit}) {
+export default function DriverDashboard({handleSubmit, user, authorizedUser }) {
+    useEffect(()=>{
+            authorizedUser('driver', user.role) 
+        },[user, authorizedUser])
    const {vehicles, incidents, requests, claims, ...rest} = user
    console.log(rest)
   return (

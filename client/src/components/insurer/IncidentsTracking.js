@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react'
 
-
-
-export default function InsurerDashboard({user,authorizedUser}) {
+export default function IncidentsTracking({user,authorizedUser}) {
     useEffect(()=>{
            if (user) authorizedUser('insurer', user.role) 
         },[user, authorizedUser])
-  
   return (
-    <div>InsurerDashboard
-
-    </div>
+    <div>IncidentsTracking</div>
   )
 }

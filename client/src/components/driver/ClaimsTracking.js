@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ClaimsList from '../claim/ClaimsList'
 // import { Route, Routes } from 'react-router-dom'
 // import ClaimsShow from '../claim/ClaimsShow'
 // import ClaimCreate from '../claim/ClaimCreate'
 
-export default function ClaimsTracking() {
+export default function ClaimsTracking({handleSubmit, user, authorizedUser }) {
+    useEffect(()=>{
+            authorizedUser('driver', user.role) 
+        },[user, authorizedUser])
   return (
     <ClaimsList />
     // <Routes>

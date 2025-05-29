@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
-export default function AssessorDashboard({user, handleSubmit, authorizedUser}) {
-    useEffect(()=>{
+export default function AssignedIncidents({user, authorizedUser}) {
+      useEffect(()=>{
         authorizedUser('assessor', user.role) 
     },[user, authorizedUser])
   return (
-    <div>AssessorDashboard</div>
+    <div>AssignedIncidents</div>
   )
 }

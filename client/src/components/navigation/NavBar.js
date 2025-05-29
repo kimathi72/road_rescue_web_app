@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 export default function NavBar({user}) {
   const location = useLocation()
   const {pathname} = location
-
+  const token = localStorage.getItem('jwt')
   return (
     <Stack
       justifyContent={'space-between'}
@@ -23,7 +23,7 @@ export default function NavBar({user}) {
     >
       <Link  color="secondary" href="/" underline="hover"><b>Road Rescue & Claims Tracking WebApp</b></Link>
       {
-            !user ? pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">Sign in</Link> : <Link href="/signup" color="info" underline="hover">Sign up</Link>  : <Link href="/signout"  color="warning" underline="hover">Sign out</Link>
+            !!user && !!token ? <Link href="/signout"  color="warning" underline="hover">Sign out</Link> : pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">Sign in</Link> : <Link href="/signup" color="info" underline="hover">Sign up</Link> 
           }
 
     </Stack>

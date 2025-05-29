@@ -15,7 +15,12 @@ class IncidentPhotosController < ApplicationController
 
   # POST /incident_photos
   def create
-    @incident_photo = IncidentPhoto.create(incident_photo_params)
+    upload_photo = Cloudinary::Uploader.upload(params[:image],
+                                               use_filename: true,
+                                               unique_filename: false,
+                                               overwrite: true)
+    public_id = upload_photo["public_id"]
+    @incident_photo = IncidentPhoto.create(incident_id: params[:incident_id], public_id: public_id)
     render json: @incident_photo, status: :created
   end
 
@@ -42,6 +47,6 @@ class IncidentPhotosController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def incident_photo_params
-    params.permit(:incident_id, :image_url)
+    params.permit(:incident_id, :image)
   end
 end
