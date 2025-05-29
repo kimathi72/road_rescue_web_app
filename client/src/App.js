@@ -5,22 +5,60 @@ import Signin from "./components/auth/Signin.js";
 import Signup from "./components/auth/Signup.js";
 import Signout from "./components/auth/Signout.js";
 import "./assets/styles/mystyles.css";
-import DriverIndex from "./components/driver/DriverIndex.js";
-import InsurerIndex from "./components/insurer/InsurerIndex.js";
-import AssessorIndex from "./components/assessor/AssessorIndex.js";
-import ProviderIndex from "./components/provider/ProviderIndex.js";
-
+import Home from "./components/navigation/Home.js";
+import RequestRescue from "./components/driver/RequestRescue.js";
+import { Stack } from "@mui/material";
+import SideBar from "./components/navigation/SideBar.js";
+import IncidentReporting from "./components/driver/IncidentReporting.js";
+import ClaimsTracking from "./components/driver/ClaimsTracking.js";
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+// import StreamIcon from '@mui/icons-material/Stream';
+import SupportIcon from '@mui/icons-material/Support';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+// import CommuteIcon from '@mui/icons-material/Commute';
+// import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("jwt");
   const [isLoaded, setIsLoaded] = useState(false)
+  const [links, setLinks] = useState([])
   // define navigation pointer
   const navigate = useNavigate();
-
+  useEffect(()=>{
+    switch (!!user && user.role) {
+    case "driver":
+      setLinks([
+        {
+          path:'/',
+          label: 'DashBoard', 
+          icon: <SpaceDashboardIcon/>
+        },{
+          path:'/request_rescue',
+          label: 'Request Rescue', 
+          icon: <SupportIcon/>
+        },{
+          path:'/incident_reporting',
+          label: 'Incident Reporting',
+           icon: <CarCrashIcon/>
+        },{
+          path:'/claims_tracking',
+          label: 'Claims Tracking', 
+          icon: <FindInPageIcon/> 
+        },
+      ])
+      break;
+  
+    default:
+      setLinks([])
+      break;
+  }
+  },[user])
   const getUser = useCallback(async () => {
     // await fetch api call for current_user data
+    
     const result = await fetch("/me", {
       method: "GET",
       headers: {
@@ -36,6 +74,7 @@ export default function App() {
   }, [setUser]);
   
   useEffect(() => {
+    
     getUser(); //call our  current user usecallback function 
   }, [getUser]);
 
@@ -69,47 +108,26 @@ export default function App() {
   return (
     <div className="mainDiv">
       <NavBar user={user}/>
-
+<Stack direction={'row'} spacing={2} >
+  {!!user && isLoaded && <SideBar links={links}/>}
+<Stack width={'100%'} height={'90vh'}>
       <Routes>
         <Route path="/signin" element={<Signin user={user} setUser={setUser}  setIsLoaded={setIsLoaded} />}/>
-        <Route path="/" exact element={<Signin  user={user} setUser={setUser}  setIsLoaded={setIsLoaded} />}/>
+        <Route path="/*" exact element={<Home user={user}/>}/>
         <Route path="/signup" element={<Signup setUser={setUser} setIsLoaded={setIsLoaded}  />}/>
-        <Route path="/signout" element={<Signout setUser={setUser} />} />
+        <Route path="/signout" element={<Signout setUser={setUser} setIsLoaded={setIsLoaded} />} />
+        <Route path="/request_rescue" element={<RequestRescue user={user}  handleSubmit={handleSubmit}/>} />
+        <Route path="/incident_reporting" element={<IncidentReporting handleSubmit={handleSubmit} authorized_user={authorized_user}/>} />
+        <Route path="/claims_tracking" element={<ClaimsTracking/>} />
+        {/* <Route path="/request_rescue" element={<RequestRescue user={user}/>} />
+        <Route path="/request_rescue" element={<RequestRescue user={user}/>} />
+        <Route path="/request_rescue" element={<RequestRescue user={user}/>} />
+        <Route path="/request_rescue" element={<RequestRescue user={user}/>} /> */}
+        
 
-          <Route
-            path="/driver/*"
-            element={
-              isLoaded && <DriverIndex user={user} authorized_user={authorized_user} handleSubmit={handleSubmit}/>
-            }
-          />
-          <Route
-            path="/assessor/*"
-            element={
-             isLoaded &&  <AssessorIndex
-                user={user}
-                authorized_user={authorized_user}
-                handleSubmit={handleSubmit}
-              />
-            }
-          />
-          <Route
-            path="/provider/*"
-            element={
-              isLoaded && <ProviderIndex
-                user={user}
-                authorized_user={authorized_user}
-                handleSubmit={handleSubmit}
-              />
-            }
-          />
-          <Route
-            path="/insurer/*"
-            element={
-            isLoaded &&   <InsurerIndex user={user} handleSubmit={handleSubmit} authorized_user={authorized_user} />
-            }
-          />
-      </Routes>
 
+      </Routes></Stack>
+</Stack>
     </div>
   );
 }

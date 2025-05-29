@@ -1,11 +1,13 @@
 import React from 'react'
 import RequestCreate from '../request/RequestCreate'
 import RequestsList from '../request/RequestsList'
-export default function RequestRescue() {
+import { Stack } from '@mui/material'
+export default function RequestRescue({handleSubmit}) {
   return (
-    <div>
-        <RequestCreate/>
-        <RequestsList/>
-    </div>
+    <Stack direction={{ xs: 'column', sm: 'row' }} margin={'1rem'} justifyContent={'space-around'}>
+      <RequestsList/>
+      <RequestCreate handleSubmit={handleSubmit}/>
+        
+    </Stack>
   )
 }

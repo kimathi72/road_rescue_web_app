@@ -6,7 +6,7 @@ class CreateIncidents < ActiveRecord::Migration[7.0]
       t.datetime :date_happened
       t.text :description
       t.text :police_report_url
-      t.integer :status
+      t.integer :status, default: 0
 
       t.timestamps
     end

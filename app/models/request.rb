@@ -3,7 +3,7 @@ class Request < ApplicationRecord
   belongs_to :user
   belongs_to :vehicle
   has_many :notifications
-  validates :user_is_provider
+  # validates :user_is_provider
   enum status: ["reported", "pending", "resolved"]
 
   def service_type
@@ -26,7 +26,9 @@ class Request < ApplicationRecord
     self.location[:city]
   end
 
-  def user_is_provider
-    errors.add(:user, "user must be provider") unless self.user.role == "provider"
-  end
+  # private
+
+  # def user_is_provider
+  #   errors.add(:user, "user must be provider") unless self.user.role == "provider"
+  # end
 end

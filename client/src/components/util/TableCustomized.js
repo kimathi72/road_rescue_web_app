@@ -8,22 +8,6 @@ import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 
-// function createData(events, dates) {
-//     return { events, dates };
-// }
-
-// const rows = [
-//     createData("Technical Scripter", "13 October"),
-//     createData("Gate Mock", "5 November"),
-//     createData("Bi Wizard", "26 November"),
-//     createData("Job-A-Thon14", "21 October"),
-//     createData("GFG Hiring", "15 October"),
-//     createData("TechnicalScripter", "13 October"),
-//     createData("Gate Mock Exam", "5 November"),
-//     createData("Bi Wizard School", "26 November"),
-//     createData("Job-A-Thon 14", "21 October"),
-//     createData("GFG Hiring Challenge", "15 October")
-// ];
 
 export default function TableCustomized({rows}) {
     const [pg, setpg] = React.useState(0);
@@ -41,14 +25,13 @@ export default function TableCustomized({rows}) {
     return (<>
     {console.log(rows)}
     {rows.length > 0 && <Paper>
-            <h1 style={{ textAlign: "center", color: "green" }}> GeeksForGeeks</h1>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} 
                     aria-label="simple table">
                     <TableHead> 
                         <TableRow>
                             {Object.keys(rows[0]).map((k, i)=> {
-                return <TableCell key={i}>{k}</TableCell>
+                return <TableCell  style={{ textAlign: "center", color: "rebeccapurple" }} key={i}>{k}</TableCell>
             })}
                         </TableRow>
                     </TableHead>

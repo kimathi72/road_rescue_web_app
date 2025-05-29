@@ -1,6 +1,5 @@
-import Button from "react-bootstrap/esm/Button";
 import AutoComplete from "../util/AutoComplete";
-import { Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 
 export default function RequestForm({setRequest, setIsSubmitted}) {
   
@@ -9,9 +8,9 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
       e.preventDefault()
       setIsSubmitted(true)
     }} className="form">
+      <Stack  textAlign={'center'} spacing={2}>
+      <h3>Request new Rescue</h3>
       <Stack direction={"column"} spacing={2}>
-      <h1>Request Road Rescue services</h1>
-      <Stack direction={"row"} spacing={2}>
           <AutoComplete
             lb={"Select Vehicle"}
             setData={setRequest}
@@ -28,7 +27,6 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
 </Stack>
 
         <TextField
-        label= "Additional notes: "
           multiline
           onChange={e=>setRequest((prev)=>({...prev, "request_description": e.target.value}))}
           minRows={3}

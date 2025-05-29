@@ -5,7 +5,6 @@ import { Stack } from "@mui/material";
 export default function NavBar({user}) {
   const location = useLocation()
   const {pathname} = location
-  const preventDefault = (event) => event.preventDefault();
 
   return (
     <Stack
@@ -19,7 +18,7 @@ export default function NavBar({user}) {
         padding: "1rem",
         borderBottom: "1px solid #000" 
       }}
-      onClick={preventDefault}
+      
     >
       {
             !user ? pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">Sign in</Link> : <Link href="/signup" color="info" underline="hover">Sign up</Link>  : <Link href="/signout"  color="warning" underline="hover">Sign out</Link>

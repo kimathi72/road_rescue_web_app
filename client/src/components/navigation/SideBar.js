@@ -9,9 +9,9 @@ export default function SideBar({links}) {
         {links.map((link, index)=>{
           return <ListItem key={index}> 
            <ListItemIcon>
-          {link.icon}
+          {link.icon} 
             </ListItemIcon>
-             <Link key={index}  to={link['url']}>{link['label']}</Link>
+             <Link key={index}  to={link['path']}>{link['label']}</Link>
       
         </ListItem>
         }

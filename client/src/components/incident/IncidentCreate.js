@@ -9,8 +9,8 @@ export default function IncidentCreate({handleSubmit}) {
         isSubmitted && handleSubmit('/incidents', "POST", incident)
     },[isSubmitted, incident, handleSubmit])
   return (
-    <div>
-        <h2>Incident create</h2>
+    <div className='displayDiv'>
+        
         <IncidentForm setIncident={setIncident} incident={incident} setIsSubmitted={setIsSubmitted}/>
     </div>
   )

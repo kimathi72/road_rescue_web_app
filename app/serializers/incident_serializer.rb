@@ -1,3 +1,5 @@
 class IncidentSerializer < ActiveModel::Serializer
-  attributes :id, :date, :vehicle_plate, :description, :police_report_url, :city, :photos_count, :status
+  attributes :id, :date, :vehicle_plate, :city, :description, :status
+  has_one :claim
+  has_many :incident_photos
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_27_153107) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,6 +35,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_27_153107) do
     t.index ["incident_id"], name: "index_claims_on_incident_id"
   end
 
+  create_table "incident_abstacts", force: :cascade do |t|
+    t.string "public_id"
+    t.bigint "incident_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["incident_id"], name: "index_incident_abstacts_on_incident_id"
+  end
+
   create_table "incident_photos", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.text "image_url"
@@ -48,8 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_27_153107) do
     t.bigint "location_id", null: false
     t.datetime "date_happened"
     t.text "description"
-    t.text "police_report_url"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_incidents_on_location_id"
@@ -148,6 +155,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_27_153107) do
   add_foreign_key "assessments", "claims"
   add_foreign_key "assessments", "users"
   add_foreign_key "claims", "incidents"
+  add_foreign_key "incident_abstacts", "incidents"
   add_foreign_key "incident_photos", "incidents"
   add_foreign_key "incidents", "locations"
   add_foreign_key "incidents", "vehicles"

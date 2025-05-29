@@ -1,106 +1,40 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-// import RequestIndex from "../request/RequestIndex.js";
-// import VehicleIndex from "../vehicle/VehicleIndex.js";
-// import IncidentIndex from "../incident/IncidentIndex.js";
-// import ClaimsIndex from "../claim/ClaimsIndex.js";
+import React, { useEffect, useState } from "react";
+import AssessorDashBoard from "../assessor/AssessorDashboard.js"
+import ProviderDashBoard from "../provider/ProviderDashBoard.js";
+import DriverDashBoard from "../driver/DriverDashboard.js";
+import AdminDashboard from "../admin/AdminDashboard.js";
+import InsurerDashBoard from "../insurer/InsurerDashboard.js";
+import { useNavigate } from "react-router-dom";
 
-export default function Home({
-  user,
-  handleSubmit,
-  authorized_user,
-  isLoaded,
-}) {
-  return (
-    <>
-      {isLoaded ? (
-        <Routes>
-          {/* <Route
-            path="/incidents/*"
-            element={
-              <IncidentIndex
-                user={user}
-                handleSubmit={handleSubmit}
-                authorized_user={authorized_user}
-              />
-            }
-          /> */}
-          {/* <Route
-            path="/claims/*"
-            element={
-              <ClaimsIndex
-                user={user}
-                handleSubmit={handleSubmit}
-                authorized_user={authorized_user}
-              />
-            }
-          /> */}
-          {/* <Route
-            path="/requests/*"
-            element={
-              <RequestIndex
-                user={user}
-                handleSubmit={handleSubmit}
-                authorized_user={authorized_user}
-              />
-            }
-          />
-          <Route
-            path="/vehicles/*"
-            element={
-              <VehicleIndex
-                user={user}
-                handleSubmit={handleSubmit}
-                authorized_user={authorized_user}
-              />
-            }
-          /> */}
-          {/* <Route
-            exact
-            path="/*"
-            element={
-              <IncidentIndex
-                user={user}
-                handleSubmit={handleSubmit}
-                authorized_user={authorized_user}
-              />
-            }
-          /> */}
+export default function Home({user}) {
+  const navigate= useNavigate()
+const [dashboard,setDashboard] = useState(<></>)
+useEffect(()=>{
+  switch (!!user && user.role) {
+    case "driver":
+      setDashboard(<DriverDashBoard user={user}/>)
+      break;
+      case "admin":
+      setDashboard(<AdminDashboard/>)
+      break;
+      case "insurer":
+      setDashboard(<InsurerDashBoard/>)
+      break;
+      case "provider":
+      setDashboard(<ProviderDashBoard/>)
+      break;
+      case "assessor":
+      setDashboard(<AssessorDashBoard/>)
+      break;
+  
+    default:
+      navigate('/signin')
+      break;
+  }
+},[user,navigate])
 
-          <Route
-            path="/driver/*"
-            element={
-              <DriverIndex user={user} authorized_user={authorized_user} />
-            }
-          />
-          <Route
-            path="/assessor/*"
-            element={
-              <AssessorIndex
-                user={user}
-                authorized_user={authorized_user}
-              />
-            }
-          />
-          <Route
-            path="/provider/*"
-            element={
-              <ProviderIndex
-                user={user}
-                authorized_user={authorized_user}
-              />
-            }
-          />
-          <Route
-            path="/insurer/*"
-            element={
-              <InsurerIndex user={user} authorized_user={authorized_user} />
-            }
-          />
-        </Routes>
-      ) : (
-        <p>Loading app</p>
-      )}
+  return (<>
+    {dashboard}
     </>
   );
 }

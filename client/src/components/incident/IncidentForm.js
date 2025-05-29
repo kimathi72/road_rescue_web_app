@@ -1,8 +1,6 @@
-import React from 'react'
 import AutoComplete from '../util/AutoComplete'
 import { Button, Stack, TextField } from '@mui/material'
 import DatePicker from '../util/DatePicker'
-import UploadWidget from '../util/UploadWidget'
 
 export default function IncidentForm({setIsSubmitted,incident, setIncident}) {
   return (
@@ -10,8 +8,9 @@ export default function IncidentForm({setIsSubmitted,incident, setIncident}) {
         e.preventDefault()
         setIsSubmitted(true)
         }}>
-          <Stack spacing={2}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <Stack spacing={2} textAlign={'center'}>
+            <h3>Incident create</h3>
+          <Stack direction={'column'} spacing={2}>
             <AutoComplete
             url='/vehicles' 
             k={'plate_number'}
@@ -28,16 +27,13 @@ export default function IncidentForm({setIsSubmitted,incident, setIncident}) {
             </Stack>
             <TextField
             multiline 
+            id="description"
             placeholder='Add Description'
             minRows={3}
-            onChange={(e)=> setIncident((prev)=>({...prev, "description": e.target.value}))}
+            onChange={(e)=> setIncident((prev)=>({...prev, [`${e.target.id}`]: e.target.value}))}
             />
-            
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
-            <UploadWidget label={"Upload Police Abstract"} setData={(value)=>setIncident({...incident, "police_abstract_url": value})}/>
             <Button type='submit'>Submit</Button>
-            </Stack>
-            
+
             </Stack>
             
         </form>

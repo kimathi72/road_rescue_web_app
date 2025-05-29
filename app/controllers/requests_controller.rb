@@ -5,7 +5,7 @@ class RequestsController < ApplicationController
   def index
     case current_user.role
     when "driver"
-      @requests = User.find(current_user["id"]).vehicles.requests
+      @requests = Request.select { |request| request.vehicle["user_id"] == current_user.id }
     when "provider"
       @requests = User.find(current_user["id"]).requests
     else

@@ -1,4 +1,5 @@
 class IncidentsController < ApplicationController
+  require_relative "../serializers/incident_summary_serializer"
   before_action :set_incident, only: %i[ show update destroy ]
   before_action :driver_authenticated, only: [:create]
   # GET /incidents
@@ -47,6 +48,6 @@ class IncidentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def incident_params
-    params.require(:incident).permit(:vehicle_id, :location_id, :date_happened, :description, :police_report_url, :status)
+    params.require(:incident).permit(:vehicle_id, :location_id, :date_happened, :description, :status)
   end
 end

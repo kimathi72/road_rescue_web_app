@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :incident_abstacts
   resources :incident_photos
   mount ActionCable.server => "/cable"
 

@@ -1,15 +1,17 @@
 import React from 'react'
+import useQuery from '../../hooks/useQuery'
+import TableCustomized from '../util/TableCustomized'
+import { Stack } from '@mui/material'
 
 
-export default function RequestsList({requests}) {
-  
+export default function RequestsList() {
+  const {data: requests, isLoaded} = useQuery('/requests')
+
   return (
-    <ul>{
-      requests.length ? requests.map((request, index)=>{
-      return   <li key={index}>
-          {request.id}
-        </li>
-      }) : <li>No Rescue Requests found.</li>
-      }</ul>
+    <Stack direction={'column'} textAlign={'center'}>
+      <h3>Queued Requests</h3>
+    {
+      isLoaded && requests.length > 0 ? <TableCustomized rows={requests}/> : <p>No Rescue Requests found.</p>
+      }</Stack>
   )
 }
