@@ -113,7 +113,7 @@ export default function App() {
 <Stack width={'100%'} height={'90vh'}>
       <Routes>
         <Route path="/signin" element={<Signin user={user} setUser={setUser}  setIsLoaded={setIsLoaded} />}/>
-        <Route path="/*" exact element={<Home user={user}/>}/>
+        <Route path="/*" exact element={<Home user={user} handleSubmit={handleSubmit}/>}/>
         <Route path="/signup" element={<Signup setUser={setUser} setIsLoaded={setIsLoaded}  />}/>
         <Route path="/signout" element={<Signout setUser={setUser} setIsLoaded={setIsLoaded} />} />
         <Route path="/request_rescue" element={<RequestRescue user={user}  handleSubmit={handleSubmit}/>} />

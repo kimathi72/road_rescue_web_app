@@ -9,7 +9,7 @@ export default function RequestsList() {
 
   return (
     <Stack direction={'column'} textAlign={'center'}>
-      <h3>Queued Requests</h3>
+      <h3 style={{ textAlign: "center", color: "green" }}>Queued Requests</h3>
     {
       isLoaded && requests.length > 0 ? <TableCustomized rows={requests}/> : <p>No Rescue Requests found.</p>
       }</Stack>

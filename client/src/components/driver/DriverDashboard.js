@@ -1,11 +1,17 @@
 import { Card, CardContent, Stack, Typography } from '@mui/material'
-import React from 'react'
+import VehicleCreate from '../vehicle/VehicleCreate.js'
+import VehicleList from '../vehicle/VehicleList.js'
 
-export default function DriverDashboard({user}) {
+
+export default function DriverDashboard({user, handleSubmit}) {
    const {vehicles, incidents, requests, claims, ...rest} = user
+   console.log(rest)
   return (
-   <h2>{rest.role} Dashboard
-      <Stack direction={'row'} spacing={4}>
+   
+   <Stack direction={'column'} spacing={5} >
+      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent={'space-around'}>
+         <Stack direction={'column'} spacing={5} margin={'1rem'}>
+      <Stack direction={'row'} justifyContent={'space-evenly'}>
          <Card>
             <CardContent>
                <Typography>
@@ -28,7 +34,11 @@ export default function DriverDashboard({user}) {
             </CardContent>
          </Card>
       </Stack>
-   </h2>
+            <VehicleList/>
+         </Stack>
+      <VehicleCreate user={user} handleSubmit={handleSubmit} /> 
+      </Stack>
+      </Stack>
     
   )
 }

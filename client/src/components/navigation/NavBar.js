@@ -8,7 +8,8 @@ export default function NavBar({user}) {
 
   return (
     <Stack
-      alignItems={'end'}
+      justifyContent={'space-between'}
+      direction={'row'}
       sx={{
         width: '100%',
         typography: 'body1',
@@ -20,6 +21,7 @@ export default function NavBar({user}) {
       }}
       
     >
+      <Link  color="secondary" href="/" underline="hover"><b>Road Rescue & Claims Tracking WebApp</b></Link>
       {
             !user ? pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">Sign in</Link> : <Link href="/signup" color="info" underline="hover">Sign up</Link>  : <Link href="/signout"  color="warning" underline="hover">Sign out</Link>
           }

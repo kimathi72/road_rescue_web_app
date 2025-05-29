@@ -6,13 +6,13 @@ import AdminDashboard from "../admin/AdminDashboard.js";
 import InsurerDashBoard from "../insurer/InsurerDashboard.js";
 import { useNavigate } from "react-router-dom";
 
-export default function Home({user}) {
+export default function Home({user, handleSubmit}) {
   const navigate= useNavigate()
 const [dashboard,setDashboard] = useState(<></>)
 useEffect(()=>{
   switch (!!user && user.role) {
     case "driver":
-      setDashboard(<DriverDashBoard user={user}/>)
+      setDashboard(<DriverDashBoard user={user} handleSubmit={handleSubmit}/>)
       break;
       case "admin":
       setDashboard(<AdminDashboard/>)
@@ -31,7 +31,7 @@ useEffect(()=>{
       navigate('/signin')
       break;
   }
-},[user,navigate])
+},[user,navigate,handleSubmit])
 
   return (<>
     {dashboard}

@@ -46,7 +46,7 @@ export default function TableCustomized({rows}) {
                                 
                                 Object.keys(row).map((value)=>{
                         console.log(value)
-                return <TableCell  key={value}>{row[value]}</TableCell>
+                return <TableCell style={{textAlign:'center'}} key={value}>{row[value]}</TableCell>
             })
             }
                                 {/* <TableCell component="th" 
