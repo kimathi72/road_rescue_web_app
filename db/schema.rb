@@ -26,8 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
   end
 
   create_table "claims", force: :cascade do |t|
-    t.integer "status"
-    t.float "approved_amount"
+    t.integer "status", default: 0
+    t.float "approved_amount", default: 0.0
     t.date "payout_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -67,9 +67,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
     t.bigint "vehicle_id", null: false
     t.date "start_date"
     t.date "end_date"
-    t.integer "coverage_type"
+    t.integer "coverage_type", default: 0
     t.float "premium_amount"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["vehicle_id"], name: "index_insurance_policies_on_vehicle_id"
@@ -103,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
   create_table "requests", force: :cascade do |t|
     t.integer "service_id"
     t.string "request_description"
-    t.integer "status"
+    t.integer "status", default: 0
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

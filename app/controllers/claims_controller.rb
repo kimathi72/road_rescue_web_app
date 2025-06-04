@@ -1,6 +1,6 @@
 class ClaimsController < ApplicationController
   before_action :set_claim, only: %i[ show update destroy ]
-  before_action :insurer_authenticated, only: [:create]
+  before_action :insurer_driver_authenticated, only: [:create]
   before_action :insurer_assessor_authenticated, only: [:update, :delete]
   # GET /claims
   def index

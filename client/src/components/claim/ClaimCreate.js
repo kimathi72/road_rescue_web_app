@@ -9,7 +9,7 @@ export default function ClaimCreate() {
     const incidentId = params.id
     useEffect(()=>{console.log(claim)},[claim])
     const handleClick = ()=>{
-        fetch('/incidents', {
+        fetch('/claims', {
             method:"POST", 
             headers:{
                 "Authorization": `Bearer ${localStorage.getItem('jwt')}`,

@@ -6,12 +6,12 @@ export default function IncidentPhotos({photos}) {
     <Stack>
         <ImageList>
             {
-                photos.length > 0 ? photos.map((photo, index)=>{
+                photos.length > 0 && photos.map((photo, index)=>{
                     return <ImageListItem key={index}>
       <img
         srcSet={`${photo.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
         src={`${photo.img}?w=164&h=164&fit=crop&auto=format`}
-        alt={item.title}
+        alt={photo.title}
         loading="lazy"
       />
     </ImageListItem>

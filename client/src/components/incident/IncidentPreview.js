@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import { useParams } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import { useEffect } from "react";
+import ClaimCreate from "../claim/ClaimCreate";
 
 
 export default function IncidentPreview() {
@@ -25,7 +26,7 @@ export default function IncidentPreview() {
           <h4>Vehicle Plate Number: {rest["vehicle_plate"].toUpperCase()} </h4>
           <p>Desciption: {rest["description"]}</p>
         </Stack>
-        
+        <ClaimCreate/>
       </Stack>
     </Stack> : <p>loading incident</p>}</>
   );

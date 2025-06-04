@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material'
-import useQuery from '../../hooks/useQuery'
+
 import TableCustomized from '../util/TableCustomized'
 
-export default function ClaimsList() {
-  const {data: claims, isLoaded} = useQuery('/claims')
+export default function ClaimsList({claims,isLoaded}) {
+  
  
   return (
     <Stack direction={'column'} justifyContent={'space-around'} textAlign={'center'}> 

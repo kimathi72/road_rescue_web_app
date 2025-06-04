@@ -51,6 +51,10 @@ class ApplicationController < ActionController::API
     render json: { message: "Only authenticated assessor or admin allowed" }, status: :unauthorized unless current_user[:role] == "insurer" || current_user[:role] == "admin"
   end
 
+  def insurer_driver_authenticated
+    render json: { message: "Only authenticated assessor or driver allowed" }, status: :unauthorized unless current_user[:role] == "insurer" || current_user[:role] == "driver"
+  end
+
   def insurer_assessor_authenticated
     render json: { message: "Only authenticated assessor or insurer allowed" }, status: :unauthorized unless current_user[:role] == "insurer" || current_user[:role] == "assessor"
   end
