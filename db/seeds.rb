@@ -63,12 +63,16 @@
 #                          status: 0)
 # end
 
-[{ name: "driver", email: "driver@driver.com", password: "driver123", location_id: 20, role: "driver", phone: "+254711808129" },
- { name: "admin", email: "admin@admin.com", password: "admin123", location_id: 20, role: "admin", phone: "+254711808129" },
- { name: "assessor", email: "assessor@assessor.com", password: "assessor123", location_id: 20, role: "assessor", phone: "+254711808129" },
- { name: "insurer", email: "insurer@insurer.com", password: "insurer123", location_id: 20, role: "insurer", phone: "+254711808129" },
- { name: "provider", email: "provider@provider.com", password: "provider123", location_id: 20, role: "provider", phone: "+254711808129" }].map do |user|
-  User.create(user)
-end
-puts " #{User.count} users"
+# [{ name: "driver", email: "driver@driver.com", password: "driver123", location_id: 20, role: "driver", phone: "+254711808129" },
+#  { name: "admin", email: "admin@admin.com", password: "admin123", location_id: 20, role: "admin", phone: "+254711808129" },
+#  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", location_id: 20, role: "assessor", phone: "+254711808129" },
+#  { name: "insurer", email: "insurer@insurer.com", password: "insurer123", location_id: 20, role: "insurer", phone: "+254711808129" },
+#  { name: "provider", email: "provider@provider.com", password: "provider123", location_id: 20, role: "provider", phone: "+254711808129" }].map do |user|
+#   User.create(user)
+# end
+require "faker"
+make = Faker::Vehicle.make
+model = Faker::Vehicle.model(make_of_model: make)
+Vehicle.create(user_id: 4195, plate_number: Faker::Vehicle.license_plate, make: make, model: model, year: Faker::Vehicle.year)
+# puts " #{User.count} users"
 # puts "end of seeding #{Location.count} locations, #{Service.count} services, and #{User.count} users, #{Vehicle.count} vehicles"

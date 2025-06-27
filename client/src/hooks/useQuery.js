@@ -7,7 +7,7 @@ function useQuery(url) {
   const [data, setData] = useState(null);
   const fetchData = useCallback(async()=>{
     try{    
-      const res = await fetch(url,{
+      const res = await fetch(`/api/${url}`,{
         method: "GET",
           headers: {
             "Content-Type": "application/json",

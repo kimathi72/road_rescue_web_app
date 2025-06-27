@@ -3,8 +3,11 @@ import useQuery from '../../hooks/useQuery'
 import { useParams } from 'react-router-dom'
 
 export default function IncidentShow() {
-    const params = useParams
-    const {data: incident, isLoaded} = useQuery(`/incidents/${params.id}`)
+    const params = useParams()
+    const id = params.id
+    console.log(id)
+    const url =  `/incidents/${!!id && id}`
+    const {data: incident, isLoaded} = useQuery(url)
   return (
     <div>
        {

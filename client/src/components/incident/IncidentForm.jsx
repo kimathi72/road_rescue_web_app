@@ -1,6 +1,6 @@
 import AutoComplete from '../util/AutoComplete'
 import { Button, Stack, TextField } from '@mui/material'
-import DatePicker from '../util/DatePicker'
+import DatePicker from '../util/DatePicker.jsx'
 
 export default function IncidentForm({setIsSubmitted,incident, setIncident}) {
   return (
