@@ -18,7 +18,7 @@ export default function AutoComplete ({url, k, setData, lb}){
         renderValue={(value, getItemProps)=>{
            return <Chip label={value[`${k}`]} {...getItemProps()} />
         }}
-        onChange={( e ,value)=>{value && setData((prev) => ({...prev, [`${objKey}`]: value.id}))
+        onChange={( e ,value)=>{value && setData(value)
         }}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label={lb} />}

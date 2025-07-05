@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Stack, TextField } from '@mui/material'
-import AutoComplete from '../util/AutoComplete'
 
 export default function Signup({setUser, setIsLoaded}) {
   const [driverData, setData] = useState({})
@@ -14,7 +13,7 @@ export default function Signup({setUser, setIsLoaded}) {
     e.preventDefault();
 
       try {
-        const response = await fetch("/users", {
+        const response = await fetch("/api/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -39,12 +38,7 @@ return (
   <form className='form' onSubmit={handleSubmit} >
     <h1> Driver Sign Up Here</h1>
     <Stack direction={'column'} spacing={2}>
-      <AutoComplete
-      setData={setData}
-      url='/locations' 
-            k={'city'}
-            lb='Select Location'
-      />
+     
       <TextField
     name="name"
     placeholder="enter full name"

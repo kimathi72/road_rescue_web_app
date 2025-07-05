@@ -10,7 +10,15 @@ export default function Signin({user,setUser,setIsLoaded}) {
   useEffect(()=>{
     if (localStorage.getItem('jwt') && !!user) {
       setIsLoaded(true)
-      navigate(`/incidents`)
+      switch (user.role) {
+        case "driver":
+          navigate ('/requests/create')
+          break;
+      
+        default:
+          navigate('/requests')
+          break;
+      }
 
     }
   },[user, setIsLoaded, navigate])
@@ -23,7 +31,7 @@ export default function Signin({user,setUser,setIsLoaded}) {
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch('/auth', {
+    fetch('/api/auth', {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +48,7 @@ export default function Signin({user,setUser,setIsLoaded}) {
 
   return (
     <form className='form' onSubmit={handleSubmit}>
-      <h3>Sign In As A  Here</h3> 
+      <h3>Sign in with email</h3> 
       <Stack direction={'column'} spacing={2}>
         <TextField
         label='Email'

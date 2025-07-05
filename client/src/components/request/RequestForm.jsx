@@ -1,5 +1,7 @@
+import SetLocation from "../location/SetLocation.jsx";
+import ManageServices from "../service/ManageServices.jsx";
 import AutoComplete from "../util/AutoComplete";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Input, Stack, TextField } from "@mui/material";
 
 export default function RequestForm({setRequest, setIsSubmitted}) {
   
@@ -8,33 +10,30 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
       e.preventDefault()
       setIsSubmitted(true)
     }} className="form">
-      <Stack  textAlign={'center'} spacing={2}>
-      <h3>Request new Rescue</h3>
-      <Stack direction={"column"} spacing={2}>
-          <AutoComplete
-            lb={"Select Vehicle"}
-            setData={setRequest}
-            url={"/vehicles"}
-            k={"plate_number"}
-          />
-          
+      <Stack spacing={1}>
+      
+        <SetLocation setData={setRequest}/>
+         <ManageServices/>
+{/*           
           <AutoComplete
             lb={"Choose Service"}
             url={"/services"}
             k={"name"}
             setData={setRequest}
-          />
-</Stack>
+          /> */}
+        <TextField name="vehicle" label="vehicle" placeholder="Make, Model, Color"/>
 
         <TextField
+        fullWidth
+        label="description"
           multiline
           onChange={e=>setRequest((prev)=>({...prev, "request_description": e.target.value}))}
           minRows={3}
           placeholder="Enter description"
         />
-        <Button type="submit">submit</Button>
+        
         </Stack>
-      
+      <Button variant="contained" color="error" type="submit">Request Road Rescue</Button>
     </form>
   );
 }

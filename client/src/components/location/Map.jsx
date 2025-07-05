@@ -10,9 +10,9 @@ import {
 import icon from "./Constants";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 
-export default function Map() {
-    const [position, setPosition] = useState(null);
-
+export default function Map({position, setPosition}) {
+    
+const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
 function LeafletgeoSearch() {
   const map = useMap();
   useEffect(() => {
@@ -30,8 +30,7 @@ function LeafletgeoSearch() {
        map.on('geosearch/showlocation', (result) => {
            if (result && result.location) {
              const { x, y } = result.location;
-             setPosition([y,x])
-             console.log('Longitude:', x, 'Latitude:', y);
+             setPosition([x,y])
            }
          });
 
@@ -43,27 +42,30 @@ function LeafletgeoSearch() {
   return null;
 }
   
-//   function LocationMarker() {
+  function LocationMarker() {
 
-//     const map = useMapEvents({
-//       click() {
-//         map.locate();
-//       },
-//       locationfound(e) {
-//         setPosition(e.latlng);
-//         map.flyTo(e.latlng, map.getZoom());
-//       },
-//     });Longitude: 36.828842 Latitude: -1.3026148
+    const map = useMapEvents({
+      click() {
+        map.locate();
+      },
+      locationfound(e) {
+        console.log(e.latlng.lat)
+        const {lat,lng} = e.latlng
+        setPosition([lat,lng]);
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+    // Longitude: 36.828842 Latitude: -1.3026148
 
-//     return position === null ? null : (
-//       <Marker position={position}>
-//         <Popup>You are here</Popup>
-//       </Marker>
-//     );
-//   }
+    return position === null ? null : (
+      <Marker position={position}>
+        <Popup>You are here</Popup>
+      </Marker>
+    );
+  }
   return (
     <MapContainer
-      center={position || [-1.3026148, 36.828842]}
+      center={position}
       zoom={13}
       scrollWheelZoom={false}
       style={{ height: "60vh" }}
@@ -72,13 +74,13 @@ function LeafletgeoSearch() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={ position || [-1.3026148, 36.828842]}>
+      <Marker position={position}>
         <Popup>
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>
       </Marker>
       <LeafletgeoSearch/>
-      {/* <LocationMarker /> */}
+      <LocationMarker />
     </MapContainer>
   );
 }

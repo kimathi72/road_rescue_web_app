@@ -17,7 +17,7 @@ import Vehicles from "./components/vehicle/VehicleIndex.jsx";
 import "./assets/styles/mystyles.css";
 // import Home from "./components/navigation/Home.js";
 
-import { Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import Map from "./components/location/Map.jsx";
 
 export default function App() {
@@ -78,9 +78,9 @@ export default function App() {
   );
 
   return (
-    <div className="mainDiv">
-      <NavBar user={user} />
-      <Stack width={"auto"} height={"90vh"} margin={"1rem"} padding={'1rem'}>
+    <Grid className="container">
+      <NavBar user={!!user && user} />
+      <Stack className="mainDiv">
           <Routes>
             <Route
               path="/signin"
@@ -116,7 +116,7 @@ export default function App() {
               element={<Signout setUser={setUser} setIsLoaded={setIsLoaded} />}
             />
             <Route
-              path="/rescues/*"
+              path="/requests/*"
               element={
                 !!token &&
                 isLoaded && (
@@ -128,6 +128,7 @@ export default function App() {
                 )
               }
             />
+            
             <Route
               path="/incidents/*"
               element={
@@ -207,6 +208,6 @@ export default function App() {
             />
           </Routes>
         </Stack>
-    </div>
+    </Grid>
   );
 }
