@@ -5,20 +5,15 @@ import NavBar from "./components/navigation/NavBar.jsx";
 import Signin from "./components/auth/Signin.jsx";
 import Signup from "./components/auth/Signup.jsx";
 import Signout from "./components/auth/Signout.jsx";
-import Incidents from "./components/incident/IncidentIndex.jsx";
 import Requests from "./components/request/RequestIndex.jsx";
-import Assessments from "./components/assessment/Assessments.jsx";
 import Users from "./components/user/Index.jsx";
-import Claims from "./components/claim/ClaimsIndex.jsx";
 import Invoices from "./components/invoice/InvoiceIndex.jsx";
-import Vehicles from "./components/vehicle/VehicleIndex.jsx";
-// import Analytics from "./components/admin/AnalyticsDashboard.js";
-// import SideBar from "./components/navigation/SideBar.js";
 import "./assets/styles/mystyles.css";
-// import Home from "./components/navigation/Home.js";
-
 import { Grid, Stack } from "@mui/material";
 import Map from "./components/location/Map.jsx";
+import SystemLogs from "./components/admin/SystemLogs.jsx";
+import JobsList from "./components/responder/JobsList.jsx";
+import Account from "./components/responder/Account.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -80,7 +75,7 @@ export default function App() {
   return (
     <Grid className="container">
       <NavBar user={!!user && user} />
-      <Stack className="mainDiv">
+      <Stack className="mainDiv" minHeight={'40rem'}>
           <Routes>
             <Route
               path="/signin"
@@ -95,12 +90,7 @@ export default function App() {
             <Route
               path="/"
               exact
-              element={
-                <Signin
-                 user={user}
-                  setUser={setUser}
-                  setIsLoaded={setIsLoaded}
-               />
+              element={ <Signin   user={user}    setUser={setUser}    setIsLoaded={setIsLoaded} />
               }
             />
             <Route
@@ -108,15 +98,11 @@ export default function App() {
               element={<Signup setUser={setUser} setIsLoaded={setIsLoaded} />}
             />
             <Route
-              path="/map"
-              element={<Map />}
-            />
-            <Route
               path="/signout"
               element={<Signout setUser={setUser} setIsLoaded={setIsLoaded} />}
             />
             <Route
-              path="/requests/*"
+              path="/rescues/*"
               element={
                 !!token &&
                 isLoaded && (
@@ -128,25 +114,14 @@ export default function App() {
                 )
               }
             />
+             
             
             <Route
-              path="/incidents/*"
+              path="/jobs_list"
               element={
                 !!token &&
                 isLoaded && (
-                  <Incidents
-                    handleSubmit={handleSubmit}
-                    authorizedUser={authorizedUser}
-                  />
-                )
-              }
-            />
-            <Route
-              path="/claims/*"
-              element={
-                !!token &&
-                isLoaded && (
-                  <Claims
+                  <JobsList
                     user={user}
                     handleSubmit={handleSubmit}
                     authorizedUser={authorizedUser}
@@ -154,6 +129,21 @@ export default function App() {
                 )
               }
             />
+            <Route
+              path="/account"
+              element={
+                !!token &&
+                isLoaded && (
+                  <Account
+                    user={user}
+                    handleSubmit={handleSubmit}
+                    authorizedUser={authorizedUser}
+                  />
+                )
+              }
+            />
+            
+
             <Route
               path="/invoices/*"
               element={
@@ -167,38 +157,26 @@ export default function App() {
                 )
               }
             />
+
+            <Route
+              path="/system_logs"
+              element={
+                !!token &&
+                isLoaded && (
+                  <SystemLogs
+                    user={user}
+                    handleSubmit={handleSubmit}
+                    authorizedUser={authorizedUser}
+                  />
+                )
+              }
+            />
             <Route
               path="/users/*"
               element={
                 !!token &&
                 isLoaded && (
                   <Users
-                    user={user}
-                    handleSubmit={handleSubmit}
-                    authorizedUser={authorizedUser}
-                  />
-                )
-              }
-            />
-            <Route
-              path="/vehicles/*"
-              element={
-                !!token &&
-                isLoaded && (
-                  <Vehicles
-                    user={user}
-                    handleSubmit={handleSubmit}
-                    authorizedUser={authorizedUser}
-                  />
-                )
-              }
-            />
-            <Route
-              path="/assessments/*"
-              element={
-                !!token &&
-                isLoaded && (
-                  <Assessments
                     user={user}
                     handleSubmit={handleSubmit}
                     authorizedUser={authorizedUser}

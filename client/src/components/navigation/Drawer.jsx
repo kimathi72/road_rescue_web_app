@@ -50,7 +50,7 @@ export default function TemporaryDrawer({links, urls}) {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}><MenuIcon/></Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>

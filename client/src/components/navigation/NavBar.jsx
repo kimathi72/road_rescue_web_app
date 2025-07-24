@@ -2,9 +2,10 @@ import { useLocation } from "react-router-dom";
 import Link from '@mui/material/Link';
 import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import HomeIcon from '@mui/icons-material/Home';
-import CarCrashIcon from '@mui/icons-material/CarCrash';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+import PreviewIcon from '@mui/icons-material/Preview';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import DepartureBoardIcon from '@mui/icons-material/DepartureBoard';
@@ -26,18 +27,18 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <SupervisedUserCircleIcon/>,
-            link: '/', 
-            text: 'Users'
+            link: '/users', 
+            text: 'Users Management'
+          }, 
+          {
+            icon: <PreviewIcon/>,
+            link: '/rescues', 
+            text: 'Rescues Overview'
           }, 
           {
             icon: <AnalyticsIcon/>,
-            link: '/analytics', 
-            text: 'Analytics'
-          }, 
-          {
-            icon: <AccountCircleIcon/>,
-            link: '/account', 
-            text: 'Account'
+            link: '/system_logs', 
+            text: 'System Logs'
           }
         ])
         
@@ -46,13 +47,13 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <DepartureBoardIcon/>,
-            link: '/', 
-            text: 'Requests'
+            link: '/rescues', 
+            text: 'Requests List'
           }, 
           {
             icon: <MonetizationOnIcon/>,
-            link: '/earnings', 
-            text: 'Earnings'
+            link: '/rescues/queue', 
+            text: 'Rescues Queue'
           }, 
           {
             icon: <AccountCircleIcon/>,
@@ -66,19 +67,19 @@ export default function NavBar({user}) {
       default:
         setLinks([
           {
-            icon: <HomeIcon/>,
-            link: '/', 
-            text: 'Home'
+            icon: <DepartureBoardIcon/>,
+            link: '/rescues', 
+            text: 'Rescue Assistance'
           }, 
           {
             icon: <CarCrashIcon/>,
-            link: '/requests', 
-            text: 'Requests'
+            link: '/rescues/queue', 
+            text: 'Rescue Queue'
           }, 
           {
-            icon: <AccountCircleIcon/>,
-            link: '/account', 
-            text: 'Account'
+            icon: <ReceiptIcon/>,
+            link: '/invoices', 
+            text: 'Invoices'
           }
         ])
       

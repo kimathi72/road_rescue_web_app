@@ -37,9 +37,9 @@ const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/Geoco
           })
 },[position])
 useEffect(()=>{
-  reverseSearch();
+ !!position && reverseSearch();
 
-},[reverseSearch])
+},[reverseSearch, position])
 useEffect(()=>{
   console.log(address)
 },[address])

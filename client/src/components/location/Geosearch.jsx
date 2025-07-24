@@ -26,7 +26,7 @@ export default function Geosearch({handleOpen, setPosition, value, setValue}) {
         <InputAdornment position="end">
           <IconButton
           edge="end"
-          onClick={()=>{
+          onClick={(e)=>{
             setValue('')
             setResults(null)
             setPosition(null)

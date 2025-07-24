@@ -10,17 +10,7 @@ export default function Signin({user,setUser,setIsLoaded}) {
   useEffect(()=>{
     if (localStorage.getItem('jwt') && !!user) {
       setIsLoaded(true)
-      switch (user.role) {
-        case "driver":
-          navigate ('/requests/create')
-          break;
-      
-        default:
-          navigate('/requests')
-          break;
-      }
-
-    }
+      navigate('/rescues')}
   },[user, setIsLoaded, navigate])
 
   //callback function set user authentication parameter 
