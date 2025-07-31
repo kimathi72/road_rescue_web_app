@@ -8,6 +8,7 @@ export default function RequestCreate({handleSubmit}) {
                 isSubmitted && handleSubmit('/requests', "POST", request)
             },[isSubmitted, request, handleSubmit])
     return (<div className='displayDiv'>
+        <h3>Create New Rescue Request</h3>
 <RequestForm setRequest={setRequest} setIsSubmitted={setIsSubmitted}/>
     </div>)
     

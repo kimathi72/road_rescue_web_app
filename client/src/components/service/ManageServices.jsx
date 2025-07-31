@@ -13,7 +13,7 @@ export default function ManageServices() {
   },[value])
 
   return (
-    isLoaded && <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+    isLoaded && <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
       <p>What is the probem ?</p>
       <Tabs
       value={value}
@@ -21,6 +21,8 @@ export default function ManageServices() {
         variant="scrollable"
         scrollButtons
         allowScrollButtonsMobile
+         textColor="secondary"
+  indicatorColor="secondary"
         aria-label="scrollable force tabs example"
 
     >{

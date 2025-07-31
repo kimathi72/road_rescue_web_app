@@ -1,6 +1,5 @@
 import SetLocation from "../location/SetLocation.jsx";
 import ManageServices from "../service/ManageServices.jsx";
-import AutoComplete from "../util/AutoComplete";
 import { Button, Input, Stack, TextField } from "@mui/material";
 
 export default function RequestForm({setRequest, setIsSubmitted}) {
@@ -14,13 +13,7 @@ export default function RequestForm({setRequest, setIsSubmitted}) {
       
         <SetLocation setData={setRequest}/>
          <ManageServices/>
-{/*           
-          <AutoComplete
-            lb={"Choose Service"}
-            url={"/services"}
-            k={"name"}
-            setData={setRequest}
-          /> */}
+
         <TextField name="vehicle" label="vehicle" placeholder="Make, Model, Color"/>
 
         <TextField

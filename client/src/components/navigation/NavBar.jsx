@@ -26,14 +26,14 @@ export default function NavBar({user}) {
       case 'admin':
         setLinks([
           {
+            icon: <PreviewIcon/>,
+            link: '/jobs_overview', 
+            text: 'Jobs Overview'
+          },
+          {
             icon: <SupervisedUserCircleIcon/>,
             link: '/users', 
             text: 'Users Management'
-          }, 
-          {
-            icon: <PreviewIcon/>,
-            link: '/rescues', 
-            text: 'Rescues Overview'
           }, 
           {
             icon: <AnalyticsIcon/>,
@@ -47,18 +47,18 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <DepartureBoardIcon/>,
-            link: '/rescues', 
-            text: 'Requests List'
+            link: '/jobs_list', 
+            text: 'Jobs List'
           }, 
           {
             icon: <MonetizationOnIcon/>,
-            link: '/rescues/queue', 
-            text: 'Rescues Queue'
+            link: '/assigned_jobs', 
+            text: 'Assigned Jobs'
           }, 
           {
             icon: <AccountCircleIcon/>,
             link: '/account', 
-            text: 'Account'
+            text: 'Account Management'
           }
         ])
         
@@ -67,14 +67,14 @@ export default function NavBar({user}) {
       default:
         setLinks([
           {
-            icon: <DepartureBoardIcon/>,
-            link: '/rescues', 
-            text: 'Rescue Assistance'
+            icon: <CarCrashIcon/>,
+            link: '/new_rescue', 
+            text: 'New Rescue'
           }, 
           {
-            icon: <CarCrashIcon/>,
-            link: '/rescues/queue', 
-            text: 'Rescue Queue'
+            icon: <DepartureBoardIcon/>,
+            link: '/rescue_queue', 
+            text: 'Rescues Queue'
           }, 
           {
             icon: <ReceiptIcon/>,

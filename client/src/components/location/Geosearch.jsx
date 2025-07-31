@@ -9,7 +9,7 @@ export default function Geosearch({handleOpen, setPosition, value, setValue}) {
         console.log(result)
         const {x, y, ...rest} = result
         setPosition([y,x])
-        setValue(result.label)
+        // setValue(result.label)
         setResults(null)
     } 
     const handleChange = async(e)=>{

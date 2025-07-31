@@ -2,21 +2,15 @@ import { useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import { Button, Stack, TextField } from '@mui/material'
 
-export default function Signin({user,setUser,setIsLoaded}) {
+export default function Signin({setUser,setIsLoaded}) {
   //create user email and password variables
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
-  const navigate =useNavigate() 
-  useEffect(()=>{
-    if (localStorage.getItem('jwt') && !!user) {
-      setIsLoaded(true)
-      navigate('/rescues')}
-  },[user, setIsLoaded, navigate])
-
   //callback function set user authentication parameter 
   function handleAuthenticate(data) {    
     localStorage.setItem("jwt", data.jwt);  
-    setUser(data.user);  
+    setUser(data.user); 
+    setIsLoaded(true)  
   }
   // event handling function, on the event on submit action, post form inputs to auth api
   const handleSubmit = (e) => {
@@ -38,7 +32,7 @@ export default function Signin({user,setUser,setIsLoaded}) {
 
   return (
     <form className='form' onSubmit={handleSubmit}>
-      <h3>Sign in with email</h3> 
+      <h3 className='pageTitle'>Sign in with email</h3> 
       <Stack direction={'column'} spacing={2}>
         <TextField
         label='Email'
