@@ -7,12 +7,14 @@ Rails.application.routes.draw do
   resources :notifications
   resources :locations
   resources :chats
-  resources :reviews
   resources :requests
   resources :services
   resources :drivers
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"
+  get "/driver_requests", to: "requests#driver_requests"
+  get "/provider_requests", to: "requests#provider_requests"
+  get "/nearby_requests", to: "requests#nearby_requests"
   get "/me", to: "users#me"
   delete "/logout", to: "auth#destroy"
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }

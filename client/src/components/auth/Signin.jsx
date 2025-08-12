@@ -32,6 +32,7 @@ export default function Signin({setUser,setIsLoaded}) {
 
   return (
     <form className='form' onSubmit={handleSubmit}>
+      <h2> Welcome to Road Rescue Web App</h2>
       <h3 className='pageTitle'>Sign in with email</h3> 
       <Stack direction={'column'} spacing={2}>
         <TextField

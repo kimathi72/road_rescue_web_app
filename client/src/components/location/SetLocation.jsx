@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { FormControl, Button } from "@mui/material";
+import { FormControl} from "@mui/material";
 import Geosearch from "./Geosearch";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import { useGeolocated } from "react-geolocated";
@@ -24,14 +24,10 @@ export default function SetLocation({ setData }) {
     setValue(`${data["address"]["District"]}, ${data["address"]["Region"]}`);
     setData((prev) => ({
       ...prev,
-      location: {
-        latitude: position[0],
-        longitude: position[1],
-        place: data['address']['PlaceName'],
-        district: data["address"]["District"],
-        city: data["address"]["City"],
-        region: data["address"]["Region"],
-        country: data["address"]["CntryName"],
+      "location_attributes": {
+        "latitude": position[0],
+        "longitude": position[1],
+        "city": data["address"]["City"]
       },
     }));
   }, [position]);

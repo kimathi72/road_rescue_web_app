@@ -2,15 +2,13 @@ import React, { useEffect } from 'react'
 import useQuery from '../../hooks/useQuery'
 import { Box, Button, Tab, Tabs } from '@mui/material'
 
-export default function ManageServices() {
+export default function ManageServices({setData}) {
   const {data: services, isLoaded} = useQuery('/services')
    const [value, setValue] = React.useState(0); 
     const handleChange = (event, newValue) => {
     setValue(newValue);
+    setData(prev=>({...prev, "service_id": newValue + 1}))
   };
-  useEffect(()=>{
-    console.log(value)
-  },[value])
 
   return (
     isLoaded && <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
@@ -18,11 +16,14 @@ export default function ManageServices() {
       <Tabs
       value={value}
         onChange={handleChange}
-        variant="scrollable"
-        scrollButtons
-        allowScrollButtonsMobile
-         textColor="secondary"
-  indicatorColor="secondary"
+        sx={{
+    '& .MuiTabs-flexContainer': {
+      flexWrap: 'wrap',
+      gap:'1rem'
+    },
+  }}
+         textColor="primary"
+  indicatorColor="primary"
         aria-label="scrollable force tabs example"
 
     >{

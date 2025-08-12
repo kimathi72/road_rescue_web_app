@@ -3,19 +3,26 @@ class RequestsController < ApplicationController
   before_action :driver_authenticated, only: [:create]
 
   def index
-    case current_user.role
-    when "driver"
-      @requests = Request.select { |request| request.vehicle["user_id"] == current_user.id }
-    when "provider"
-      @requests = User.find(current_user["id"]).requests
-    else
-      @requests = Request.all
-    end
-    render json: @requests
+    @requests = Request.all
+    render json: @requests, status: :ok
+  end
+
+  def provider_requests
+    @requests = User.find(current_user[:id]).requests
+    render json: @requests, status: :ok
+  end
+
+  def driver_requests
+    @requests = Request.select { |request| request[:vehicle][:user_id] == current_user.id }
+    render json: @requests, status: :ok
+  end
+
+  def nearby_requests
+    @requests = Request.filter { |request| request[:location][:city] == current_user[:location][:city] }
   end
 
   def show
-    render @request, include: [:service, :vehicle, :location], status: :ok
+    render json: @request, status: :ok
   end
 
   def create
@@ -25,7 +32,7 @@ class RequestsController < ApplicationController
 
   def update
     @request.update(request_params)
-    render json: @request, include: [:service, :vehicle, :location], status: :updated
+    render json: @request, status: :updated
   end
 
   def destroy
@@ -38,6 +45,6 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:vehicle_id, :service_id, :location_id, :request_description, :user_id, :status)
+    params.require(:request).permit(:vehicle_id, :service_id, :user_id, :request_description, :status, location_attributes: [:city, :latitude, :longitude])
   end
 end

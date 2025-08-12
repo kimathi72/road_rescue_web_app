@@ -1,6 +1,5 @@
 class VehicleSerializer < ActiveModel::Serializer
-  attributes :id, :plate_number, :make, :model, :year
+  attributes :id, :plate_number, :make, :color, :model, :year
   belongs_to :user
-  has_many :incidents
-  has_one :insurance_policy
+  has_many :requests
 end

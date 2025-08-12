@@ -1,39 +1,52 @@
 import { Button, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function VehicleCreate({ user, handleSubmit }) {
+export default function VehicleCreate({ user }) {
   const [vehicle, setVehicle] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const token = localStorage.getItem('jwt')
+  const navigate = useNavigate()
+    useEffect(() => {
+    user && setVehicle({ ...vehicle, "user_id": user.id })
+    
+  }, [user]);
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    console.log(vehicle)
 
-  useEffect(() => {
-    if (user) {
-      setVehicle((prev) => ({ ...prev, user_id: user.id }));
-    }
-  }, [user, setVehicle]);
-
-  useEffect(() => {
-    console.log(vehicle);
-    isSubmitted && handleSubmit("/vehicles", "POST", { vehicle: vehicle });
-  }, [isSubmitted, handleSubmit, vehicle]);
+    const res = await fetch('/api/vehicles', {
+      method:"POST",
+      headers:{
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }, body: JSON.stringify(
+        {"vehicle": vehicle}
+      )
+    })
+    const data = await res.json()
+    console.log(data)
+    if (!data.error ){navigate(-1)}
+  }
 
   const handleChange = (e) => {
-    setVehicle((prev) => ({ ...prev, [`${e.target.name}`]: e.target.value }));
+    console.log(vehicle)
+
+    setVehicle({ ...vehicle, [`${e.target.name}`]: e.target.value });
   };
 
   return (
     <form
       className="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setIsSubmitted(true);
-      }}
+      onSubmit={
+        handleSubmit
+      }
     >
-      <Stack direction={"column"} spacing={2}>
-        <h3 style={{ textAlign: "center", color: "green" }}> Add a vehicle</h3>
-
+        <h3 className="pageTitle"> Add a new vehicle</h3>
+<Stack direction={"row"} flexWrap={'wrap'} alignItems={'center'} gap={'1rem'} justifyContent={'center'} spacing={2}>
         <TextField
           label="Plate Number"
           name="plate_number"
+          required
           onChange={handleChange}
         />
         <TextField label="Vehicle Make" name="make" onChange={handleChange} />
@@ -41,16 +54,18 @@ export default function VehicleCreate({ user, handleSubmit }) {
         <TextField
           label="Model of Vehicle"
           name="model"
+          required
           onChange={handleChange}
         />
+        <TextField label="Vehicle Color" name="color" onChange={handleChange} />
         <TextField
           label="Year of Manufacture"
           name="year"
           onChange={handleChange}
         />
-
-        <Button type="submit">Add Vehicle</Button>
-      </Stack>
+</Stack>
+        <Button variant="contained" color='success' type="submit">Add Vehicle</Button>
+      
     </form>
   );
 }

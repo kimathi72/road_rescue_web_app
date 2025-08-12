@@ -21,18 +21,6 @@
 #   Location.create(l)
 # end
 
-# ["Towing service",
-#  "Mechanical Breakdown Assistance",
-#  "Flat Tire / Tire Change",
-#  "Fuel Delivery",
-#  "Battery Jump Start",
-#  "Lockout Assistance",
-#  "Stuck Vehicle Recovery",
-#  "Insurance Contact Service",
-#  "Assessment Request"].map do |s|
-#   Service.create(name: s)
-# end
-
 # require "faker"
 
 # roles = ["driver", "provider", "assessor"]
@@ -62,17 +50,28 @@
 #                          premium_amount: Random.new.rand(500..1200),
 #                          status: 0)
 # end
-
-# [{ name: "driver", email: "driver@driver.com", password: "driver123", location_id: 20, role: "driver", phone: "+254711808129" },
-#  { name: "admin", email: "admin@admin.com", password: "admin123", location_id: 20, role: "admin", phone: "+254711808129" },
-#  { name: "assessor", email: "assessor@assessor.com", password: "assessor123", location_id: 20, role: "assessor", phone: "+254711808129" },
-#  { name: "insurer", email: "insurer@insurer.com", password: "insurer123", location_id: 20, role: "insurer", phone: "+254711808129" },
-#  { name: "provider", email: "provider@provider.com", password: "provider123", location_id: 20, role: "provider", phone: "+254711808129" }].map do |user|
-#   User.create(user)
-# end
 require "faker"
+puts "start seeding"
+
+["Flat Tire ",
+ "Engine Trouble",
+ "Out Of Fuel",
+ "Dead Battery",
+ "Lockout Out",
+ "Accident",
+ "Other"].map do |s|
+  Service.create(name: s)
+end
+
+[{ name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129" },
+ { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129" },
+ { name: "provider", email: "provider@provider.com", password: "provider123", role: "provider", phone: "+254711808129" }].map do |user|
+  User.create(user)
+end
+puts "users #{User.count} services #{Service.count}"
 make = Faker::Vehicle.make
 model = Faker::Vehicle.model(make_of_model: make)
-Vehicle.create(user_id: 4195, plate_number: Faker::Vehicle.license_plate, make: make, model: model, year: Faker::Vehicle.year)
+Vehicle.create(user_id: 1, plate_number: Faker::Vehicle.license_plate, make: make, model: model, year: Faker::Vehicle.year)
+puts "end seeding "
 # puts " #{User.count} users"
 # puts "end of seeding #{Location.count} locations, #{Service.count} services, and #{User.count} users, #{Vehicle.count} vehicles"

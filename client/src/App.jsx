@@ -6,8 +6,10 @@ import Signin from "./components/auth/Signin.jsx";
 import Signup from "./components/auth/Signup.jsx";
 import Signout from "./components/auth/Signout.jsx";
 import Users from "./components/user/Index.jsx";
+import VehicleCreate from "./components/vehicle/VehicleCreate.jsx";
 import Invoices from "./components/invoice/InvoiceIndex.jsx";
 import "./assets/styles/mystyles.css";
+import RequestShow from "./components/request/RequestShow.jsx";
 import SystemLogs from "./components/admin/SystemLogs.jsx";
 import JobsList from "./components/responder/JobsList.jsx";
 import Account from "./components/responder/Account.jsx";
@@ -45,28 +47,13 @@ export default function App() {
   }, [getUser, token]);
 
   // callback function to do async fetch request. pass as prop to child component
-  const handleSubmit = async (url, method, obj) => {
-    try {
-      const results = await fetch(url, {
-        method: method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: obj && JSON.stringify(obj),
-      });
-      const data = await results.json();
-      console.log(data);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  
 
   //on App load, query for current user, auto login if signed in, otherwise sign in first.
 
-  const authorizedUser = (role) => {
-    if (!!token && isLoaded) {
-      return !!(role === user.role);
+  const authorizedUser = (perm) => {
+    if (!!user && isLoaded) {
+      return !!(perm === user.role);
     } else {
       return false;
     }
@@ -102,7 +89,7 @@ export default function App() {
             element={
             authorizedUser("provider") ? <JobsList />
               : authorizedUser("driver") ? (
-                <RequestCreate handleSubmit={handleSubmit} />
+                <RequestCreate  />
               ) : authorizedUser("admin") ? (
                 <RequestOverview />
               ) : (
@@ -123,7 +110,7 @@ export default function App() {
             path="/jobs_list"
             element={
               authorisationFn("provider",
-                <JobsList handleSubmit={handleSubmit} />
+                <JobsList/>
               )
             }
           />
@@ -136,13 +123,19 @@ export default function App() {
             path="/account"
             element={
               authorisationFn("provider",
-                <Account handleSubmit={handleSubmit} />
+                <Account  />
               )
             }
           />
           <Route
             path="/new_rescue"
             element={authorisationFn("driver", <RequestCreate />)}
+          />
+          <Route
+          path="/request/:id"
+          element={
+            <RequestShow role={!!user && user.role}/>
+          }
           />
           <Route
             path="/rescue_queue"
@@ -152,7 +145,7 @@ export default function App() {
             path="/invoices/*"
             element={
               authorisationFn("driver",
-                <Invoices handleSubmit={handleSubmit} />
+                <Invoices  />
               )
             }
           />
@@ -169,8 +162,12 @@ export default function App() {
           <Route
             path="/users/*"
             element={
-              authorisationFn("admin", <Users handleSubmit={handleSubmit} />)
+              authorisationFn("admin", <Users  />)
             }
+          />
+          <Route 
+          path="/add_vehicle"
+          element={<VehicleCreate user={user}  />}
           />
         </Routes>
          

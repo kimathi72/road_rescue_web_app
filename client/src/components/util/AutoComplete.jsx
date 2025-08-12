@@ -9,7 +9,7 @@ export default function AutoComplete ({url, k, setData, lb}){
     const {data: results, isLoaded} = useQuery(url)
     //prop 'lb' expects two worded string, the secong word references db table 
     //objKey returns lowercase last word in 'lb' string plus id at the end. reference FK in db table
-    const objKey = lb.toString().toLowerCase().split(' ')[1] + '_id' 
+    // const objKey = lb.toString().toLowerCase().split(' ')[1] + '_id' 
     return(
         isLoaded && <Autocomplete
         disablePortal

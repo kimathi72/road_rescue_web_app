@@ -1,3 +1,6 @@
 class RequestSerializer < ActiveModel::Serializer
-  attributes :id, :vehicle_plate, :service_type, :city, :request_description, :provider_name, :status
+  attributes :id, :request_description, :status, :created_at
+  belongs_to :vehicle
+  belongs_to :service
+  belongs_to :location
 end

@@ -10,87 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_29_053115) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_05_093521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "assessments", force: :cascade do |t|
-    t.bigint "claim_id", null: false
-    t.string "report_url"
-    t.float "estimated_cost"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["claim_id"], name: "index_assessments_on_claim_id"
-    t.index ["user_id"], name: "index_assessments_on_user_id"
-  end
-
-  create_table "claims", force: :cascade do |t|
-    t.integer "status", default: 0
-    t.float "approved_amount", default: 0.0
-    t.date "payout_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "incident_id", null: false
-    t.index ["incident_id"], name: "index_claims_on_incident_id"
-  end
-
-  create_table "incident_abstacts", force: :cascade do |t|
-    t.string "public_id"
-    t.bigint "incident_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["incident_id"], name: "index_incident_abstacts_on_incident_id"
-  end
-
-  create_table "incident_photos", force: :cascade do |t|
-    t.bigint "incident_id", null: false
-    t.text "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["incident_id"], name: "index_incident_photos_on_incident_id"
-  end
-
-  create_table "incidents", force: :cascade do |t|
-    t.bigint "vehicle_id", null: false
-    t.bigint "location_id", null: false
-    t.datetime "date_happened"
-    t.text "description"
-    t.integer "status", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_incidents_on_location_id"
-    t.index ["vehicle_id"], name: "index_incidents_on_vehicle_id"
-  end
-
-  create_table "insurance_policies", force: :cascade do |t|
-    t.bigint "vehicle_id", null: false
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "coverage_type", default: 0
-    t.float "premium_amount"
-    t.integer "status", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["vehicle_id"], name: "index_insurance_policies_on_vehicle_id"
-  end
-
-  create_table "insurances", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "locations", force: :cascade do |t|
     t.float "latitude"
     t.float "longitude"
     t.string "city"
-    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "place"
-    t.string "district"
-    t.string "region"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -108,22 +37,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_29_053115) do
     t.string "request_description"
     t.integer "status", default: 0
     t.bigint "user_id"
+    t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "location_id"
     t.bigint "vehicle_id", null: false
     t.index ["location_id"], name: "index_requests_on_location_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
     t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"
-  end
-
-  create_table "reviews", force: :cascade do |t|
-    t.string "remark"
-    t.integer "rating"
-    t.bigint "request_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["request_id"], name: "index_reviews_on_request_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -152,17 +72,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_29_053115) do
     t.string "plate_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "color"
     t.index ["user_id"], name: "index_vehicles_on_user_id"
   end
 
-  add_foreign_key "assessments", "claims"
-  add_foreign_key "assessments", "users"
-  add_foreign_key "claims", "incidents"
-  add_foreign_key "incident_abstacts", "incidents"
-  add_foreign_key "incident_photos", "incidents"
-  add_foreign_key "incidents", "locations"
-  add_foreign_key "incidents", "vehicles"
-  add_foreign_key "insurance_policies", "vehicles"
   add_foreign_key "notifications", "requests"
   add_foreign_key "requests", "locations"
   add_foreign_key "requests", "users"
