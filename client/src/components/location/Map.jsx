@@ -1,5 +1,7 @@
 import React, {useState, useEffect } from "react";
 // import icon from "./Constants";
+import 'leaflet/dist/leaflet.js';
+
 import {
   MapContainer,
   TileLayer,

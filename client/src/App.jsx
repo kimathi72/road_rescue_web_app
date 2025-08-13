@@ -11,13 +11,13 @@ import Invoices from "./components/invoice/InvoiceIndex.jsx";
 import "./assets/styles/mystyles.css";
 import RequestShow from "./components/request/RequestShow.jsx";
 import SystemLogs from "./components/admin/SystemLogs.jsx";
-import JobsList from "./components/responder/JobsList.jsx";
 import Account from "./components/responder/Account.jsx";
 import RequestOverview from "./components/admin/RequestOverview.jsx";
 import RequestCreate from "./components/request/RequestCreate.jsx";
-import RescueQueue from "./components/driver/RescueQueue.jsx";
+import RescueQueue from "./components/request/RequestQueue.jsx";
 import Notify from "./components/navigation/Notify.jsx";
-import AssignedJobs from './components/responder/AssignedJobs.jsx'
+import RequestEdit from './components/request/RequestEdit.jsx'
+import RequestIndex from "./components/request/RequestIndex.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -87,7 +87,7 @@ export default function App() {
             path="/"
             exact
             element={
-            authorizedUser("provider") ? <JobsList />
+            authorizedUser("provider") ? <RequestIndex />
               : authorizedUser("driver") ? (
                 <RequestCreate  />
               ) : authorizedUser("admin") ? (
@@ -107,20 +107,13 @@ export default function App() {
           />
 
           <Route
-            path="/jobs_list"
+            path="/requests"
             element={
-              authorisationFn("provider",
-                <JobsList/>
-              )
+                <RequestIndex/>
             }
           />
           <Route
-            path="/assigned_jobs"
-            element={
-              authorisationFn("provider", <AssignedJobs />)}
-          />
-          <Route
-            path="/account"
+            path="/account/provider"
             element={
               authorisationFn("provider",
                 <Account  />
@@ -128,18 +121,24 @@ export default function App() {
             }
           />
           <Route
-            path="/new_rescue"
+            path="/requests/create"
             element={authorisationFn("driver", <RequestCreate />)}
           />
           <Route
-          path="/request/:id"
+          path="/requests/:id"
           element={
             <RequestShow role={!!user && user.role}/>
           }
           />
           <Route
-            path="/rescue_queue"
-            element={authorisationFn("driver", <RescueQueue />)}
+          path="/requests/:id/edit"
+          element={
+            <RequestEdit user={user}/>
+          }
+          />
+          <Route
+            path="/requests/queue"
+            element={ !!user && <RescueQueue user={user} />}
           />
           <Route
             path="/invoices/*"
@@ -150,7 +149,7 @@ export default function App() {
             }
           />
           <Route
-            path="/jobs_overview"
+            path="/requests/overview"
             element={
               authorisationFn("admin",  <RequestOverview />)}
           />

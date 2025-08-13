@@ -22,7 +22,7 @@ export default function RequestCreate() {
       // setRequest(data)
       console.log(data);   
 
-      navigate(`/request/${data.id}`)
+      navigate(`/requests/${data.id}`)
   };
     return (
     <div className='displayDiv'>

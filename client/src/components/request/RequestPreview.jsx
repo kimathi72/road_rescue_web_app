@@ -22,7 +22,7 @@ export default function RequestPreview({request}) {
       </Typography>
     </CardContent>
     <CardActions>
-      <Link to={`/request/${request.id}`} > View Request Details</Link>
+      <Link to={`/requests/${request.id}`} > View Request Details</Link>
     </CardActions>
     </Card>
   )

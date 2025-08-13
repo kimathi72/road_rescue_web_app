@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import Link from '@mui/material/Link';
-import { Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ReceiptIcon from '@mui/icons-material/Receipt';
@@ -27,8 +27,8 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <PreviewIcon/>,
-            link: '/jobs_overview', 
-            text: 'Jobs Overview'
+            link: '/requests/overview', 
+            text: 'Requests Overview'
           },
           {
             icon: <SupervisedUserCircleIcon/>,
@@ -47,17 +47,17 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <DepartureBoardIcon/>,
-            link: '/jobs_list', 
-            text: 'Jobs List'
+            link: '/requests', 
+            text: 'Requests List'
           }, 
           {
             icon: <MonetizationOnIcon/>,
-            link: '/assigned_jobs', 
-            text: 'Assigned Jobs'
+            link: '/requests/queue', 
+            text: 'Requests Queue'
           }, 
           {
             icon: <AccountCircleIcon/>,
-            link: '/account', 
+            link: '/account/provider', 
             text: 'Account Management'
           }
         ])
@@ -68,13 +68,13 @@ export default function NavBar({user}) {
         setLinks([
           {
             icon: <CarCrashIcon/>,
-            link: '/new_rescue', 
-            text: 'New Rescue'
+            link: '/requests/create', 
+            text: 'Create Request'
           }, 
           {
             icon: <DepartureBoardIcon/>,
-            link: '/rescue_queue', 
-            text: 'Rescues Queue'
+            link: '/requests/queue', 
+            text: 'Requests Queue'
           }, 
           {
             icon: <ReceiptIcon/>,
@@ -90,10 +90,12 @@ export default function NavBar({user}) {
   const {pathname} = location
   const token = localStorage.getItem('jwt')
   return (
-   !!user && <Stack
+   !!user && <Grid
+   container
    className="navBar"
       justifyContent={'space-between'}
       direction={'row'}
+      alignItems={'center'}
       sx={{
         width: '100%',
         typography: 'body1',
@@ -109,7 +111,7 @@ export default function NavBar({user}) {
             !!user && !!token ? <Drawer links={links} urls={urls}/> : pathname === "/signup" ? <Link  color="primary" href="/signin" underline="hover">SignIn</Link> : <Link href="/signup" color="info" underline="hover">SignUp</Link> 
           }
 
-    </Stack>
+    </Grid>
   );
 }
 

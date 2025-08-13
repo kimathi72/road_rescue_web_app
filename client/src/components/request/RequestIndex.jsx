@@ -4,7 +4,8 @@ import RequestsList from './RequestsList'
 
 export default function RequestIndex() {
   const {data: requests, isLoaded} = useQuery('/requests')
+  const title = "Requests List"
   return (
-    isLoaded ? <RequestsList requests={requests}/> : <p>Fetching Rescue Requests. . .</p>
+    isLoaded ? <RequestsList title={title} requests={requests}/> : <p>Fetching Rescue Requests. . .</p>
   )
 }

@@ -7,20 +7,6 @@ class RequestsController < ApplicationController
     render json: @requests, status: :ok
   end
 
-  def provider_requests
-    @requests = User.find(current_user[:id]).requests
-    render json: @requests, status: :ok
-  end
-
-  def driver_requests
-    @requests = Request.select { |request| request[:vehicle][:user_id] == current_user.id }
-    render json: @requests, status: :ok
-  end
-
-  def nearby_requests
-    @requests = Request.filter { |request| request[:location][:city] == current_user[:location][:city] }
-  end
-
   def show
     render json: @request, status: :ok
   end
@@ -38,6 +24,16 @@ class RequestsController < ApplicationController
   def destroy
   end
 
+  def queue
+    @user_role = User.find(params[:user_id]).role
+    provider_requests unless @user_role != "provider"
+    driver_requests unless @user_role != "driver"
+    # requests = @requests.map { |request| Request.find(request[:request_id].to_i) }
+    # render json: @requests, status: :ok
+    puts @requests
+    @requests.map { |request| render json: request }
+  end
+
   private
 
   def set_request
@@ -46,5 +42,19 @@ class RequestsController < ApplicationController
 
   def request_params
     params.require(:request).permit(:vehicle_id, :service_id, :user_id, :request_description, :status, location_attributes: [:city, :latitude, :longitude])
+  end
+
+  def provider_requests
+    @requests = Request.all.select { |request| request[:user_id].to_i == params[:user_id].to_i }
+  end
+
+  def driver_requests
+    @user = User.find(params[:user_id])
+    @vehicles = @user.vehicles
+    @requests = @vehicles.map { |vehicle| vehicle.requests }
+  end
+
+  def nearby_requests
+    @requests = Request.filter { |request| request[:location][:city] == User.find(params[:user_id])[:location][:city] }
   end
 end

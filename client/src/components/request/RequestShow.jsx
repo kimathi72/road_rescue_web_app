@@ -19,15 +19,17 @@ export default function RequestShow({role}) {
         
         break;
       case 'provider':
-        if (!request['user_id']){
+        console.log(!!request && request)
+        if (!!request && !!request['user']){
 setAction(<>
-        <Button >Decline Request</Button>
-        <Button>Accept Request</Button>
+                  <Button>Cancel Request</Button>
+          <Button>Proceed to Invoice</Button>
         </>)
-        }else{
+        }else if (!!request && !request['user']){
           setAction(<>
-          <Button>Cancel Request</Button>
-          <Button>Invoice</Button>
+          <Button >Decline Request</Button>
+        <Button>Accept Request</Button>
+
           </>)
         }
         

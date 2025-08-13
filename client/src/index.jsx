@@ -6,7 +6,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./index.css";
 import App from "./App";
-// import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
 import reportWebVitals from "./reportWebVitals";
 import { CableProvider } from "./context/cable";
