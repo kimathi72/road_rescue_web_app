@@ -27,6 +27,7 @@ export default function SetLocation({ setData }) {
       "location_attributes": {
         "latitude": position[0],
         "longitude": position[1],
+        "district": data['address']['District'],
         "city": data["address"]["City"]
       },
     }));

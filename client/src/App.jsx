@@ -127,7 +127,7 @@ export default function App() {
           <Route
           path="/requests/:id"
           element={
-            <RequestShow role={!!user && user.role}/>
+            <RequestShow user={!!user && user}/>
           }
           />
           <Route

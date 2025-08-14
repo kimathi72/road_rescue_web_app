@@ -18,7 +18,7 @@ class RequestsController < ApplicationController
 
   def update
     @request.update(request_params)
-    render json: @request, status: :updated
+    render json: @request, status: :ok
   end
 
   def destroy
@@ -30,8 +30,7 @@ class RequestsController < ApplicationController
     driver_requests unless @user_role != "driver"
     # requests = @requests.map { |request| Request.find(request[:request_id].to_i) }
     # render json: @requests, status: :ok
-    puts @requests
-    @requests.map { |request| render json: request }
+
   end
 
   private
@@ -41,17 +40,24 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:vehicle_id, :service_id, :user_id, :request_description, :status, location_attributes: [:city, :latitude, :longitude])
+    params.require(:request).permit(:vehicle_id, :service_id, :user_id, :request_description, :status, location_attributes: [:city, :district, :latitude, :longitude])
   end
 
   def provider_requests
-    @requests = Request.all.select { |request| request[:user_id].to_i == params[:user_id].to_i }
+    puts ("params is #{params[:user_id]}")
+    @requests = User.find(params[:user_id]).requests
+    # @requests = Request.all.select do |request|
+    #   request[:user_id] == params[:user_id]
+    # end
+    puts json: @requests
+    render json: @requests, status: :ok
   end
 
   def driver_requests
     @user = User.find(params[:user_id])
     @vehicles = @user.vehicles
     @requests = @vehicles.map { |vehicle| vehicle.requests }
+    @requests.map { |request| render json: request }
   end
 
   def nearby_requests

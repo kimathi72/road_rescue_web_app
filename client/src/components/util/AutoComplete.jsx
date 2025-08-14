@@ -3,8 +3,11 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import useQuery from '../../hooks/useQuery';
 import Chip from '@mui/material/Chip';
+import { useLocation } from 'react-router-dom';
 
-export default function AutoComplete ({url, k, setData, lb}){
+export default function AutoComplete ({url, k, setData, lb, value}){
+const location = useLocation()
+const {pathname} = location
 
     const {data: results, isLoaded} = useQuery(url)
     //prop 'lb' expects two worded string, the secong word references db table 
@@ -14,6 +17,7 @@ export default function AutoComplete ({url, k, setData, lb}){
         isLoaded && <Autocomplete
         disablePortal
       options={(results.length && results)|| []}
+      //  value={!!value  && value}
         getOptionLabel={option => option[`${k}`]}
         renderValue={(value, getItemProps)=>{
            return <Chip label={value[`${k}`]} {...getItemProps()} />

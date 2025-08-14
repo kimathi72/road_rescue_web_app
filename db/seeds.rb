@@ -63,9 +63,9 @@ puts "start seeding"
   Service.create(name: s)
 end
 
-[{ name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129" },
- { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129" },
- { name: "provider", email: "provider@provider.com", password: "provider123", role: "provider", phone: "+254711808129" }].map do |user|
+[{ name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129", location_attributes: { city: "kabete", district: "kibichiku", latitude: "-1.2216808", longitude: "36.7307536" } },
+ { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129", location_attributes: { city: "Embakasi West", district: "Kariobangi South", latitude: "-1.2594066", longitude: "36.8916509" } },
+ { name: "provider", email: "provider@provider.com", password: "provider123", role: "provider", phone: "+254711808129", location_attributes: { city: "Embakasi East", district: "Embakasi East", latitude: "-1.3333991", longitude: "36.8857263" } }].map do |user|
   User.create(user)
 end
 puts "users #{User.count} services #{Service.count}"

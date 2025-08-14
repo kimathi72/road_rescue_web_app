@@ -20,7 +20,7 @@ const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/Geoco
       center={position}
       zoom={13}
       scrollWheelZoom={false}
-      style={{ height: "70vh" , width:'60vw'}}
+      style={{ height: "30vh" , width:'40vw'}}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -18,7 +18,7 @@ export default function TemporaryDrawer({links, urls}) {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250,  }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: 230,  }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {links.map(({link,icon,text}, index) => (
           <ListItem key={index} disablePadding>
@@ -50,7 +50,7 @@ export default function TemporaryDrawer({links, urls}) {
   return (
     <div>
       <Button  onClick={toggleDrawer(true)}startIcon={<MenuIcon/>} > Menu </Button>
-      <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
+      <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>

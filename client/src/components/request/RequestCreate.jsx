@@ -6,6 +6,7 @@ export default function RequestCreate() {
         const [request, setRequest] = useState({})
         const token = localStorage.getItem('jwt')
         const navigate = useNavigate()
+        useEffect(()=>{console.log(request)},[request])
 
         const handleSubmit = async (e) => {
             e.preventDefault() 

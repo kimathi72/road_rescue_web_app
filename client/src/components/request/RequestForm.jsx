@@ -4,11 +4,12 @@ import { Button, Input, Stack, TextField } from "@mui/material";
 import VehicleSelect from "../vehicle/VehicleSelect.jsx";
 
 export default function RequestForm({ setRequest, handleSubmit }) {
+  
   return (
     <form onSubmit={handleSubmit} className="form">
       <Stack spacing={1}>
         <SetLocation setData={setRequest} />
-        <ManageServices setData={setRequest} />
+        <ManageServices setData={setRequest}  />
         <VehicleSelect setData={setRequest} />
 
         <TextField
@@ -26,7 +27,7 @@ export default function RequestForm({ setRequest, handleSubmit }) {
         />
       </Stack>
       <Button variant="contained" color="error" type="submit">
-        Request Road Rescue
+        Submit Rescue Request
       </Button>
     </form>
   );
