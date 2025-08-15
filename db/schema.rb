@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_13_083627) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_15_063437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chats", force: :cascade do |t|
+    t.bigint "request_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["request_id"], name: "index_chats_on_request_id"
+  end
 
   create_table "locations", force: :cascade do |t|
     t.float "latitude"
@@ -21,6 +28,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_13_083627) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "district"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -77,6 +94,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_13_083627) do
     t.index ["user_id"], name: "index_vehicles_on_user_id"
   end
 
+  add_foreign_key "chats", "requests"
+  add_foreign_key "messages", "chats"
+  add_foreign_key "messages", "users"
   add_foreign_key "notifications", "requests"
   add_foreign_key "requests", "locations"
   add_foreign_key "requests", "users"
