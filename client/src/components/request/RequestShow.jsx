@@ -94,7 +94,7 @@ export default function RequestShow({ user }) {
         );
         break;
     }
-  }, [user]);
+  }, [user, request]);
   return isLoaded ? (
     <Grid container direction={"column"} gap={"2rem"} justifyContent={"center"}>
       <h3 style={{ textAlign: "center" }}>Request Details</h3>
