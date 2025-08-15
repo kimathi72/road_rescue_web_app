@@ -4,7 +4,9 @@ class Request < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :location, optional: true
   has_many :notifications
-  accepts_nested_attributes_for :location
+  has_one :chat
+  accepts_nested_attributes_for :location, :chat
+  after_create :create_chat
   # validates :user_is_provider
   enum :status, {
          :reported => 0,
