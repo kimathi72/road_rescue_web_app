@@ -22,7 +22,7 @@ export default function RequestShow({ user }) {
             gap={"0.5rem"}
           >
             {(!!request && !!request['invoice']) ? <Button
-            onClick={()=>navigate(`/requests/${id}/invoice`)}
+            onClick={()=>navigate(`/invoice/${request.invoice.id}`)}
             >proceed to invoice</Button> 
             :(!!request && request['status'] ==='cancelled') ? 
               <Button onClick={()=>navigate(`/requests/${id}/edit`, {state: {"status": "reported"}})}>
@@ -36,7 +36,7 @@ export default function RequestShow({ user }) {
             </Button> }
             {
               (!!request && !!request['user']) ? <Button 
-              onClick={()=>navigate(`/requests/${id}/chat`)}
+              onClick={()=>navigate(`/chat/${request.chat.id}`)}
                variant="contained">Chat with Provider</Button> : <Button onClick={()=>navigate('/nearby_providers')} variant="contained">View nearby Providers</Button>
             }
             
@@ -54,10 +54,10 @@ export default function RequestShow({ user }) {
               justifyContent={"center"}
               gap={"0.5rem"}
             >
-              <Button onClick={()=>navigate(`/requests/${id}/chat`)} variant="contained" color="success">
+              <Button onClick={()=>navigate(`/chat/${request.chat.id}`)} variant="contained" color="success">
                 Chat with Driver
               </Button>
-              <Button onClick={()=>navigate(`/requests/${id}/invoice`)} variant="contained" color="primary">
+              <Button onClick={()=>navigate(`/invoice/${request.invoice.id}`)} variant="contained" color="primary">
                 Proceed to Invoice
               </Button>
             </Grid>

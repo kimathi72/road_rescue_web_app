@@ -18,6 +18,7 @@ import RescueQueue from "./components/request/RequestQueue.jsx";
 import Notify from "./components/navigation/Notify.jsx";
 import RequestEdit from './components/request/RequestEdit.jsx'
 import RequestIndex from "./components/request/RequestIndex.jsx";
+import Chat from "./components/chat/Chat.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -168,7 +169,14 @@ export default function App() {
           path="/add_vehicle"
           element={<VehicleCreate user={user}  />}
           />
+          <Route
+        path="/chat/:id"
+        element={
+          <Chat user={user} />
+        }
+        />
         </Routes>
+        
          
     </Router>
     </div>

@@ -15,13 +15,11 @@ class MessagesController < ApplicationController
 
   # POST /messages
   def create
-    @message = Message.new(message_params)
-
-    if @message.save
-      render json: @message, status: :created, location: @message
-    else
-      render json: @message.errors, status: :unprocessable_entity
-    end
+    @user = current_user
+    @message = @user.messages.create(message_params)
+    serialized_message = @message.serialize
+    ActionCable.server.broadcast("chat_#{@message.chat.id}", serialized_message)
+    render json: @message, status: :created
   end
 
   # PATCH/PUT /messages/1
@@ -39,13 +37,14 @@ class MessagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_message
-      @message = Message.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def message_params
-      params.require(:message).permit(:chat_id, :user_id, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_message
+    @message = Message.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def message_params
+    params.require(:message).permit(:chat_id, :user_id, :content)
+  end
 end

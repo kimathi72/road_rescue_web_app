@@ -75,3 +75,18 @@
     text-align: center;
     color: chocolate;
 }
+.sent{
+    margin-bottom: 0.5rem;
+    align-self:flex-end;
+    width: 18rem;
+    min-height: fit-content;
+    background: #57a315;
+
+}
+.received{
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+    width: 18rem;
+    min-height: fit-content;
+    background: #76B4BC;
+}

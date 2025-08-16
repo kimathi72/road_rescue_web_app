@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :messages
   resources :incident_photos
   mount ActionCable.server => "/cable"
 
@@ -7,7 +6,10 @@ Rails.application.routes.draw do
   resources :vehicles
   resources :notifications
   resources :locations
-  resources :chats
+  resources :chats do
+    resources :messages, only: [:index, :create, :show]
+  end
+  resources :messages
   resources :requests
   resources :services
   resources :drivers
