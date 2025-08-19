@@ -1,49 +1,65 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import {CableContext} from '../../context/cable'
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { CableContext } from "../../context/cable";
 
-import useQuery from '../../hooks/useQuery'
-import MessageShow from './MessageShow'
+import useQuery from "../../hooks/useQuery";
+import MessageShow from "./MessageShow";
+import Notify from "../navigation/Notify";
+import { Link } from "react-router-dom";
 
-function MessageList({chatId, user }) {
-    const messagesEndRef = useRef(null)
-    const [messages, setMessages] = useState([])
-    const {data: chatMessages, isLoaded} = useQuery(`/chats/${chatId}/messages`)
-    useEffect(()=>{
-        !isLoaded ? null : !!isLoaded && setMessages(chatMessages)
-    },[isLoaded, chatMessages])
+function MessageList({ chatId, user }) {
+   const { data: chatMessages, isLoaded } = useQuery(
+    `/chats/${chatId}/messages`
+  );
+  const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState([]);
 
-     const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+ 
+  useEffect(() => {
+    !isLoaded ? null : !!isLoaded && setMessages(chatMessages);
+  }, [isLoaded, chatMessages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [messages]);
 
-    const cableContext = useContext(CableContext)
-    useEffect(()=>{
-        const newChannel = cableContext.cable.subscriptions.create(
-            {
-                channel: "ChatChannel",
-                "chat_id": !!chatId && chatId
-            },
-            {
-                received: (data) => {
-                   setMessages([...messages, data]) 
-                }
-            }
-        )
-    },[cableContext, messages])
-  return (
-   !!messages && !!messages.length ? <ul style={{display: "flex", flexDirection: "column", listStyle: "none", maxHeight: "82vh", overflow: 'auto', border: "1px solid orange", padding:"0.5rem"}}>
+  const cableContext = useContext(CableContext);
+  useEffect(() => {
+    const newChannel = cableContext.cable.subscriptions.create(
       {
-        messages.map((message, index)=>{
-          return <MessageShow key={index} message={message} user={user} />
-        })
+        channel: "ChatChannel",
+        chat_id: !!chatId && chatId,
+      },
+      {
+        received: (data) => {
+          console.log(data)
+          return setMessages([...messages, data]);
+        },
       }
-       <div ref={messagesEndRef} />
-    </ul> : <p>No Messages yet. add message below</p>
-  )
+    );
+  }, [cableContext, messages]);
+  return !!messages && !!messages.length ? (
+    <ul
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        listStyle: "none",
+        maxHeight: "82vh",
+        overflow: "auto",
+        padding: "0.5rem",
+      }}
+    >
+      {!!messages && messages.map((message, index) => {
+        return <MessageShow key={index} message={message} user={user} />;
+      })}
+      <div ref={messagesEndRef} />
+    </ul>
+  ) : (
+    <p>No Messages yet. add message below</p>
+  );
 }
 
-export default MessageList
+export default MessageList;

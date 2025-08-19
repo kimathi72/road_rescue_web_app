@@ -9,7 +9,7 @@ const params = useParams()
 const chatId = params.id
 
   return (
-    <Grid container direction={'column'} border={'1px solid black'}>
+    <Grid container direction={'column'} sx={{boxShadow: "2px 2px 2px 2px #888888",backgroundColor: "AppWorkspace", borderRadius: "5px"}}>
         <MessageList chatId={chatId} user={user} />
         <MessageCreate chatId={chatId}/>
     </Grid>
