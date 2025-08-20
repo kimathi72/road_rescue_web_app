@@ -20,6 +20,7 @@ import RequestEdit from './components/request/RequestEdit.jsx'
 import RequestIndex from "./components/request/RequestIndex.jsx";
 import Chat from "./components/chat/Chat.jsx";
 import { Grid } from "@mui/material";
+import Earnings from "./components/invoice/Earnings.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -115,14 +116,7 @@ export default function App() {
                 <RequestIndex/>
             }
           />
-          <Route
-            path="/account/provider"
-            element={
-              authorisationFn("provider",
-                <Account  />
-              )
-            }
-          />
+         
           <Route
             path="/requests/create"
             element={authorisationFn("driver", <RequestCreate />)}
@@ -151,18 +145,23 @@ export default function App() {
               )
             }
           />
-          <Route
+          {/* <Route
             path="/requests/overview"
             element={
               authorisationFn("admin",  <RequestOverview />)}
-          />
+          /> */}
           <Route
-            path="/system_logs"
+            path="/analytics"
             element={
               authorisationFn("admin",  <SystemLogs />)}
           />
           <Route
-            path="/users/*"
+            path="/earnings"
+            element={
+              authorisationFn("provider",  <Earnings />)}
+          />
+          <Route
+            path="/users"
             element={
               authorisationFn("admin", <Users  />)
             }

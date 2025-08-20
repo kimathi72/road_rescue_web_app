@@ -1,18 +1,19 @@
 import { useLocation } from "react-router-dom";
-import Link from "@mui/material/Link";
-import { Box, Grid, Stack } from "@mui/material";
+import { Grid, Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ReceiptIcon from "@mui/icons-material/Receipt";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
-import PreviewIcon from "@mui/icons-material/Preview";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
-import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import Drawer from "./Drawer";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShieldIcon from '@mui/icons-material/Shield';
+import ListIcon from '@mui/icons-material/List';
+import AddIcon from '@mui/icons-material/Add';
+import CommuteIcon from '@mui/icons-material/Commute';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+
 export default function NavBar({ user }) {
   const [links, setLinks] = useState([]);
   useEffect(() => {
@@ -22,19 +23,19 @@ export default function NavBar({ user }) {
       case "admin":
         setLinks([
           {
-            icon: <PreviewIcon />,
-            link: "/requests/overview",
-            text: "Requests Overview",
+            icon: <ListIcon />,
+            link: "/requests",
+            text: "All Requests",
           },
           {
             icon: <SupervisedUserCircleIcon />,
             link: "/users",
-            text: "Users Management",
+            text: "Users",
           },
           {
             icon: <AnalyticsIcon />,
-            link: "/system_logs",
-            text: "System Logs",
+            link: "/analytics",
+            text: "analytics",
           },
           {
         icon: <LogoutIcon />,
@@ -47,19 +48,19 @@ export default function NavBar({ user }) {
       case "provider":
         setLinks([
           {
-            icon: <DepartureBoardIcon />,
+            icon: <ListIcon />,
             link: "/requests",
-            text: "Requests List",
-          },
-          {
-            icon: <MonetizationOnIcon />,
-            link: "/requests/queue",
-            text: "Requests Queue",
+            text: "Requests",
           },
           {
             icon: <AccountCircleIcon />,
-            link: "/account/provider",
-            text: "Account Management",
+            link: "/requests/queue",
+            text: "My Requests",
+          },
+          {
+            icon: <MonetizationOnIcon />,
+            link: "/earnings",
+            text: "Earnings",
           },
           {
         icon: <LogoutIcon />,
@@ -73,19 +74,24 @@ export default function NavBar({ user }) {
       default:
         setLinks([
           {
-            icon: <CarCrashIcon />,
+            icon: <AddIcon/>,
             link: "/requests/create",
             text: "Create Request",
           },
           {
-            icon: <DepartureBoardIcon />,
+            icon: <ListIcon/>,
             link: "/requests/queue",
-            text: "Requests Queue",
+            text: "my Requests",
           },
           {
-            icon: <ReceiptIcon />,
-            link: "/invoices",
-            text: "Invoices",
+            icon: <CommuteIcon />,
+            link: "/vehicles",
+            text: "Vehicle Status",
+          },
+          {
+            icon: <LocationOnIcon />,
+            link: "/location",
+            text: "Location",
           },
           {
         icon: <LogoutIcon />,
