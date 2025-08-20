@@ -6,7 +6,7 @@ export default function RequestPreview({request}) {
   const dateCreated = new Date(!!request && request["created_at"]).toLocaleString();
   return (
     !!request && <Card sx={{display: 'flex', flexDirection: 'column', mb: 1, width:'40rem'}}>
-      <CardContent sx={{display: 'flex',justifyContent: 'space-around', color: 'tomato', fontSize: 14}} >
+      <CardContent sx={{display: 'flex',justifyContent: 'space-around', color: 'black', fontSize: 14}} >
          <Typography variant='body2'>
        Location: {request.location.district}, {request.location.city}
       </Typography>
@@ -19,7 +19,7 @@ export default function RequestPreview({request}) {
       <Typography variant="h5" component="div">
        Issue: {request.service.name}
       </Typography>
-      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Vehicle: {request.vehicle['plate_number']}, {request.vehicle['make']}  {request.vehicle['model']} </Typography>
+      <Typography sx={{ color: 'lightcoral', mb: 1.5 }}>Vehicle: {request.vehicle['plate_number']}, {request.vehicle['make']}  {request.vehicle['model']} </Typography>
       <Typography variant="body2" >
         created at: {dateCreated}        
       </Typography>

@@ -19,6 +19,7 @@ import Notify from "./components/navigation/Notify.jsx";
 import RequestEdit from './components/request/RequestEdit.jsx'
 import RequestIndex from "./components/request/RequestIndex.jsx";
 import Chat from "./components/chat/Chat.jsx";
+import { Grid } from "@mui/material";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -72,13 +73,14 @@ export default function App() {
     }
   }
   return (
-    <div  className='container'>
     <Router 
       future={{
     v7_startTransition: true,
     v7_relativeSplatPath: true,
   }}>     
+    <Grid container direction={{xs: 'column', md:'row', lg: 'row'}}>
       <NavBar user={!!user && user} />
+      <Grid container size={{xs: 12, md: 8, lg: 10}} justifyContent={'center'} p={2}>
         <Routes>
           <Route
             path="/signin"
@@ -176,9 +178,10 @@ export default function App() {
         }
         />
         </Routes>
-        
+        </Grid>
+        </Grid>
          
     </Router>
-    </div>
+    
   );
 }

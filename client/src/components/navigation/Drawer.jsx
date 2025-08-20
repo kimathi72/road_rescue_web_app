@@ -1,16 +1,7 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import { ListItemText } from '@mui/material';
-export default function TemporaryDrawer({links, urls}) {
+import { Grid, Button, Box } from '@mui/material';
+import { NavLink } from 'react-router-dom';
+export default function TemporaryDrawer({links, user}) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -19,7 +10,45 @@ export default function TemporaryDrawer({links, urls}) {
 
   const DrawerList = (
     <Box sx={{ width: 230,  }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
+      
+    </Box>
+  );
+
+  return (
+   !!user && <Grid container gap={'1rem'} direction={{xs: 'grow', md: 'column', lg: 'column'}} justifyContent={'left'}>
+      
+      {
+        links.map(({link,icon,text},index)=>{
+          return <Button 
+          color={user.role === 'driver' ? 'success' : user.role === 'provider' ? 'warning' : 'default' } 
+          href={link} 
+          startIcon={icon}
+          variant='contained'
+          >
+            {text}
+          </Button>
+          
+        })
+     
+      }
+      
+    </Grid>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <List>
         {links.map(({link,icon,text}, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton href={link}>
@@ -43,16 +72,4 @@ export default function TemporaryDrawer({links, urls}) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
-    </Box>
-  );
-
-  return (
-    <div>
-      <Button  onClick={toggleDrawer(true)}startIcon={<MenuIcon/>} > Menu </Button>
-      <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
-        {DrawerList}
-      </Drawer>
-    </div>
-  );
-}
+      </List> */}

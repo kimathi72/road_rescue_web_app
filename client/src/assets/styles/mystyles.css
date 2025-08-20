@@ -73,14 +73,15 @@
 }
 .pageTitle{
     text-align: center;
-    color: chocolate;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: rgb(10, 10, 10);
 }
 .sent{
     margin-bottom: 0.5rem;
     align-self:flex-end;
     width: 18rem;
     min-height: fit-content;
-    background-color: #57a315;
 
 }
 .received{
@@ -88,5 +89,4 @@
     align-self: flex-start;
     width: 18rem;
     min-height: fit-content;
-    background: #76B4BC;
 }
