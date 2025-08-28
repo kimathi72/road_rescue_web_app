@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   belongs_to :location, optional: true
   accepts_nested_attributes_for :location
+  after_create :create_location
   has_many :vehicles
   has_many :requests
   has_many :messages

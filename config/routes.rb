@@ -1,13 +1,21 @@
 Rails.application.routes.draw do
+  resources :invoice_items
+  resources :invoices
   resources :incident_photos
   mount ActionCable.server => "/cable"
 
-  resources :users
-  resources :vehicles
+  resources :users do
+    resources :requests, only: [:index, :show]
+    resources :locations, only: [:index, :show]
+    resources :vehicles, only: [:index, :show]
+  end
+  resources :vehicles do
+    resources :requests, only: [:index, :show]
+  end
   resources :notifications
   resources :locations
   resources :chats do
-    resources :messages, only: [:index, :create, :show]
+    resources :messages, only: [:index, :show]
   end
   resources :messages
   resources :requests

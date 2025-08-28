@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { Grid, Link } from "@mui/material";
 import { useEffect, useState } from "react";
+import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
@@ -12,55 +13,29 @@ import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
 import CommuteIcon from '@mui/icons-material/Commute';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 
 
 export default function NavBar({ user }) {
   const [links, setLinks] = useState([]);
+  const location = useLocation()
+  const {pathname} = location 
+
   useEffect(() => {
     console.log(user);
     
     switch (user.role) {
-      case "admin":
-        setLinks([
-          {
-            icon: <ListIcon />,
-            link: "/requests",
-            text: "All Requests",
-          },
-          {
-            icon: <SupervisedUserCircleIcon />,
-            link: "/users",
-            text: "Users",
-          },
-          {
-            icon: <AnalyticsIcon />,
-            link: "/analytics",
-            text: "analytics",
-          },
-          {
-        icon: <LogoutIcon />,
-        link: "/signout",
-        text: "Sign out",
-      },
-        ]);
-
-        break;
       case "provider":
         setLinks([
           {
-            icon: <ListIcon />,
-            link: "/requests",
-            text: "Requests",
+            icon: <HomeIcon />,
+            link: "/",
+            text: "Home",
           },
           {
-            icon: <AccountCircleIcon />,
-            link: "/requests/queue",
-            text: "My Requests",
-          },
-          {
-            icon: <MonetizationOnIcon />,
-            link: "/earnings",
-            text: "Earnings",
+            icon: <LocationOnIcon />,
+            link: "/location",
+            text: "My Location ",
           },
           {
         icon: <LogoutIcon />,
@@ -74,24 +49,14 @@ export default function NavBar({ user }) {
       default:
         setLinks([
           {
-            icon: <AddIcon/>,
-            link: "/requests/create",
-            text: "Create Request",
-          },
-          {
-            icon: <ListIcon/>,
-            link: "/requests/queue",
-            text: "my Requests",
+            icon: <HomeIcon/>,
+            link: "/",
+            text: "Home",
           },
           {
             icon: <CommuteIcon />,
             link: "/vehicles",
-            text: "Vehicle Status",
-          },
-          {
-            icon: <LocationOnIcon />,
-            link: "/location",
-            text: "Location",
+            text: "My Vehicles ",
           },
           {
         icon: <LogoutIcon />,
@@ -103,8 +68,6 @@ export default function NavBar({ user }) {
         break;
     }
   }, [user]);
-  const location = useLocation();
-  const { pathname } = location;
   const token = localStorage.getItem("jwt");
   return (
     !!user && (

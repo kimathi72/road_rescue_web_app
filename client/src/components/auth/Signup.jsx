@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Stack, TextField } from '@mui/material'
+import { Link, useNavigate } from "react-router-dom";
+import { Button, FormControl, InputLabel, MenuItem, Stack, TextField } from '@mui/material'
+import Select from '@mui/material/Select';
 
 export default function Signup({setUser, setIsLoaded}) {
-  const [driverData, setData] = useState({})
+  const [userData, setData] = useState({})
   const navigate = useNavigate();
   useEffect(()=>{
     setData((prev)=>({...prev, "role": "driver"}))
@@ -11,14 +12,14 @@ export default function Signup({setUser, setIsLoaded}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+console.log(userData)
       try {
         const response = await fetch("/api/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({user: driverData}),
+          body: JSON.stringify({user: userData}),
         });
         const data = await response.json();
         setUser(data.user);
@@ -39,6 +40,16 @@ return (
     <h1> Driver Sign Up Here</h1>
     <Stack direction={'column'} spacing={2}>
      
+    <FormControl>
+      <label>choose a role</label>
+    <select
+          onChange={(event) => {
+    setData(prev => ({...prev, "role": event.target.value}));
+  }}>
+      <option value={'driver'}>Driver</option>
+      <option value={'provider'}>Provider</option>
+    </select>
+    </FormControl>
       <TextField
     name="name"
     placeholder="enter full name"
@@ -51,12 +62,7 @@ return (
     type="email"
     onChange={handleChange}
     />
-    <TextField
-    name="phone"
-    placeholder="enter phone number +254XXXXXXXXX"
-    type="text"
-    onChange={handleChange}
-    />
+    
     <TextField
     name="password"
     placeholder="enter password"
@@ -71,6 +77,7 @@ return (
     />
     <Button type='submit' >Sign up</Button>
     </Stack>
+    <Link to='/signin'>Already have an account, sign in here</Link>
   </form>
 )
 }

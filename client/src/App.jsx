@@ -6,7 +6,7 @@ import Signin from "./components/auth/Signin.jsx";
 import Signup from "./components/auth/Signup.jsx";
 import Signout from "./components/auth/Signout.jsx";
 import Users from "./components/user/Index.jsx";
-import VehicleCreate from "./components/vehicle/VehicleCreate.jsx";
+import VehicleIndex from "./components/vehicle/VehicleIndex.jsx";
 import Invoices from "./components/invoice/InvoiceIndex.jsx";
 import "./assets/styles/mystyles.css";
 import RequestShow from "./components/request/RequestShow.jsx";
@@ -21,6 +21,10 @@ import RequestIndex from "./components/request/RequestIndex.jsx";
 import Chat from "./components/chat/Chat.jsx";
 import { Grid } from "@mui/material";
 import Earnings from "./components/invoice/Earnings.jsx";
+import ProviderDashBoard from "./components/responder/ProviderDashBoard.jsx";
+import DriverDashboard from "./components/driver/DriverDashboard.jsx";
+import AdminDashboard from "./components/admin/AdminDashboard.jsx";
+import MyLocation from "./components/location/MyLocation.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -91,11 +95,11 @@ export default function App() {
             path="/"
             exact
             element={
-            authorizedUser("provider") ? <RequestIndex />
+            authorizedUser("provider") ? <ProviderDashBoard user={!!user  && user} />
               : authorizedUser("driver") ? (
-                <RequestCreate  />
+                <DriverDashboard user={!!user && user}  />
               ) : authorizedUser("admin") ? (
-                <RequestOverview />
+                <AdminDashboard user={!!user && user} />
               ) : (
                 <Signin setUser={setUser} setIsLoaded={setIsLoaded} />
               )
@@ -156,9 +160,9 @@ export default function App() {
               authorisationFn("admin",  <SystemLogs />)}
           />
           <Route
-            path="/earnings"
+            path="/vehicles/*"
             element={
-              authorisationFn("provider",  <Earnings />)}
+              authorisationFn("driver",  <VehicleIndex />)}
           />
           <Route
             path="/users"
@@ -166,9 +170,12 @@ export default function App() {
               authorisationFn("admin", <Users  />)
             }
           />
-          <Route 
-          path="/add_vehicle"
-          element={<VehicleCreate user={user}  />}
+
+          <Route
+            path="/location"
+            element={
+               authorisationFn("provider" , <MyLocation user={user} />)
+            }
           />
           <Route
         path="/chat/:id"

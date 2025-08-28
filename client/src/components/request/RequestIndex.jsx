@@ -6,6 +6,6 @@ export default function RequestIndex() {
   const {data: requests, isLoaded} = useQuery('/requests')
   const title = "Requests List"
   return (
-    isLoaded ? <RequestsList title={title} requests={requests}/> : <p>Fetching Rescue Requests. . .</p>
+    isLoaded ? <RequestsList title={title} requests={requests.filter(request=>request.status === "reported")}/> : <p>Fetching Rescue Requests. . .</p>
   )
 }

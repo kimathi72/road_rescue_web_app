@@ -5,8 +5,9 @@ class Request < ApplicationRecord
   belongs_to :location, optional: true
   has_many :notifications
   has_one :chat
-  accepts_nested_attributes_for :location, :chat
-  after_create :create_chat
+  has_one :invoice
+  accepts_nested_attributes_for :location, :chat, :invoice
+  after_create :create_chat, :create_invoice
   # validates :user_is_provider
   enum :status, {
          :reported => 0,
@@ -14,4 +15,11 @@ class Request < ApplicationRecord
          :resolved => 2,
          :cancelled => 3,
        }
+
+  def serialize
+    serialized_request = ActiveModelSerializers::Adapter::Json.new(
+      RequestSerializer.new(self)
+    ).serializable_hash
+    serialized_request[:request]
+  end
 end

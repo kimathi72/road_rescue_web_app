@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_15_063437) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_20_201831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,24 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_15_063437) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["request_id"], name: "index_chats_on_request_id"
+  end
+
+  create_table "invoice_items", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
+    t.text "description"
+    t.float "charge"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "request_id", null: false
+    t.float "total"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["request_id"], name: "index_invoices_on_request_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -95,6 +113,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_15_063437) do
   end
 
   add_foreign_key "chats", "requests"
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoices", "requests"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "requests"

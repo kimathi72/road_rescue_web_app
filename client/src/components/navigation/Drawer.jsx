@@ -11,7 +11,8 @@ export default function TemporaryDrawer({ links, user }) {
       >
         {links.map(({ link, icon, text }, index) => {
           return (
-            <Button
+            <Button 
+            key = {index}
               color={
                 user.role === "driver"
                   ? "success"

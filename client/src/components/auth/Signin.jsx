@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import { Button, Stack, TextField } from '@mui/material'
 
 export default function Signin({setUser,setIsLoaded}) {
@@ -49,6 +49,7 @@ export default function Signin({setUser,setIsLoaded}) {
         />
         <Button type='submit'>Sign In</Button>
       </Stack>
+      <Link to='/signup'>Don't have an account yet? sign up here</Link>
     </form>    
   )
 }

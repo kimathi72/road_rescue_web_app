@@ -4,7 +4,7 @@ import Geosearch from "./Geosearch";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import { useGeolocated } from "react-geolocated";
 
-export default function SetLocation({ setData }) {
+export default function CreateLocation({setData}) {
   const [position, setPosition] = useState(null);
   const [value, setValue] = useState("");
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =

@@ -1,4 +1,4 @@
-import SetLocation from "../location/SetLocation.jsx";
+import CreateLocation from "../location/CreateLocation.jsx";
 import ManageServices from "../service/ManageServices.jsx";
 import { Button, Input, Stack, TextField } from "@mui/material";
 import VehicleSelect from "../vehicle/VehicleSelect.jsx";
@@ -8,7 +8,7 @@ export default function RequestForm({ setRequest, handleSubmit }) {
   return (
     <form onSubmit={handleSubmit} className="form">
       <Stack spacing={1}>
-        <SetLocation setData={setRequest} />
+        <CreateLocation setData={setRequest} />
         <ManageServices setData={setRequest}  />
         <VehicleSelect setData={setRequest} />
 

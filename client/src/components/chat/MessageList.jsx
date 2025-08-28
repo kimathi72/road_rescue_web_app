@@ -3,8 +3,6 @@ import { CableContext } from "../../context/cable";
 
 import useQuery from "../../hooks/useQuery";
 import MessageShow from "./MessageShow";
-import Notify from "../navigation/Notify";
-import { Link } from "react-router-dom";
 
 function MessageList({ chatId, user }) {
    const { data: chatMessages, isLoaded } = useQuery(

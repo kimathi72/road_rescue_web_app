@@ -1,16 +1,39 @@
 import { Box, Button, Grid, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import Map from "../location/Map";
+import { CableContext } from "../../context/cable";
 
 export default function RequestShow({ user }) {
+  const [request, setRequest]= useState(null)
   const [action, setAction] = useState(<></>);
   const params = useParams();
   const navigate = useNavigate();
   const id = params.id;
-  const { data: request, isLoaded } = useQuery(`/requests/${id}`);
+  const { data: requestDetails, isLoaded } = useQuery(`/requests/${id}`);
   const dateCreated = new Date(!!request && request["created_at"]).toLocaleString();
+
+  useEffect(()=>{
+    !!isLoaded && setRequest(requestDetails)
+  },[isLoaded, requestDetails])
+
+  const cableContext = useContext(CableContext);
+  useEffect(()=>{
+    const newChannel = cableContext.cable.subscriptions.create(
+      {
+        channel: "RequestChannel",
+        request_id: !!id && id
+      },
+      {
+        received: (data)=>{
+          console.log(data)
+          setRequest(data)
+        }
+      }
+    )
+  },[cableContext, request])
+
   useEffect(() => {
     switch (user.role) {
       case "driver":
@@ -95,7 +118,7 @@ export default function RequestShow({ user }) {
         break;
     }
   }, [user, request]);
-  return isLoaded ? (
+  return isLoaded && !!request ? (
     <Grid container direction={"column"} gap={"2rem"} justifyContent={"center"}>
       <h3 style={{ textAlign: "center" }}>Request Details</h3>
       <Grid container direction={"row"} justifyContent={"space-between"}>
