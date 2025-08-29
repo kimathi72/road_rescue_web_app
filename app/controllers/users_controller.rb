@@ -59,6 +59,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone, location_attributes: [:city, :district, :longitude, :latitude])
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone, location_attributes: [:city, :district, :longitude, :latitude], vehicle_attributes: [:plate_number, :make, :model, :color])
   end
 end

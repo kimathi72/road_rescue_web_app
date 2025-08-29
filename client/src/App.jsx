@@ -25,6 +25,8 @@ import ProviderDashBoard from "./components/responder/ProviderDashBoard.jsx";
 import DriverDashboard from "./components/driver/DriverDashboard.jsx";
 import AdminDashboard from "./components/admin/AdminDashboard.jsx";
 import MyLocation from "./components/location/MyLocation.jsx";
+import InvoiceCreate from "./components/invoice/InvoiceCreate.jsx";
+import InvoiceShow from "./components/invoice/InvoiceShow.jsx";
 
 export default function App() {
   //set user State , default to null, update state on sign in/up
@@ -142,12 +144,16 @@ export default function App() {
             element={ !!user && <RescueQueue user={user} />}
           />
           <Route
-            path="/invoices/*"
+            path="/invoices/list"
             element={
               authorisationFn("driver",
                 <Invoices  />
               )
             }
+          />
+          <Route
+            path="/invoices/:id"
+            element={<InvoiceShow role={!!user && user.role} /> }
           />
           {/* <Route
             path="/requests/overview"

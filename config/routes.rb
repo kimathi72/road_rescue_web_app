@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
+  resources :invoices do
+    resources :invoice_items, only: [:index]
+  end
   resources :invoice_items
-  resources :invoices
   resources :incident_photos
   mount ActionCable.server => "/cable"
 

@@ -45,7 +45,7 @@ export default function RequestShow({ user }) {
             gap={"0.5rem"}
           >
             {(!!request && !!request['invoice']) ? <Button
-            onClick={()=>navigate(`/invoice/${request.invoice.id}`)}
+            onClick={()=>navigate(`/invoices/${request.invoice.id}`)}
             >proceed to invoice</Button> 
             :(!!request && request['status'] ==='cancelled') ? 
               <Button onClick={()=>navigate(`/requests/${id}/edit`, {state: {"status": "reported"}})}>
@@ -80,8 +80,8 @@ export default function RequestShow({ user }) {
               <Button onClick={()=>navigate(`/chat/${request.chat.id}`)} variant="contained" color="success">
                 Chat with Driver
               </Button>
-              <Button onClick={()=>navigate(`/invoice/${request.invoice.id}`)} variant="contained" color="primary">
-                Proceed to Invoice
+              <Button onClick={()=>navigate(`/invoices/${request.invoice.id}`)} variant="contained" color="primary">
+                proceed to Invoice
               </Button>
             </Grid>
           );

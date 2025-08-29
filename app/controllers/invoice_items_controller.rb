@@ -3,8 +3,11 @@ class InvoiceItemsController < ApplicationController
 
   # GET /invoice_items
   def index
-    @invoice_items = InvoiceItem.all
-
+    if params[:invoice_id]
+      @invoice_items = Invoice.find(params[:invoice_id]).invoice_items
+    else
+      @invoice_items = InvoiceItem.all
+    end
     render json: @invoice_items
   end
 
@@ -39,13 +42,14 @@ class InvoiceItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_invoice_item
-      @invoice_item = InvoiceItem.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def invoice_item_params
-      params.require(:invoice_item).permit(:invoice_id, :description, :charge)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_invoice_item
+    @invoice_item = InvoiceItem.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def invoice_item_params
+    params.require(:invoice_item).permit(:invoice_id, :description, :charge)
+  end
 end

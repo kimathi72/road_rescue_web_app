@@ -10,7 +10,6 @@ import Drawer from "./Drawer";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShieldIcon from '@mui/icons-material/Shield';
 import ListIcon from '@mui/icons-material/List';
-import AddIcon from '@mui/icons-material/Add';
 import CommuteIcon from '@mui/icons-material/Commute';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
