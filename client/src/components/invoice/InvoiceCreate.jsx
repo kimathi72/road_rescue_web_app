@@ -27,6 +27,8 @@ export default function InvoiceCreate({invoiceId}) {
       },
       body: JSON.stringify({ invoice_item: item }),
     });
+    const data = await res.json()
+    console.log(data)
   };
   return (
     <Grid container direction={"column"} gap={"2rem"}>
@@ -53,7 +55,7 @@ export default function InvoiceCreate({invoiceId}) {
             type="number"
             placeholder="charge"
             onChange={(e) => {
-              setItem((prev) => ({ ...prev, "charge": e.target.value }));
+              setItem((prev) => ({ ...prev, "cost": e.target.value }));
             }}
           />
           <Button type="submit" startIcon={<AddIcon />}>

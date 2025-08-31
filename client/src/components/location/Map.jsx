@@ -28,7 +28,9 @@ const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/Geoco
       />
       <Marker position={position}>
         <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
+          you are here
+          lat: {position[0]}
+          long: {position[1]}
         </Popup>
       </Marker>
       {children}

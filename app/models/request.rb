@@ -7,7 +7,8 @@ class Request < ApplicationRecord
   has_one :chat
   has_one :invoice
   accepts_nested_attributes_for :location, :chat, :invoice
-  after_create :create_chat, :create_invoice
+  after_create :create_chat
+  after_create :create_invoice
   # validates :user_is_provider
   enum :status, {
          :reported => 0,

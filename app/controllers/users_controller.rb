@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
   before_action :set_user, only: %i[ show update destroy ]
   # before_action :insurer_admin_authenticated, only: [:index]
-  before_action :admin_authenticated, only: [:update]
+  # before_action :admin_authenticated, only: [:update]
 
   # GET /users
   def index

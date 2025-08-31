@@ -7,4 +7,10 @@ class Invoice < ApplicationRecord
     :paid => 1,
     :overdue => 2,
   }
+
+  def total
+    invoice_items = self.invoice_items
+    total_cost = invoice_items.map { |n| n.charge }
+    total_cost.inject(0, :+)
+  end
 end

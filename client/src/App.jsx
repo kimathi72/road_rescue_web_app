@@ -119,7 +119,7 @@ export default function App() {
           <Route
             path="/requests"
             element={
-                <RequestIndex/>
+                <RequestIndex user={user}/>
             }
           />
          

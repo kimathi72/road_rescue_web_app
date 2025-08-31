@@ -18,13 +18,10 @@ class InvoiceItemsController < ApplicationController
 
   # POST /invoice_items
   def create
-    @invoice_item = InvoiceItem.new(invoice_item_params)
-
-    if @invoice_item.save
-      render json: @invoice_item, status: :created, location: @invoice_item
-    else
-      render json: @invoice_item.errors, status: :unprocessable_entity
-    end
+    @invoice_item = InvoiceItem.create(invoice_item_params)
+    serialized_invoice_item = @invoice_item.serialize
+    ActionCable.server.broadcast("invoice_#{@invoice_item.invoice_id}", serialized_invoice_item)
+    render json: @invoice_item, status: :created
   end
 
   # PATCH/PUT /invoice_items/1
@@ -50,6 +47,6 @@ class InvoiceItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def invoice_item_params
-    params.require(:invoice_item).permit(:invoice_id, :description, :charge)
+    params.require(:invoice_item).permit(:invoice_id, :quantity, :description, :cost)
   end
 end
