@@ -1,55 +1,58 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate} from 'react-router-dom'
-import { Button, Stack, TextField } from '@mui/material'
+import { Form, redirect, useNavigate} from 'react-router-dom'
+import { Button, Grid, TextField } from '@mui/material'
+import { fetchData } from '../../services/fetchData'
+import { useEffect } from 'react'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
-export default function Signin({setUser,setIsLoaded}) {
-  //create user email and password variables
-  const [email, setEmail] = useState('')
-  const [password,setPassword] = useState('')
-  //callback function set user authentication parameter 
-  function handleAuthenticate(data) {    
-    localStorage.setItem("jwt", data.jwt);  
-    setUser(data.user); 
-    setIsLoaded(true)  
-  }
-  // event handling function, on the event on submit action, post form inputs to auth api
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    fetch('/api/auth', {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: {
-          email: `${email}`,
-          password: `${password}`          
-        }
-      })
-    })
-    .then((r)=>r.json())
-    .then(handleAuthenticate)    
-  }
+export async function action({request, params}){
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData)
+   const data = await fetchData({
+    url: '/api/auth',
+    method: "POST",
+    submittedData: {user: updates}
+  })
+   !!data && ("jwt" in data) && localStorage.setItem("jwt", data.jwt)
+   
+}
+
+export default function Signin() {
+  useDocumentTitle('Road Rescue - Signin')
+  const token = localStorage.getItem('jwt')
+  const navigate = useNavigate()
+  useEffect(()=>{
+!!token && navigate('/')
+  },[
+token
+  ])
 
   return (
-    <form className='form' onSubmit={handleSubmit}>
-      <h2> Welcome to Road Rescue Web App</h2>
+    <Grid container size={{xs: 12, md: 12, lg:8}} minWidth={'60vw'} direction={'column'} justifyContent={'center'} alignItems={'center'} gap={'1rem'}>
+      <h2>{document.title}</h2>
       <h3 className='pageTitle'>Sign in with email</h3> 
-      <Stack direction={'column'} spacing={2}>
+    <Form method='post' id='signinForm'>
+      <label>
+        <span>Email</span>
         <TextField
-        label='Email'
+        name='email'
         type='email'
         placeholder='enter email address'
-        onChange={(e) => setEmail(e.target.value) }
+        required
         />
+        </label>
+        <label>
+          <span>Password</span>
         <TextField
-        label='Password'
+        name='password'
         type='password'
         placeholder='enter password'
-        onChange={(e) => setPassword(e.target.value) }
+        required
         />
-        <Button type='submit'>Sign In</Button>
-      </Stack>
-      <Link to='/signup'>Don't have an account yet? sign up here</Link>
-    </form>    
+        </label>
+        <Button fullWidth variant='contained' color='success' type='submit'>Sign In</Button>
+      
+    </Form> 
+    
+    </Grid>   
   )
 }

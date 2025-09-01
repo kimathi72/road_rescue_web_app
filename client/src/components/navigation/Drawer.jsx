@@ -1,34 +1,20 @@
 import * as React from "react";
-import { Grid, Button } from "@mui/material";
-export default function TemporaryDrawer({ links, user }) {
+import { Drawer, Button } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+
+export default function TemporaryDrawer({ children }) {
+   const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
   return (
-    !!user && (
-      <Grid
-        container
-        gap={"1rem"}
-        direction={{ xs: "grow", md: "column", lg: "column" }}
-        justifyContent={"left"}
-      >
-        {links.map(({ link, icon, text }, index) => {
-          return (
-            <Button 
-            key = {index}
-              color={
-                user.role === "driver"
-                  ? "success"
-                  : user.role === "provider"
-                  ? "warning"
-                  : "default"
-              }
-              href={link}
-              startIcon={icon}
-              variant="contained"
-            >
-              {text}
-            </Button>
-          );
-        })}
-      </Grid>
-    )
+     <div>
+      <Button onClick={toggleDrawer(true)} startIcon={<MenuIcon/>}>Open Menu</Button>
+      <Drawer open={open} onClose={toggleDrawer(false)}>
+        {children}
+      </Drawer>
+    </div>
   );
 }

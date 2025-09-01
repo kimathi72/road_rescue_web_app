@@ -8,7 +8,7 @@ class AuthController < ApplicationController
       # encode token comes from ApplicationController
       token = encode_token({ user_id: @user.id })
       session[:user_id] = @user.id
-      session[:user_role] = @user.role
+      session[:user_type] = @user.type
       render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
     else
       render json: { message: "Invalid email or password" }, status: :unauthorized
@@ -17,8 +17,9 @@ class AuthController < ApplicationController
 
   def destroy
     session.delete :user_id
-    session.delete :user_role
-    head :no_content
+    session.delete :user_type
+    # head :no_content
+    render json: {}, status: :ok
   end
 
   private

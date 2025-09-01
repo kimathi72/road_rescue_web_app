@@ -1,24 +1,21 @@
 import React, { useCallback, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { fetchData } from "../../services/fetchData";
 
-export default function Signout({ setUser, setIsLoaded }) {
+export async function loader (){
+  await fetchData({
+    url: 'api/logout', 
+    method: "DELETE"
+  })
+  localStorage.clear()
+}
+
+export default function Signout({}) {
   const navigate = useNavigate();
-  const logout = useCallback(()=>{
-      fetch("/api/logout", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-      }).then(()=>{
-        localStorage.clear();
-      })      
-  },[])
+  const token = localStorage.getItem('jwt')
+  useLoaderData()
 useEffect(()=>{
-  setIsLoaded(false)
-  logout()
-  setUser(null); 
-  navigate("/"); 
-},[logout, navigate])
+ !token && navigate("/"); 
+},[navigate, token])
   return ( <div>Logging out...</div> )
 }

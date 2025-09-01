@@ -37,7 +37,7 @@ export default function AdminNav() {
         links.map((link)=>{
           return  <li key={link.text}>
             <NavLink to={link.url}>
-                <Button startIcon={link.icon}>{link.text}</Button>
+                <Button color='default' startIcon={link.icon}>{link.text}</Button>
             </NavLink>
             </li>
         })

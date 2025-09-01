@@ -17,11 +17,12 @@ Rails.application.routes.draw do
   resources :messages
 
   resources :services
-  resources :providers do
-    resources :requests, only: [:index, :show]
-  end
+
   resources :locations do
     resources :providers, only: [:index, :show]
+  end
+  resources :providers do
+    resources :requests, only: [:index, :show]
   end
   resources :drivers do
     resources :vehicles, only: [:index, :show]

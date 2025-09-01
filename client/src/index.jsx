@@ -9,6 +9,9 @@ import "./index.css";
 import App , {loader as apploader}from "./App";
 import 'leaflet/dist/leaflet.css';
 import ErrorPage from "./ErrorPage";
+import Signin, {action as signinAction} from "./components/auth/Signin.jsx";
+import Signup from "./components/auth/Signup.jsx";
+import Signout, {loader as signoutloader} from "./components/auth/Signout.jsx";
 
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
@@ -24,7 +27,15 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <div>"hello"</div>
-      }
+      },{
+    path: '/signin',
+    element: <Signin/>,
+    action: signinAction
+  },{
+    path:'/signout',
+    element: <Signout/>,
+    loader: signoutloader
+  }
     ]
   }
 ])

@@ -1,9 +1,12 @@
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { CableProvider } from "./context/cable";
 import {Grid} from '@mui/material'
 import { fetchData } from "./services/fetchData";
 import NavBar from "./components/navigation/NavBar";
- 
+import { useEffect } from "react";
+
+const token = localStorage.getItem('jwt')
+
 export async function loader(){
   const data = await fetchData({
     url: '/api/me',
@@ -14,10 +17,16 @@ export async function loader(){
 
 export default function App () {
   const {user} = useLoaderData()
-  console.log(!!user && user.role)
+  
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    !user && navigate('/signin')
+  },[user])
+
 return (
-  <Grid id="app" container direction={{xs: "column", md: "column", lg: "row"}} gap={'2rem'}>
-    <NavBar type={user.role}/>
+  <Grid id="app" container direction={{xs: "column", md: "column", lg: "row"}} gap={'5rem'}>
+    <NavBar type={!!user && user.type}/>
     <CableProvider>
       
       <Outlet/>
