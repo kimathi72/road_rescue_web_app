@@ -3,7 +3,7 @@ class RequestSerializer < ActiveModel::Serializer
   belongs_to :vehicle
   belongs_to :service
   belongs_to :location
-  belongs_to :user
+  belongs_to :provider
   has_one :chat
   has_one :invoice
 end

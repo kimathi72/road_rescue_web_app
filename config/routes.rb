@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :admins
   resources :invoices do
     resources :invoice_items, only: [:index]
   end
@@ -6,23 +7,29 @@ Rails.application.routes.draw do
   resources :incident_photos
   mount ActionCable.server => "/cable"
 
-  resources :users do
+  resources :users
+
+  resources :notifications
+
+  resources :chats do
+    resources :messages, only: [:index, :show]
+  end
+  resources :messages
+
+  resources :services
+  resources :providers do
     resources :requests, only: [:index, :show]
-    resources :locations, only: [:index, :show]
+  end
+  resources :locations do
+    resources :providers, only: [:index, :show]
+  end
+  resources :drivers do
     resources :vehicles, only: [:index, :show]
   end
   resources :vehicles do
     resources :requests, only: [:index, :show]
   end
-  resources :notifications
-  resources :locations
-  resources :chats do
-    resources :messages, only: [:index, :show]
-  end
-  resources :messages
   resources :requests
-  resources :services
-  resources :drivers
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"
   get "/request/:user_id", to: "requests#queue"

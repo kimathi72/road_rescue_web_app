@@ -6,12 +6,7 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    case current_user.role
-    when "insurer"
-      @users = User.all.select { |user| user.role != "insurer" || user.role != "admin" }
-    else
-      @users = User.all
-    end
+    @users = User.all
     render json: @users, status: :ok
   end
 
@@ -30,7 +25,7 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
     @token = encode_token(user_id: @user.id)
     session[:user_id] = @user.id
-    session[:user_role] = @user.role
+    session[:user_type] = @user.type
     # send_email = sendgrid_email(email: @user.email, token: @token)
     render json: { user: UserSerializer.new(@user), jwt: @token }, status: :created
   end
@@ -59,6 +54,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone, location_attributes: [:city, :district, :longitude, :latitude], vehicle_attributes: [:plate_number, :make, :model, :color])
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :type, :phone)
   end
 end

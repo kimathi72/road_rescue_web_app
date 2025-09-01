@@ -10,15 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_01_152455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admins", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "chats", force: :cascade do |t|
     t.bigint "request_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["request_id"], name: "index_chats_on_request_id"
+  end
+
+  create_table "drivers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "invoice_items", force: :cascade do |t|
@@ -68,17 +78,23 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
     t.index ["request_id"], name: "index_notifications_on_request_id"
   end
 
+  create_table "providers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "availability", default: false, null: false
+  end
+
   create_table "requests", force: :cascade do |t|
     t.integer "service_id"
     t.string "request_description"
     t.integer "status", default: 0
-    t.bigint "user_id"
     t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "vehicle_id", null: false
+    t.bigint "provider_id", null: false
     t.index ["location_id"], name: "index_requests_on_location_id"
-    t.index ["user_id"], name: "index_requests_on_user_id"
+    t.index ["provider_id"], name: "index_requests_on_provider_id"
     t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"
   end
 
@@ -93,7 +109,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
     t.string "password_digest"
     t.string "phone"
     t.string "name"
-    t.integer "role"
+    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
@@ -101,7 +117,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
   end
 
   create_table "vehicles", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "make"
     t.string "model"
     t.string "year"
@@ -109,7 +124,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "color"
-    t.index ["user_id"], name: "index_vehicles_on_user_id"
+    t.bigint "driver_id", null: false
+    t.index ["driver_id"], name: "index_vehicles_on_driver_id"
   end
 
   add_foreign_key "chats", "requests"
@@ -119,8 +135,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_29_053828) do
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "requests"
   add_foreign_key "requests", "locations"
-  add_foreign_key "requests", "users"
+  add_foreign_key "requests", "users", column: "provider_id"
   add_foreign_key "requests", "vehicles"
   add_foreign_key "users", "locations"
-  add_foreign_key "vehicles", "users"
+  add_foreign_key "vehicles", "users", column: "driver_id"
 end

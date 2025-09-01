@@ -4,7 +4,6 @@ class CreateRequests < ActiveRecord::Migration[7.0]
       t.integer :service_id
       t.string :request_description
       t.integer :status, default: 0
-      t.references :user, foreign_key: true
       t.references :location, foreign_key: true
       t.timestamps
     end

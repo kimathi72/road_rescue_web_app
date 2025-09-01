@@ -1,8 +1,8 @@
 class Vehicle < ApplicationRecord
-  belongs_to :user, dependent: :destroy
+  belongs_to :driver, class_name: "Driver"
 
   has_many :requests, dependent: :destroy
 
-  validates :user_id, presence: true
+  # validates :driver_id, presence: trues
   validates :plate_number, uniqueness: { case_sensitive: false }
 end

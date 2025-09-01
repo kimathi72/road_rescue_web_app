@@ -58,20 +58,19 @@ puts "start seeding"
  "Out Of Fuel",
  "Dead Battery",
  "Lockout Out",
- "Accident",
- "Other"].map do |s|
+ "Accident"].map do |s|
   Service.create(name: s)
 end
+Location.create(city: "Embakasi West", district: "Kariobangi South", latitude: "-1.2594066", longitude: "36.8916509")
+Driver.create(name: "driver", email: "driver@driver.com", password: "driver123", phone: "+254711808129")
+Admin.create(name: "admin", email: "admin@admin.com", password: "admin123", phone: "+254711808129")
+Provider.create(name: "provider", email: "provider@provider.com", password: "provider123", phone: "+254711808129", location_id: Location.first.id)
 
-[{ name: "driver", email: "driver@driver.com", password: "driver123", role: "driver", phone: "+254711808129", location_attributes: { city: "kabete", district: "kibichiku", latitude: "-1.2216808", longitude: "36.7307536" } },
- { name: "admin", email: "admin@admin.com", password: "admin123", role: "admin", phone: "+254711808129", location_attributes: { city: "Embakasi West", district: "Kariobangi South", latitude: "-1.2594066", longitude: "36.8916509" } },
- { name: "provider", email: "provider@provider.com", password: "provider123", role: "provider", phone: "+254711808129", location_attributes: { city: "Embakasi East", district: "Embakasi East", latitude: "-1.3333991", longitude: "36.8857263" } }].map do |user|
-  User.create(user)
-end
-puts "users #{User.count} services #{Service.count}"
 make = Faker::Vehicle.make
 model = Faker::Vehicle.model(make_of_model: make)
-Vehicle.create(user_id: 1, plate_number: Faker::Vehicle.license_plate, make: make, model: model, year: Faker::Vehicle.year)
+
+Driver.first.vehicles.create(plate_number: Faker::Vehicle.license_plate, make: make, model: model, year: Faker::Vehicle.year)
 puts "end seeding "
+puts "users #{User.count} services #{Service.count} Vehicles #{Vehicle.count} Locations #{Location.count}"
 # puts " #{User.count} users"
 # puts "end of seeding #{Location.count} locations, #{Service.count} services, and #{User.count} users, #{Vehicle.count} vehicles"

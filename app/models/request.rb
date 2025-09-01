@@ -1,7 +1,7 @@
 class Request < ApplicationRecord
   belongs_to :service
   belongs_to :vehicle
-  belongs_to :user, optional: true
+  belongs_to :Provider, class_name: "Provider", optional: true
   belongs_to :location, optional: true
   has_many :notifications
   has_one :chat

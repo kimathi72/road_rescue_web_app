@@ -3,18 +3,17 @@ class VehiclesController < ApplicationController
   before_action :driver_authenticated, only: [:create]
   # GET /vehicles
   def index
-    case current_user.role
-    when "driver"
-      @vehicles = User.find(current_user.id).vehicles
+    if params[:driver_id]
+      @vehicles = Driver.find(params[:driver_id]).vehicles
     else
-      @vehicle = Vehicle.all
+      @vehicles = Vehicle.all
     end
-    render json: @vehicles
+    render json: @vehicles, status: :ok
   end
 
   # GET /vehicles/1
   def show
-    render json: @vehicle
+    render json: @vehicle, status: :ok
   end
 
   # POST /vehicles
@@ -44,6 +43,6 @@ class VehiclesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def vehicle_params
-    params.require(:vehicle).permit(:user_id, :plate_number, :make, :color, :model, :year)
+    params.require(:vehicle).permit(:driver_id, :plate_number, :make, :color, :model, :year)
   end
 end
