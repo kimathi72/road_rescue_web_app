@@ -3,6 +3,7 @@ import { Button, Grid, TextField } from '@mui/material'
 import { fetchData } from '../../services/fetchData'
 import { useEffect } from 'react'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import FeaturesSection from '../navigation/Features'
 
 export async function action({request, params}){
   const formData = await request.formData()
@@ -51,6 +52,7 @@ token
         <Button fullWidth variant='contained' color='success' type='submit'>Sign In</Button>
       
     </Form> 
+    <FeaturesSection/>
     
     </Grid>   
   )

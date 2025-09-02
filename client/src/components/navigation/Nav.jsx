@@ -15,13 +15,13 @@ export default function Nav({type}) {
         <List id="navLinks" >
           <Stack sx={{flexWrap: "wrap", gap: '0.2rem'}} direction={{xs: "column", sm: "column", md: "row", lg: "column"}} spacing={2}>
           {
-          type === "Admin" && (
+        !!type &&  type === "Admin" && (
             <AdminNav/>
           ) }
           { 
-          type === "Provider" && (
+         !!type && type === "Provider" && (
             <ProviderNav/>
-          ) }{ type === "Driver" && (
+          ) }{!!type && type === "Driver" && (
             <DriverNav/>
           )}
           <li key={'auth'}>

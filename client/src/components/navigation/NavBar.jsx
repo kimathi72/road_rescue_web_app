@@ -11,16 +11,16 @@ export default function NavBar({ type }) {
     const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
-    <Grid size={{xs: 12, md: 12, lg: 2}} container justifyContent={'space-evenly'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} gap={'2rem'}>
+    <Grid container size={{xs: 12, md: 12, lg: 3}}  justifyContent={'space-between'} alignItems={'flex-start'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} >
       <Grid 
-      alignSelf={'left'}
+      container
        size={{xs: 2, md: 2, lg: 12}} 
        id="logoDiv">
         <img src={logo} alt="logo"/>
       </Grid>
-      
+      <Grid>
       {isDesktop ? <Nav type={type}/> : <TemporaryDrawer><Nav type={type}/></TemporaryDrawer>}
-      
+      </Grid>
     </Grid>
   );
 }

@@ -1,66 +1,51 @@
 import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { CableProvider } from "./context/cable";
-import {Grid, Typography} from '@mui/material'
+import { Grid, Typography } from "@mui/material";
 import { fetchData } from "./services/fetchData";
 import NavBar from "./components/navigation/NavBar";
 import { useEffect, useState } from "react";
 
-const token = localStorage.getItem('jwt')
+const token = localStorage.getItem("jwt");
 
-export async function loader(){
-  const data = !!token &&  await fetchData({
-    url: '/api/me',
-    method: "GET",
-  })
-  return {...data};
+export async function loader() {
+  const data =
+    !!token &&
+    (await fetchData({
+      url: "/api/me",
+      method: "GET",
+    }));
+  return { ...data };
 }
 
-export default function App () {
-  const {user} = useLoaderData()
-  const navigate = useNavigate()
+export default function App() {
+  const { user } = useLoaderData();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    !!localStorage.getItem('jwt') && !user && localStorage.clear()
-    !user && navigate('/signin')
-    console.log(user)
-  },[user, navigate])
+  useEffect(() => {
+    !!localStorage.getItem("jwt") && !user && localStorage.clear();
+    !user && navigate("/signin");
+    console.log(user);
+  }, [user, navigate]);
 
-return (
-  <Grid id="app" container direction={{xs: "column", md: "column", lg: "row"}} gap={'5rem'}>
-    <NavBar type={!!user && user.type}/>
-    <CableProvider>
-      <Grid container direction={'column'} >
- <Typography
-  variant="overline" gutterBottom sx={{ display: 'block' }}
- >Welcome {!!user ? user.name : "to Road Rescue"}</Typography>
-      <Outlet/>
-      </Grid>
-     
-      
-    </CableProvider>
-  </Grid>
-)
+  return (
+    <Grid
+      id="app"
+      container
+      direction={{ xs: "column", md: "column", lg: "row" }}
+      justifyContent={"center"}
+    >
+       <NavBar type={!!user && user.type}/>
+      <CableProvider>
+        <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 8}}>
+          <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
+            Welcome {!!user ? user.name : "to Road Rescue"}
+          </Typography>
+          <Outlet />
+        </Grid>
+      </CableProvider>
+    </Grid>
+  );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { useCallback, useEffect, useState } from "react";
 // import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
@@ -120,7 +105,6 @@ return (
 //   }, [getUser, token]);
 
 //   // callback function to do async fetch request. pass as prop to child component
-  
 
 //   //on App load, query for current user, auto login if signed in, otherwise sign in first.
 
@@ -144,11 +128,11 @@ return (
 //     }
 //   }
 //   return (
-//     <Router 
+//     <Router
 //       future={{
 //     v7_startTransition: true,
 //     v7_relativeSplatPath: true,
-//   }}>     
+//   }}>
 //     <Grid container direction={{xs: 'column', md:'row', lg: 'row'}}>
 //       <NavBar user={!!user && user} />
 //       <Grid container size={{xs: 12, md: 8, lg: 10}} justifyContent={'center'} p={2}>
@@ -186,7 +170,7 @@ return (
 //                 <RequestIndex user={user}/>
 //             }
 //           />
-         
+
 //           <Route
 //             path="/requests/create"
 //             element={authorisationFn("driver", <RequestCreate />)}
@@ -256,8 +240,8 @@ return (
 //         </Routes>
 //         </Grid>
 //         </Grid>
-         
+
 //     </Router>
-    
+
 //   );
 // }

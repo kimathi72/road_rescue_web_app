@@ -32,8 +32,8 @@ return (
       <label>
         <span>Account Type</span>
         <TextField
+        variant="standard"
         select
-        label='Type'
         defaultValue={'Driver'}
         helperText="Please select account type"
         name='type'
