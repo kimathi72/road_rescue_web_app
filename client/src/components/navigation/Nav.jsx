@@ -14,19 +14,22 @@ export default function Nav({type}) {
     <nav>
         <List id="navLinks" >
           <Stack sx={{flexWrap: "wrap", gap: '0.2rem'}} direction={{xs: "column", sm: "column", md: "row", lg: "column"}} spacing={2}>
-          {type === "Admin" ? (
+          {
+          type === "Admin" && (
             <AdminNav/>
-          ) : type === "Provider" ? (
+          ) }
+          { 
+          type === "Provider" && (
             <ProviderNav/>
-          ) : type === "Driver" && (
+          ) }{ type === "Driver" && (
             <DriverNav/>
           )}
           <li key={'auth'}>
             {!!type ? (
-              <NavLink to={"/signout"}><Button color="warning" startIcon={<LogoutIcon/>}>Sign Out</Button></NavLink>
+              <NavLink to={"/signout"}><Button fullWidth color="warning" startIcon={<LogoutIcon/>}>Sign Out</Button></NavLink>
             ) : !type && (pathname === '/signin' ? (
-              <NavLink to='/signup'><Button variant='contained' startIcon={<PersonAddIcon/>}>Sign Up</Button></NavLink>
-            ) : pathname === '/signup' && <NavLink to={'/signin'}><Button  variant='contained' startIcon={<LoginIcon/>}>Sign Up</Button></NavLink>
+              <NavLink to='/signup'><Button fullWidth color='default' variant='contained' startIcon={<PersonAddIcon/>}>Sign Up</Button></NavLink>
+            ) : pathname === '/signup' && <NavLink to={'/signin'}><Button fullWidth color='default' variant='contained' startIcon={<LoginIcon/>}>Sign in</Button></NavLink>
             )}
           </li>
           </Stack>

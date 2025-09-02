@@ -1,44 +1,58 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {createBrowserRouter, RouterProvider} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./index.css";
-import App , {loader as apploader}from "./App";
-import 'leaflet/dist/leaflet.css';
+import App, { loader as apploader } from "./App";
+import "leaflet/dist/leaflet.css";
 import ErrorPage from "./ErrorPage";
-import Signin, {action as signinAction} from "./components/auth/Signin.jsx";
-import Signup from "./components/auth/Signup.jsx";
-import Signout, {loader as signoutloader} from "./components/auth/Signout.jsx";
+import Signin, { action as signinAction } from "./components/auth/Signin.jsx";
+import Signup, {action as signupAction} from "./components/auth/Signup.jsx";
+import Signout, {
+  loader as signoutloader,
+} from "./components/auth/Signout.jsx";
 
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App/>,
-    errorElement: <ErrorPage/>,
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
     loader: apploader,
-    HydrateFallback:()=><LoadingPage> <p>Initializing Road Rescue App. Please wait</p> </LoadingPage>,
+    HydrateFallback: () => (
+      <LoadingPage>
+        {" "}
+        <p>Initializing Road Rescue App. Please wait</p>{" "}
+      </LoadingPage>
+    ),
     children: [
       {
         index: true,
-        element: <div>"hello"</div>
-      },{
-    path: '/signin',
-    element: <Signin/>,
-    action: signinAction
-  },{
-    path:'/signout',
-    element: <Signout/>,
-    loader: signoutloader
-  }
-    ]
-  }
-])
+        element: <div>"hello"</div>,
+      },
+      {
+        path: "/signin",
+        element: <Signin />,
+        action: signinAction,
+      },
+      {
+        path: "/signout",
+        element: <Signout />,
+        loader: signoutloader,
+      },
+      {
+        path: "/signup",
+        element: <Signup/>,
+        action: signupAction,
+      }
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

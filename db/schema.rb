@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_01_152455) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_02_033503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -78,10 +78,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_01_152455) do
     t.index ["request_id"], name: "index_notifications_on_request_id"
   end
 
+  create_table "provider_services", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.bigint "service_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_provider_services_on_provider_id"
+    t.index ["service_id"], name: "index_provider_services_on_service_id"
+  end
+
   create_table "providers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "availability", default: false, null: false
   end
 
   create_table "requests", force: :cascade do |t|
@@ -113,6 +121,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_01_152455) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
+    t.boolean "availability", default: false, null: false
+    t.boolean "is_verified", default: false, null: false
     t.index ["location_id"], name: "index_users_on_location_id"
   end
 
@@ -134,6 +144,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_01_152455) do
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "requests"
+  add_foreign_key "provider_services", "services"
+  add_foreign_key "provider_services", "users", column: "provider_id"
   add_foreign_key "requests", "locations"
   add_foreign_key "requests", "users", column: "provider_id"
   add_foreign_key "requests", "vehicles"

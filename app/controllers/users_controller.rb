@@ -21,12 +21,11 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    puts(user_params)
-    @user = User.create(user_params)
+    puts params
+    @user = params[:user][:type].constantize.create(user_params)
     @token = encode_token(user_id: @user.id)
     session[:user_id] = @user.id
     session[:user_type] = @user.type
-    # send_email = sendgrid_email(email: @user.email, token: @token)
     render json: { user: UserSerializer.new(@user), jwt: @token }, status: :created
   end
 

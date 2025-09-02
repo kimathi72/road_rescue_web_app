@@ -27,9 +27,8 @@ token
   ])
 
   return (
-    <Grid container size={{xs: 12, md: 12, lg:8}} minWidth={'60vw'} direction={'column'} justifyContent={'center'} alignItems={'center'} gap={'1rem'}>
-      <h2>{document.title}</h2>
-      <h3 className='pageTitle'>Sign in with email</h3> 
+    <Grid container size={{xs: 12, md: 12, lg:8}} minWidth={'60vw'} direction={'column'} justifyContent={'center'} alignItems={'center'} gap={'2rem'}>
+      <h1 className='pageTitle'>Sign in to your account</h1> 
     <Form method='post' id='signinForm'>
       <label>
         <span>Email</span>

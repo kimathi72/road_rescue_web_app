@@ -27,7 +27,7 @@ export default function ProviderNav() {
         links.map(link=>{
           return  <li key={link.text}>
                 <NavLink to={link.url}>
-                    <Button color='default' startIcon={link.icon}>{link.text}</Button>
+                    <Button fullWidth color='default' startIcon={link.icon}>{link.text}</Button>
                 </NavLink>
             </li>
         })

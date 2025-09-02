@@ -26,7 +26,7 @@ export default function DriverNav() {
                         : ""
                     }
 >
-                    <Button color='default' size='small' startIcon={link.icon}>{link.text}</Button>
+                    <Button fullWidth color='default' size='small' startIcon={link.icon}>{link.text}</Button>
                 </NavLink>
             </li>
         })

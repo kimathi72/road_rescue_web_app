@@ -1,83 +1,89 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, FormControl, InputLabel, MenuItem, Stack, TextField } from '@mui/material'
-import Select from '@mui/material/Select';
+import { Link, useNavigate , Form} from "react-router-dom";
+import { Button, MenuItem, Grid, TextField } from '@mui/material'
+import { fetchData } from "../../services/fetchData";
+import { useEffect } from "react";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
-export default function Signup({setUser, setIsLoaded}) {
-  const [userData, setData] = useState({})
+export async function action({request, params}){
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData)
+  const data = await fetchData({
+    url: '/api/users',
+    method: "POST",
+    submittedData: {user: updates}
+  })
+   !!data && ("jwt" in data) && localStorage.setItem("jwt", data.jwt)
+}
+
+export default function Signup() {
+  useDocumentTitle('Road Rescue - Signup')
+  const roles = ["Driver", "Provider"]
+  const token = localStorage.getItem('jwt')
   const navigate = useNavigate();
   useEffect(()=>{
-    setData((prev)=>({...prev, "role": "driver"}))
-  },[])
+    !!token && navigate('/')
+  },[token])
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-console.log(userData)
-      try {
-        const response = await fetch("/api/users", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({user: userData}),
-        });
-        const data = await response.json();
-        setUser(data.user);
-        localStorage.setItem("jwt", data.jwt);
-        setIsLoaded(true)
-        navigate(`/`) ;
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    const handleChange = (e)=>{
-      const {name, value} = e.target
-      setData((prevUser) => ({...prevUser, [name]: value}))
-    }
 return (
-  <form className='form' onSubmit={handleSubmit} >
-    <h1> Driver Sign Up Here</h1>
-    <Stack direction={'column'} spacing={2}>
-     
-    <FormControl>
-      <label>choose a role</label>
-    <select
-          onChange={(event) => {
-    setData(prev => ({...prev, "role": event.target.value}));
-  }}>
-      <option value={'driver'}>Driver</option>
-      <option value={'provider'}>Provider</option>
-    </select>
-    </FormControl>
+  <Grid container size = {{xs:12, md: 12, lg:8}} minWidth={'60vw'} direction={'column'} justifyContent={'center'} alignItems={'center'} gap={'2rem'}>
+    <h1>Create an account</h1>
+  <Form method="post" id="signupForm" >
+    
+      <label>
+        <span>Account Type</span>
+        <TextField
+        select
+        label='Type'
+        defaultValue={'Driver'}
+        helperText="Please select account type"
+        name='type'
+        required
+        >
+          {roles.map((r,i)=>{
+            return <MenuItem key={i} value={r}>{r}</MenuItem>
+          })}
+        </TextField>
+        </label>
+    <label>
+      <span>Full Name</span>
       <TextField
     name="name"
     placeholder="enter full name"
     type="text"
-    onChange={handleChange}
+    required
     />
-    <TextField
+    </label>
+      <label>
+        <span>Email</span>
+        <TextField
     name="email"
     placeholder="enter email address"
     type="email"
-    onChange={handleChange}
+    required
     />
-    
+      </label>
+    <label>
+      <span>Password</span>
     <TextField
     name="password"
     placeholder="enter password"
     type="password"
-    onChange={handleChange}
+    required
     />
+    </label>
+    <label>
+      <span>
+        Confirm Password 
+      </span>
     <TextField
     name="password_confirmation"
     placeholder="password confirmation"
     type="password"
-    onChange={handleChange}
+    required
     />
-    <Button type='submit' >Sign up</Button>
-    </Stack>
-    <Link to='/signin'>Already have an account, sign in here</Link>
-  </form>
+    </label>
+    <Button variant="contained" color="success" fullWidth type='submit' >Sign up</Button>
+  </Form>
+  </Grid>
 )
 }
