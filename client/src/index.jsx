@@ -15,7 +15,7 @@ import Signout, {
   loader as signoutloader,
 } from "./components/auth/Signout.jsx";
  import RequestCreate, {loader as servicesLoader, action as reqAction} from "./components/request/RequestCreate.jsx";
-
+ import RequestQueue, {loader as reqQueLoader} from "./components/request/RequestQueue.jsx";
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
 const {user} = await apploader()
@@ -60,6 +60,11 @@ const router = createBrowserRouter([
             element:<RequestCreate/>,
             ...(!!user && {loader: async()=> servicesLoader(user.id)}),
             action: reqAction
+          },
+          {
+            path: "/requests/queue", 
+            element: <RequestQueue/>,
+            ...(!!user && {loader: async()=>reqQueLoader(user.id)}),
           }
         ]
       }

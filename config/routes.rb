@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   resources :incident_photos
   mount ActionCable.server => "/cable"
 
-  resources :users
+  resources :users do
+    resources :requests, only: [:index], controller: "requests"
+  end
 
   resources :notifications
 
@@ -21,9 +23,7 @@ Rails.application.routes.draw do
   resources :locations do
     resources :providers, only: [:index, :show]
   end
-  resources :providers do
-    resources :requests, only: [:index, :show]
-  end
+  resources :providers
   resources :drivers do
     resources :vehicles, only: [:index, :show]
   end

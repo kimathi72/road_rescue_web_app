@@ -2,19 +2,27 @@ import {Button, Grid } from '@mui/material'
 import RequestPreview from './RequestPreview';
 import { useEffect, useState } from 'react';
 import TableCustomized from '../util/TableCustomized';
-
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export default function RequestsList({requests, title}) {
   const [tableData, setTableData] = useState([])
   useEffect(()=>{
         !!requests && console.log(requests)
         setTableData(requests.map(request=>{
-          const {vehicle,service, location, user, chat, invoice, created_at, ...rest} = request
-          return {...rest,
-            "vehicle_make_model": `${vehicle.make , vehicle.model}`,
-            "location": location.city,
+          const {vehicle,service,id, status,location, provider, chat, invoice, created_at, ...rest} = request
+          return {"index": id,
+            "issue": service.name
+            ,"vehicle": `${vehicle.make} ${ vehicle.model}`,
+            "status": status,            
+            "location": !!location && location.district || <WarningAmberIcon/>,
+            "provider availability": !!provider && provider.availability || <Box sx={{ display: 'flex' , flexDirection:"column", alignItems:"center"}}>
+      <CircularProgress size="0.5rem"/>
+      <small>waiting for provider</small>
+    </Box>,
             "created": new Date(created_at).toLocaleString(),
-            "view": <Button href={`/requests/${request.id}`}>view Request</Button>
+            "view": <Button href={`/requests/${request.id}`}>view</Button>
             }
         }))
   },[requests])

@@ -1,6 +1,6 @@
 import React from 'react'
 import { fetchData } from '../../services/fetchData'
-import { Form, useLoaderData } from 'react-router-dom'
+import { Form, redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom'
 import { Button, Grid, MenuItem, TextField } from '@mui/material'
 import MapPicker from '../location/MapPicker.jsx'
 import useDocumentTitle from '../../hooks/useDocumentTitle.js'
@@ -26,10 +26,13 @@ export async function action({request}){
     submittedData: {"request": updates}
   })
   console.log(data)
+  return  !!data ? redirect('/requests/queue') : redirect('/requests/create')
 }
 
 export default function RequestCreate() {
   const {services, vehicles} = useLoaderData()
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   
   useDocumentTitle('Road Rescue - Create Request ')
   return (
@@ -79,7 +82,7 @@ export default function RequestCreate() {
             minRows={2}
             />
           </div>
-        <Button fullWidth color='warning' variant='contained' type='submit'>Submit Request</Button>
+        <Button fullWidth color='warning' variant='contained' type='submit' disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit Request"}</Button>
       </Form>
 
     </Grid>

@@ -1,11 +1,21 @@
 import React from 'react'
 import useQuery from '../../hooks/useQuery'
 import RequestsList from './RequestsList'
+import { fetchData } from '../../services/fetchData'
+import { useLoaderData } from 'react-router-dom'
 
-export default function RequestQueue({user}) {
-  const {data: requests, isLoaded} = useQuery(`/users/${!!user && user.id}/requests`)
+export async function loader (userId){
+  const requests = await fetchData({
+    url: `/api/users/${userId}/requests`,
+    method: "GET"
+  })
+  return {requests}
+}
+
+export default function RequestQueue() {
+  const {requests} = useLoaderData()
   const title = "Requests Queue"
   return (
-    isLoaded ? <RequestsList title={title} requests={requests}/> : <p>Fetching Your Requests. . .</p>
+    !!requests ? <RequestsList title={title} requests={requests}/> : <p>Fetching Your Requests. . .</p>
   )
 }

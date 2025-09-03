@@ -4,9 +4,9 @@ class RequestsController < ApplicationController
 
   def index
     if params[:user_id]
-      @role = User.find(params[:user_id]).role
-      provider_requests unless @role != "provider"
-      driver_requests unless @role != "driver"
+      @type = User.find(params[:user_id]).type
+      provider_requests unless @type != "Provider"
+      driver_requests unless @type != "Driver"
     else
       @requests = Request.all
     end
@@ -43,14 +43,19 @@ class RequestsController < ApplicationController
   end
 
   def provider_requests
-    @requests = User.find(params[:user_id]).requests
+    @requests = Provider.find(params[:user_id]).requests
   end
 
   def driver_requests
-    @user = User.find(params[:user_id])
-    @vehicles = @user.vehicles
-    @requests = []
-    @vehicles.map { |vehicle| vehicle.requests.map { |request| @requests << request } }
+    # @user = User.find(params[:user_id])
+    # @vehicles = @user.vehicles
+    # @requests = []
+    # @vehicles.map { |vehicle| vehicle.requests.map { |request| @requests << request } }
+
+    @requests = Driver.find(params[:user_id]).requests
+    # @requests = @driver.requests
+    # @requests = []
+    # @vehicles.map { |vehicle| vehicle.requests.map { |request| @requests << request } }
   end
 
   def nearby_requests

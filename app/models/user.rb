@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
   # belongs_to :location, optional: true
-
+  self.inheritance_column = :type
   # after_create :create_location
   # has_many :vehicles
   # has_many :requests
