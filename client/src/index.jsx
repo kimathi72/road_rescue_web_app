@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@fontsource/roboto/300.css";
@@ -14,10 +14,12 @@ import Signup, {action as signupAction} from "./components/auth/Signup.jsx";
 import Signout, {
   loader as signoutloader,
 } from "./components/auth/Signout.jsx";
+ import RequestCreate, {loader as servicesLoader, action as reqAction} from "./components/request/RequestCreate.jsx";
 
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
-
+const {user} = await apploader()
+console.log(user)
 const router = createBrowserRouter([
   {
     path: "/",
@@ -49,6 +51,17 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup/>,
         action: signupAction,
+      },
+      {
+        path: "/requests/",
+        children: [
+          {
+            path: "/requests/create",
+            element:<RequestCreate/>,
+            ...(!!user && {loader: async()=> servicesLoader(user.id)}),
+            action: reqAction
+          }
+        ]
       }
     ],
   },

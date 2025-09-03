@@ -100,7 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_02_033503) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "vehicle_id", null: false
-    t.bigint "provider_id", null: false
+    t.bigint "provider_id"
     t.index ["location_id"], name: "index_requests_on_location_id"
     t.index ["provider_id"], name: "index_requests_on_provider_id"
     t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"

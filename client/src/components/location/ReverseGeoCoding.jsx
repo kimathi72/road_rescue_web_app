@@ -1,9 +1,9 @@
 import { Button } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react'
 
-export default function ReverseGeoCoding({position, setLocation}) {
+export default function ReverseGeoCoding({position, setAddress}) {
    const [value,setValue] = useState('')
-   const [address, setAddress] = useState({})
+   
     const reverseSearch = useCallback(async() =>{
          const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
    const data = await (
@@ -28,21 +28,6 @@ export default function ReverseGeoCoding({position, setLocation}) {
   return (
     <div>
         <p>Your Current geo-location: {!!value && value}</p>
-        <Button onClick={async(e)=>{
-                console.log(address)
-                const res = await fetch(`/api/users/${user.id}`, {
-                    method: "PUT", 
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
-                        "Content-Type": 'application/json'
-                    }, body: JSON.stringify({user: address})
-                })
-
-                    const data = await res.json()
-                    console.log(data)
-            }
-            
-            }>Update Location</Button>
     </div>
   )
 }

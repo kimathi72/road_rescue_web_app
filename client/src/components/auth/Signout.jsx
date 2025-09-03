@@ -16,6 +16,6 @@ export default function Signout({}) {
   useLoaderData()
 useEffect(()=>{
  !token && navigate("/"); 
-},[navigate, token])
+},[token])
   return ( <div>Logging out...</div> )
 }

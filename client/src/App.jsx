@@ -1,9 +1,10 @@
 import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { CableProvider } from "./context/cable";
-import { Grid, Typography } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Grid, Typography } from "@mui/material";
 import { fetchData } from "./services/fetchData";
 import NavBar from "./components/navigation/NavBar";
 import { useEffect, useState } from "react";
+import CopyrightIcon from '@mui/icons-material/Copyright';
 
 const token = localStorage.getItem("jwt");
 
@@ -22,7 +23,7 @@ export default function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    !!localStorage.getItem("jwt") && !user && localStorage.clear();
+    
     !user && navigate("/signin");
     console.log(user);
   }, [user, navigate]);
@@ -36,13 +37,18 @@ export default function App() {
     >
        <NavBar type={!!user && user.type}/>
       <CableProvider>
-        <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 8}}>
+        <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 8}} sx={{overflowY: "auto"}}>
           <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
             Welcome {!!user ? user.name : "to Road Rescue"}
           </Typography>
           <Outlet />
         </Grid>
       </CableProvider>
+      <BottomNavigation
+      showLabels
+      >
+        <BottomNavigationAction label={`Road Rescue App - ${new Date().getFullYear()}`}/>
+      </BottomNavigation>
     </Grid>
   );
 }
@@ -62,7 +68,6 @@ export default function App() {
 // import SystemLogs from "./components/admin/SystemLogs.jsx";
 // import Account from "./components/responder/Account.jsx";
 // import RequestOverview from "./components/admin/RequestOverview.jsx";
-// import RequestCreate from "./components/request/RequestCreate.jsx";
 // import RescueQueue from "./components/request/RequestQueue.jsx";
 // import Notify from "./components/navigation/Notify.jsx";
 // import RequestEdit from './components/request/RequestEdit.jsx'

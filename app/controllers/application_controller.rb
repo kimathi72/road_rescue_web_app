@@ -44,15 +44,15 @@ class ApplicationController < ActionController::API
   end
 
   def driver_authenticated
-    render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:type] == "driver"
+    render json: { message: "Only authenticated driver allowed" }, status: :unauthorized unless current_user[:type] == "Driver"
   end
 
   def admin_authenticated
-    render json: { message: "Only authenticated admin allowed" }, status: :unauthorized unless current_user[:type] == "admin"
+    render json: { message: "Only authenticated admin allowed" }, status: :unauthorized unless current_user[:type] == "Admin"
   end
 
   def provider_authenticated
-    render json: { message: "Only authenticated assessor allowed" }, status: :unauthorized unless current_user[:type] == "provider"
+    render json: { message: "Only authenticated assessor allowed" }, status: :unauthorized unless current_user[:type] == "Provider"
   end
 
   def authorized

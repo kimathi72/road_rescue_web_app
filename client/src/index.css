@@ -35,7 +35,7 @@ code {
 }
 #logoDiv{
   border-radius: 0.5rem;
-  box-shadow: 1px 1px #aca185;
+  box-shadow: 1px 1px #f9ebeb;
   img {
     width: 100%;
     height: auto;
@@ -160,4 +160,12 @@ i {
   background: #ffffff;
   border-radius: 0.2rem;
   
+}
+#requestForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #f9ebeb;
+  background: white;
 }
