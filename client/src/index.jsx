@@ -7,7 +7,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./index.css";
 import App, { loader as apploader } from "./App";
-import "leaflet/dist/leaflet.css";
+
 import ErrorPage from "./ErrorPage";
 import Signin, { action as signinAction } from "./components/auth/Signin.jsx";
 import Signup, {action as signupAction} from "./components/auth/Signup.jsx";
@@ -16,6 +16,7 @@ import Signout, {
 } from "./components/auth/Signout.jsx";
  import RequestCreate, {loader as servicesLoader, action as reqAction} from "./components/request/RequestCreate.jsx";
  import RequestQueue, {loader as reqQueLoader} from "./components/request/RequestQueue.jsx";
+ import RequestShow, {loader as reqShowLoader} from "./components/request/RequestShow.jsx";
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
 const {user} = await apploader()
@@ -65,6 +66,11 @@ const router = createBrowserRouter([
             path: "/requests/queue", 
             element: <RequestQueue/>,
             ...(!!user && {loader: async()=>reqQueLoader(user.id)}),
+          },
+          {
+            path: "/requests/:id",
+            element: <RequestShow/>, 
+            loader: reqShowLoader,
           }
         ]
       }

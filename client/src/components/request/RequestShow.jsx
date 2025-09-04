@@ -1,172 +1,133 @@
-import { Box, Button, Grid, Stack } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import useQuery from "../../hooks/useQuery";
-import Map from "../location/Map";
+// RequestShow.jsx
+import { Box, Button, Grid } from "@mui/material";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useLoaderData, useNavigate, useParams, Form } from "react-router-dom";
 import { CableContext } from "../../context/cable";
+import { fetchData } from "../../services/fetchData";
+import RequestMap from "./RequestMap";
 
-export default function RequestShow({ user }) {
-  const [request, setRequest]= useState(null)
-  const [action, setAction] = useState(<></>);
-  const params = useParams();
-  const navigate = useNavigate();
-  const id = params.id;
-  const { data: requestDetails, isLoaded } = useQuery(`/requests/${id}`);
-  const dateCreated = new Date(!!request && request["created_at"]).toLocaleString();
+export async function loader ({params}){
+  const request = await fetchData({ url: `/api/requests/${params.id}`, method: "GET" });
+  const user = await fetchData({ url: '/api/me', method: "GET" });
+  return { request, user };
+}
 
-  useEffect(()=>{
-    !!isLoaded && setRequest(requestDetails)
-  },[isLoaded, requestDetails])
+export default function RequestShow() {
+  const { request: initialRequest, user } = useLoaderData();
+  const [request, setRequest] = useState(initialRequest);
+  const [providerLocation, setProviderLocation] = useState(
+    initialRequest.provider?.location
+      ? [initialRequest.provider.location.latitude, initialRequest.provider.location.longitude]
+      : null
+  );
+  const [routeInfo, setRouteInfo] = useState(null);
 
+  const { id } = useParams();
   const cableContext = useContext(CableContext);
-  useEffect(()=>{
-    const newChannel = cableContext.cable.subscriptions.create(
+  const cable = cableContext?.cable; // grab stable reference
+
+  // Memoize coordinates so reference is stable between renders unless values change
+  const requestCoords = useMemo(() => {
+    if (!request?.location) return null;
+    return [
+      Number(request.location.latitude),
+      Number(request.location.longitude)
+    ];
+  }, [request?.location?.latitude, request?.location?.longitude]);
+
+  const providerCoordsMemo = useMemo(() => {
+    if (!providerLocation) return null;
+    return [ Number(providerLocation[0]), Number(providerLocation[1]) ];
+  }, [providerLocation?.[0], providerLocation?.[1]]);
+
+  // Subscribe to live updates (guard on stable cable)
+  useEffect(() => {
+    if (!id || !cable) return;
+
+    const channel = cable.subscriptions.create(
+      { channel: "RequestChannel", request_id: id },
       {
-        channel: "RequestChannel",
-        request_id: !!id && id
-      },
-      {
-        received: (data)=>{
-          console.log(data)
-          setRequest(data)
+        received: (data) => {
+          // Update request
+          setRequest(data);
+
+          // Update provider location if present (numeric)
+          if (data.provider?.location) {
+            setProviderLocation([
+              Number(data.provider.location.latitude),
+              Number(data.provider.location.longitude)
+            ]);
+          }
         }
       }
-    )
-  },[cableContext, request])
+    );
 
-  useEffect(() => {
-    switch (user.role) {
-      case "driver":
-        setAction(
-          <Grid
-            container 
-            direction={"column"}
-            justifyContent={"center"}
-            gap={"0.5rem"}
-          >
-            {(!!request && !!request['invoice']) ? <Button
-            onClick={()=>navigate(`/invoices/${request.invoice.id}`)}
-            >proceed to invoice</Button> 
-            :(!!request && request['status'] ==='cancelled') ? 
-              <Button onClick={()=>navigate(`/requests/${id}/edit`, {state: {"status": "reported"}})}>
-                undo Cancellation
-              </Button>: <Button
-            onClick={() =>
-                navigate(`/requests/${id}/edit`, { state: { "status": "cancelled"} })
-              }
-               variant="contained" color="error">
-              Cancel Request
-            </Button> }
-            {
-              (!!request && !!request['user']) ? <Button 
-              onClick={()=>navigate(`/chat/${request.chat.id}`)}
-               variant="contained">Chat with Provider</Button> : <Button onClick={()=>navigate('/nearby_providers')} variant="contained">View nearby Providers</Button>
-            }
-            
-          </Grid>
-        );
+    return () => {
+      if (channel && channel.unsubscribe) channel.unsubscribe();
+    };
+  }, [cable, id]);
 
-        break;
-      case "provider":
-        console.log(!!request && request);
-        if (!!request && !!request["user"]) {
-          setAction(
-            <Grid
-              container
-              direction={"column"}
-              justifyContent={"center"}
-              gap={"0.5rem"}
-            >
-              <Button onClick={()=>navigate(`/chat/${request.chat.id}`)} variant="contained" color="success">
-                Chat with Driver
-              </Button>
-              <Button onClick={()=>navigate(`/invoices/${request.invoice.id}`)} variant="contained" color="primary">
-                proceed to Invoice
-              </Button>
-            </Grid>
-          );
-        } else if (!!request && !request["user"]) {
-          setAction(
-            <Grid
-              container
-              direction={"column"}
-              justifyContent={"center"}
-              gap={"0.5rem"}
-            >
-            
-              <Button onClick={()=>navigate(`/requests/${id}/edit`, {state:{"user_id": user.id , "status": "accepted"}})} variant="contained" color="success">
-                Accept Request
-              </Button>
-            </Grid>
-          );
-        }
+  const dateCreated = request?.created_at ? new Date(request.created_at).toLocaleString() : "";
 
-        break;
-
-      default:
-        setAction(
-          <Grid
-            container
-            direction={"column"}
-            justifyContent={"center"}
-            gap={"0.5rem"}
-          >
-            <Button>Cancel Request</Button>
-            <Button>Delete Request</Button>
-          </Grid>
-        );
-        break;
-    }
-  }, [user, request]);
-  return isLoaded && !!request ? (
-    <Grid container direction={"column"} gap={"2rem"} justifyContent={"center"}>
+  return request ? (
+    <Grid container direction="column" gap="2rem" justifyContent="center">
       <h3 style={{ textAlign: "center" }}>Request Details</h3>
-      <Grid container direction={"row"} justifyContent={"space-between"}>
-        <Grid container direction={"column"} justifyContent={"space-around"}>
-          <Box>
-            <p>
-              Issue:{" "}
-              <span style={{ fontSize: "large" }}>{request.service.name}</span>
-            </p>
-            <p>
-              Vehicle: {request.vehicle["plate_number"]} -{" "}
-              {request.vehicle["make"]} {request.vehicle["model"]}
-            </p>
-            <p>Details: {request["request_description"]} </p>
-            <p>Location: {request.location.city}</p>
-            <small>created at: {dateCreated}</small>
-            
-          </Box>
-          <Box>
-            <h4>Provider details</h4>
-            {!!request["user"] ? (
-              <Box>
-                <p>email: {request.user.email} </p>
-                <p>Phone: {request.user.phone}</p>
-              </Box>
-            ) : (
-              <p>Waiting for provider response. </p>
-            )}
-          </Box>
-        </Grid>
-        <Grid
-          container
-          gap={"1rem"}
-          direction={"column"}
-          justifyContent={"center"}
-        >
-          <h4 style={{ textAlign: "center" }}>Live Location</h4>
-          <Map
-            position={[
-              request["location"]["latitude"],
-              request["location"]["longitude"],
-            ]}
-          />
-        </Grid>
+
+      <Grid container direction={{ xs: "column", md: "row" }} justifyContent="space-around">
+        <Box>
+          <p>Issue: <strong>{request.service?.name}</strong></p>
+          <p>Vehicle: {request.vehicle?.plate_number} - {request.vehicle?.make} {request.vehicle?.model}</p>
+          <p>Details: {request.request_description}</p>
+          <p>Location: {request.location?.city}</p>
+          <small>Created at: {dateCreated}</small>
+        </Box>
+
+        <Box>
+          <h4>Provider details</h4>
+          {request.provider ? (
+            <Box>
+              <p>Email: {request.provider.email}</p>
+              <p>Phone: {request.provider.phone}</p>
+              <p>Location: {request.provider.location?.district}</p>
+            </Box>
+          ) : <p>Waiting for provider response.</p>}
+        </Box>
       </Grid>
-      {action}
+
+      <Grid container direction="column" gap="1rem" justifyContent="center">
+        <h4 style={{ textAlign: "center" }}>Live Location</h4>
+
+        <RequestMap
+          requestLocation={requestCoords}
+          providerLocation={providerCoordsMemo}
+          onRouteInfo={setRouteInfo}
+        />
+
+        {routeInfo && (
+          <p style={{ textAlign: "center" }}>
+            Distance: {routeInfo.distanceKm} km — ETA: {routeInfo.etaMin} min
+          </p>
+        )}
+      </Grid>
+
+      {/* Example action buttons (keep existing logic) */}
+      {request && request.status === "reported" && user.type === "Provider" && (
+        <Form method="post" action={`/api/requests/${request.id}/accept`}>
+          <Button type="submit">Accept</Button>
+        </Form>
+      )}
+
+      {request?.provider && (
+        <Button onClick={() => navigate(`/chat/${request.chat.id}`)} variant="contained">
+          Chat with {user?.type === "Driver" ? "Provider" : "Driver"}
+        </Button>
+      )}
+
+      {request?.invoice && (
+        <Button onClick={() => navigate(`/invoices/${request.invoice.id}`)}>Proceed to Invoice</Button>
+      )}
     </Grid>
   ) : (
-    <p>Loading Request. . .</p>
+    <p>Loading Request…</p>
   );
 }

@@ -16,8 +16,8 @@ export default function RequestsList({requests, title}) {
             "issue": service.name
             ,"vehicle": `${vehicle.make} ${ vehicle.model}`,
             "status": status,            
-            "location": !!location && location.district || <WarningAmberIcon/>,
-            "provider availability": !!provider && provider.availability || <Box sx={{ display: 'flex' , flexDirection:"column", alignItems:"center"}}>
+            "location": !!location && location.district || <WarningAmberIcon fontSize='small'/>,
+            "provider availability": !!provider ? provider.availability_status : <Box sx={{ display: 'flex' , flexDirection:"column", alignItems:"center"}}>
       <CircularProgress size="0.5rem"/>
       <small>waiting for provider</small>
     </Box>,
