@@ -4,8 +4,7 @@ class MessagesController < ApplicationController
   # GET /messages
   def index
     if params[:chat_id]
-      @chat = Chat.find(params[:chat_id])
-      @messages = @chat.messages
+      @messages = Chat.find(params[:chat_id]).messages
     else
       @messages = Message.all
     end
@@ -20,8 +19,7 @@ class MessagesController < ApplicationController
 
   # POST /messages
   def create
-    @user = current_user
-    @message = @user.messages.create(message_params)
+    @message = Message.create(message_params)
     serialized_message = @message.serialize
     ActionCable.server.broadcast("chat_#{@message.chat.id}", serialized_message)
     render json: @message, status: :created

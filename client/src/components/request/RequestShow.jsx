@@ -1,18 +1,30 @@
 // RequestShow.jsx
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, Grid } from "@mui/material";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useParams, Form } from "react-router-dom";
 import { CableContext } from "../../context/cable";
 import { fetchData } from "../../services/fetchData";
 import RequestMap from "./RequestMap";
+import useDocumentTitle from '../../hooks/useDocumentTitle.js'
+import MapPicker from "../location/MapPicker.jsx";
 
 export async function loader ({params}){
   const request = await fetchData({ url: `/api/requests/${params.id}`, method: "GET" });
-  const user = await fetchData({ url: '/api/me', method: "GET" });
+  const {user} = await fetchData({ url: '/api/me', method: "GET" });
   return { request, user };
+}
+export async function action ({request,params}){
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData);
+  const data = await fetchData({
+    url: `/api/requests/${params.id}`,
+    method: "PATCH",
+    submittedData: {"request": updates},
+  })
 }
 
 export default function RequestShow() {
+  useDocumentTitle('Road Rescue - Request Details')
   const { request: initialRequest, user } = useLoaderData();
   const [request, setRequest] = useState(initialRequest);
   const [providerLocation, setProviderLocation] = useState(
@@ -21,7 +33,7 @@ export default function RequestShow() {
       : null
   );
   const [routeInfo, setRouteInfo] = useState(null);
-
+  const navigate = useNavigate()
   const { id } = useParams();
   const cableContext = useContext(CableContext);
   const cable = cableContext?.cable; // grab stable reference
@@ -42,13 +54,14 @@ export default function RequestShow() {
 
   // Subscribe to live updates (guard on stable cable)
   useEffect(() => {
-    if (!id || !cable) return;
+    // if (!id || !cable) return;
 
     const channel = cable.subscriptions.create(
-      { channel: "RequestChannel", request_id: id },
+      { channel: "RequestChannel", request_id: !!id && id },
       {
         received: (data) => {
           // Update request
+          console.log(data)
           setRequest(data);
 
           // Update provider location if present (numeric)
@@ -62,11 +75,14 @@ export default function RequestShow() {
       }
     );
 
-    return () => {
-      if (channel && channel.unsubscribe) channel.unsubscribe();
-    };
-  }, [cable, id]);
-
+    // return () => {
+    //   if (channel && channel.unsubscribe) channel.unsubscribe();
+    // };
+  }, [cable]);
+  const [open,setOpen]  = useState(false) 
+  const handleClose = ()=> {
+    setOpen(false)
+  }
   const dateCreated = request?.created_at ? new Date(request.created_at).toLocaleString() : "";
 
   return request ? (
@@ -78,10 +94,16 @@ export default function RequestShow() {
           <p>Issue: <strong>{request.service?.name}</strong></p>
           <p>Vehicle: {request.vehicle?.plate_number} - {request.vehicle?.make} {request.vehicle?.model}</p>
           <p>Details: {request.request_description}</p>
-          <p>Location: {request.location?.city}</p>
+          <p>Location: {request.location?.city || ((user?.type === "Driver") && (request?.vehicle?.driver?.id === user?.id) && <Button onClick={()=>setOpen(true)} color="warning" >add Location</Button>)}</p>
           <small>Created at: {dateCreated}</small>
         </Box>
-
+        <Dialog open= {open} onClose={handleClose}>
+            <DialogTitle>Set Request Location</DialogTitle>
+            <Form method="patch">
+              <MapPicker/> 
+              <Button type='submit' fullWidth color="success" variant="contained" > submit new location</Button>
+            </Form>
+        </Dialog>
         <Box>
           <h4>Provider details</h4>
           {request.provider ? (
@@ -111,20 +133,24 @@ export default function RequestShow() {
       </Grid>
 
       {/* Example action buttons (keep existing logic) */}
-      {request && request.status === "reported" && user.type === "Provider" && (
-        <Form method="post" action={`/api/requests/${request.id}/accept`}>
-          <Button type="submit">Accept</Button>
+      {!request?.provider && request?.status === "reported" && user?.type === "Provider" && (
+        <Form method="patch">
+          <input type="hidden" name="status" value={"accepted"} readOnly/>
+          <input type="hidden" name="provider_id" value={user.id} readOnly/>
+          <Button fullWidth color="success" type="submit">Accept Request</Button>
         </Form>
       )}
-
+      {
+        console.log(request)
+      }
       {request?.provider && (
-        <Button onClick={() => navigate(`/chat/${request.chat.id}`)} variant="contained">
+        <Button onClick={() => navigate(`/chats/${request.chat.id}`)} variant="contained">
           Chat with {user?.type === "Driver" ? "Provider" : "Driver"}
         </Button>
       )}
 
-      {request?.invoice && (
-        <Button onClick={() => navigate(`/invoices/${request.invoice.id}`)}>Proceed to Invoice</Button>
+      {request?.invoice && (user?.type === "Provider") && (
+        <Button variant="contained" fullWidth color="secondary" onClick={() => navigate(`/invoices/${request.invoice.id}`)}>Proceed to Invoice</Button>
       )}
     </Grid>
   ) : (

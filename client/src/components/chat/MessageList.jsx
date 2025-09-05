@@ -1,20 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { CableContext } from "../../context/cable";
-
-import useQuery from "../../hooks/useQuery";
 import MessageShow from "./MessageShow";
+import { useParams } from "react-router-dom";
 
-function MessageList({ chatId, user }) {
-   const { data: chatMessages, isLoaded } = useQuery(
-    `/chats/${chatId}/messages`
-  );
+function MessageList({ chatMessages, user }) {
+
   const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
 
- 
+ const {chatId} = useParams()
   useEffect(() => {
-    !isLoaded ? null : !!isLoaded && setMessages(chatMessages);
-  }, [isLoaded, chatMessages]);
+    !messages.length && !!chatMessages.length  && setMessages(chatMessages);
+  }, [chatMessages, messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

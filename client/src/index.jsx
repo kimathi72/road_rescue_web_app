@@ -7,7 +7,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./index.css";
 import App, { loader as apploader } from "./App";
-
+import Chat, {loader as chatLoader, action as chatAction} from './components/chat/Chat.jsx'
 import ErrorPage from "./ErrorPage";
 import Signin, { action as signinAction } from "./components/auth/Signin.jsx";
 import Signup, {action as signupAction} from "./components/auth/Signup.jsx";
@@ -16,7 +16,7 @@ import Signout, {
 } from "./components/auth/Signout.jsx";
  import RequestCreate, {loader as servicesLoader, action as reqAction} from "./components/request/RequestCreate.jsx";
  import RequestQueue, {loader as reqQueLoader} from "./components/request/RequestQueue.jsx";
- import RequestShow, {loader as reqShowLoader} from "./components/request/RequestShow.jsx";
+ import RequestShow, {loader as reqShowLoader, action as reqShowAction} from "./components/request/RequestShow.jsx";
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
 const {user} = await apploader()
@@ -53,6 +53,13 @@ const router = createBrowserRouter([
         element: <Signup/>,
         action: signupAction,
       },
+       {
+            path: "/chats/:chatId",
+            element: <Chat user={user}/>,
+            loader: chatLoader,
+            action: chatAction
+          }
+      ,
       {
         path: "/requests/",
         children: [
@@ -71,7 +78,10 @@ const router = createBrowserRouter([
             path: "/requests/:id",
             element: <RequestShow/>, 
             loader: reqShowLoader,
-          }
+            action: reqShowAction,
+           
+          },
+          
         ]
       }
     ],

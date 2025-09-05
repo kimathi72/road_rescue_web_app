@@ -2,17 +2,37 @@
 import { Grid } from '@mui/material'
 import MessageList from './MessageList'
 import MessageCreate from './MessageCreate'
-import { useParams } from 'react-router-dom'
-export default function Chat({user}) {
+import { useLoaderData} from 'react-router-dom'
+import { fetchData } from '../../services/fetchData'
 
-const params = useParams()
-const chatId = params.id
+export async function loader ({params}){
+  const {chatId} = params
+  const messages = await fetchData({
+    url: `/api/chats/${!!chatId && chatId}/messages`,
+    method: "GET",
+  })
+  return {messages}
+}
+export async function action ({request,params}){
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData);
+  const data = await fetchData({
+    url: `/api/messages`,
+    method: "POST",
+    submittedData: {"message": updates}
+  })
+ let inputDiv =  document.getElementById('contentInput')
+ inputDiv.value= ''
+}
+
+export default function Chat({user}) {
+const {messages} = useLoaderData()
 
   return (
-    <Grid container direction={'column'} size={{xs:12, md:6, lg:8}}  sx={{boxShadow: "2px 2px 2px 2px #888888",backgroundColor: "AppWorkspace", borderRadius: "5px"}}>
+    <Grid container direction={'column'} size={{xs:12, md:12, lg:8}}  sx={{boxShadow: "2px 2px 2px 2px #888888",backgroundColor: "AppWorkspace", borderRadius: "5px"}}>
       <h3 className='pageTitle'>Chat - Messages</h3>
-        <MessageList chatId={chatId} user={user} />
-        <MessageCreate chatId={chatId}/>
+        <MessageList chatMessages={!!messages?.length && messages} user={user} />
+        <MessageCreate userId={user.id}/>
     </Grid>
   )
 }

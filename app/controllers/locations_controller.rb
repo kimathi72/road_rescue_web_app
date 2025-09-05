@@ -12,7 +12,11 @@ class LocationsController < ApplicationController
   end
 
   def create
-    location = Location.create(location_params)
+    if params[:request_id]
+      location = Request.find(params[:request_id]).location.create(location_params)
+    else
+      location = Location.create(location_params)
+    end
     render json: location, status: :created
   end
 

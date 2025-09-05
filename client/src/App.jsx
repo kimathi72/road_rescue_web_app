@@ -25,10 +25,10 @@ export default function App() {
   useEffect(() => {
     
     !user && navigate("/signin");
-    console.log(user);
   }, [user, navigate]);
 
   return (
+    <Grid container direction={'column'} width={'100%'} height={'100%'}>
     <Grid
       id="app"
       container
@@ -44,7 +44,9 @@ export default function App() {
           <Outlet />
         </Grid>
       </CableProvider>
-      <BottomNavigation
+      
+    </Grid>
+    <BottomNavigation
       showLabels
       >
         <BottomNavigationAction label={`Road Rescue App - ${new Date().getFullYear()}`}/>

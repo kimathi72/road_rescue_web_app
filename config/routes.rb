@@ -9,12 +9,13 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :requests, only: [:index], controller: "requests"
+    resources :chats, only: [:index, :show], controller: "chats"
   end
 
   resources :notifications
 
   resources :chats do
-    resources :messages, only: [:index, :show]
+    resources :messages, only: [:index, :show], controller: "messages"
   end
   resources :messages
 
@@ -30,7 +31,10 @@ Rails.application.routes.draw do
   resources :vehicles do
     resources :requests, only: [:index, :show]
   end
-  resources :requests
+  resources :requests do
+    resources :locations, controller: "locations"
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"
   get "/request/:user_id", to: "requests#queue"

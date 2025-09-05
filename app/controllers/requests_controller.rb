@@ -39,7 +39,7 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:vehicle_id, :service_id, :user_id, :request_description, :status, location_attributes: [:city, :district, :latitude, :longitude], chat_attributes: [:chat_id], invoice_attributes: [:invoice_id, :total, :status])
+    params.require(:request).permit(:vehicle_id, :service_id, :provider_id, :request_description, :status, location_attributes: [:city, :district, :latitude, :longitude], chat_attributes: [:chat_id], invoice_attributes: [:invoice_id, :total, :status])
   end
 
   def provider_requests

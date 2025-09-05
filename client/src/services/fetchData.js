@@ -8,6 +8,6 @@ export async function fetchData ({url, method,submittedData}){
         },
         ...(!!submittedData &&{ body: JSON.stringify(submittedData)})
     })
-    const data = await res.json()
+    const data = await res?.json() || null
     return data
 }
