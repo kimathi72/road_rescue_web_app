@@ -144,9 +144,7 @@ export default function RequestShow() {
           <Button fullWidth color="success" type="submit">Accept Request</Button>
         </Form>
       )}
-      {
-        console.log(request)
-      }
+   
       {request?.provider && (
         <Button onClick={() => navigate(`/chats/${request.chat.id}`)} variant="contained">
           Chat with {user?.type === "Driver" ? "Provider" : "Driver"}

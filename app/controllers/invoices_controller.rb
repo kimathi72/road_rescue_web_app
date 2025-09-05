@@ -3,9 +3,16 @@ class InvoicesController < ApplicationController
 
   # GET /invoices
   def index
-    @invoices = Invoice.all
+    case current_user.type
+    when "Provider"
+      invoices = Invoice.joins(:request).where(requests: { provider_id: current_user.id })
+    when "Driver"
+      invoices = Driver.find(current_user.id).invoices
+    else # Admin
+      invoices = Invoice.all
+    end
 
-    render json: @invoices
+    render json: invoices, each_serializer: InvoiceSerializer
   end
 
   # GET /invoices/1
@@ -39,13 +46,14 @@ class InvoicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_invoice
-      @invoice = Invoice.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def invoice_params
-      params.require(:invoice).permit(:request_id, :total, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_invoice
+    @invoice = Invoice.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def invoice_params
+    params.require(:invoice).permit(:request_id, :total, :status)
+  end
 end

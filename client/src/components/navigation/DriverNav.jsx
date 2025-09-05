@@ -10,7 +10,7 @@ export default function DriverNav() {
         {url: '/',text: "Home",icon: <HomeIcon/>},
         {url:'/requests/create',text: "Request Rescue",icon: <LibraryAddIcon/> },
         {url: '/requests/queue',text: "My Requests",icon: <WorkHistoryIcon/> },
-        {url: '/payments',text: "Payments",icon: <PaidIcon/> },
+        {url: '/invoices',text: "Invoices",icon: <PaidIcon/> },
     ]
   return (
     <>

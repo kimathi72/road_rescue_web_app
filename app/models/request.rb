@@ -24,4 +24,8 @@ class Request < ApplicationRecord
     ).serializable_hash
     serialized_request[:request]
   end
+
+  def driver_id
+    self.vehicle.driver.id
+  end
 end

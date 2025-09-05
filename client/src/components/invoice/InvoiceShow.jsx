@@ -1,43 +1,91 @@
-import { useParams } from 'react-router-dom'
-import useQuery from '../../hooks/useQuery';
-import TableCustomized from '../util/TableCustomized';
-import { Button, Grid } from '@mui/material';
-import InvoiceCreate from './InvoiceCreate';
-import { useContext, useEffect, useState } from 'react';
-import { CableContext } from '../../context/cable';
+// src/pages/invoices/InvoiceShow.jsx
+import React from "react";
+import { useLoaderData, Form, redirect } from "react-router-dom";
+import { fetchData } from "../../services/fetchData";
 
-export default function InvoiceShow({role}) {
-      const params = useParams()
-      const invoiceId = params.id 
-      const [invoices,setInvoices]= useState([])
-      const {data: invoiceItems, isLoaded} = useQuery(`/invoices/${invoiceId}/invoice_items`)
-      useEffect(()=>{
-        !isLoaded ? null: !!isLoaded && setInvoices(invoiceItems)
-      },[isLoaded,invoiceItems])
-      const cableContext = useContext(CableContext);
-      useEffect(()=>{
-        const newChannel = cableContext.cable.subscriptions.create(
-          {
-            channel: "InvoiceChannel",
-            invoice_id: !!invoiceId && invoiceId
-          }, 
-          {
-            received: (data) => {
-              console.log(data)
-              return setInvoices([...invoices, data])
-            }
-          }
-        )
-      },[cableContext, invoices ])
+// 🟢 Loader for invoice show
+export async function loader({ params }) {
+  const {user} = await fetchData({ url: "/api/me", method: "GET" });
+  const invoice = await fetchData({
+    url: `/api/invoices/${params.invoiceId}`,
+    method: "GET",
+  });
+  console.log(invoice)
+  return { user, invoice };
+}
+
+// 🟢 Action for creating invoice items
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  updates['invoice_id'] = parseInt(updates['invoice_id'])
+  updates['cost'] = parseFloat(updates['cost'])
+  console.log(updates)
+  await fetchData({
+    url: `/api/invoice_items`,
+    method: "POST",
+    submittedData: { "invoice_item": updates },
+  });
+
+  // Refresh page after adding item
+  return redirect(`/invoices/${params.invoiceId}`);
+}
+
+export default function InvoiceShow() {
+  const { user, invoice } = useLoaderData();
+
+  const canAddItems =
+    user.type === "Provider" && invoice.request.provider_id === user.id;
+
   return (
-    <Grid container direction={'column'} gap={'2rem'}>
-        <Grid container direction={'column'} gap={'1rem'}>
-        <h6>invoice items List</h6>
-        {!!isLoaded ? !!(invoices.length > 0) ? <TableCustomized rows={invoices}/>: <p>no items added yet</p> : <p>fetching invoice</p>}
+    <div>
+      <h3>Invoice #{invoice.id}</h3>
+      <p>
+        Request ID: {invoice.request_id} — Status: {invoice.status} — Total: $
+        {invoice.total}
+      </p>
 
-        </Grid>
-        {!!role && role === "provider" && <InvoiceCreate invoiceId={invoiceId}/>}
-        {!!role && role === "driver" && <Button>Pay now</Button>}
-    </Grid>
-  )
+      <h4>Invoice Items</h4>
+      {invoice.invoice_items?.length > 0 ? (
+        <ul>
+          {invoice.invoice_items.map((item) => (
+            <li key={item.id}>
+              {item.description} — ${item.cost}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No items added yet.</p>
+      )}
+
+      {canAddItems && (
+        <div>
+          <h4>Add Invoice Item</h4>
+          <Form method="post">
+           <input type="hidden" name="invoice_id" value={invoice.id}/>
+            <input
+            type="number"
+            name="quantity"
+            placeholder="quantity"
+            required
+            />
+            <input
+              type="text"
+              name="description"
+              placeholder="Item description"
+              required
+            />
+            <input
+              type="number"
+              name="cost"
+              step="0.01"
+              placeholder="Amount"
+              required
+            />
+            <button type="submit">Add Item</button>
+          </Form>
+        </div>
+      )}
+    </div>
+  );
 }

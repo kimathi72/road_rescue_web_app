@@ -20,6 +20,8 @@ import Signout, {
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
 import RequestIndex, {loader as reqIndexLoader} from "./components/request/RequestIndex.jsx";
+import InvoicesList, {loader as invListLoader} from "./components/invoice/InvoiceList.jsx";
+import InvoiceShow , {loader as invShowLoader , action as invShowAction} from "./components/invoice/InvoiceShow.jsx";
 const {user} = await apploader()
 console.log(user)
 const router = createBrowserRouter([
@@ -60,7 +62,22 @@ const router = createBrowserRouter([
             loader: chatLoader,
             action: chatAction
           }
-      ,
+      ,{
+        path: "/invoices",
+        children:[
+          {
+            index: true, 
+            element: <InvoicesList/>,
+            loader: invListLoader, 
+          },
+          {
+            path: "/invoices/:invoiceId",
+            element: <InvoiceShow />, 
+            loader: invShowLoader, 
+            action: invShowAction
+          }
+        ]
+      },
       {
         path: "/requests/",
         children: [

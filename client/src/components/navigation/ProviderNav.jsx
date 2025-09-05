@@ -17,7 +17,7 @@ export default function ProviderNav() {
         },{
             url: '/requests/queue',text: "My Jobs",icon: <WorkHistoryIcon/> 
         },{
-            url: '/earnings',text: "Earnings",icon: <PaidIcon/>
+            url: '/invoices',text: "Invoices",icon: <PaidIcon/>
         },{
             url: '/profile',text:'Profile',icon: <AccountBoxIcon/>
         },

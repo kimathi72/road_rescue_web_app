@@ -34,6 +34,13 @@ Rails.application.routes.draw do
   resources :requests do
     resources :locations, controller: "locations"
   end
+  resources :reports do
+    collection do
+      get :admin
+      get :provider
+      get :driver
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"

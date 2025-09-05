@@ -3,6 +3,7 @@ export async function fetchData ({url, method,submittedData}){
     const res = await fetch(url,{
         method: method, 
         headers: {
+            Accept: "application/json",
             "Content-Type": "application/json",
             ...(!!token && {"Authorization": `Bearer ${token}`})
         },
