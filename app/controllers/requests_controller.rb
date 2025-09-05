@@ -7,9 +7,16 @@ class RequestsController < ApplicationController
       @type = User.find(params[:user_id]).type
       provider_requests unless @type != "Provider"
       driver_requests unless @type != "Driver"
-    else
+    elsif current_user.type == "Admin"
       @requests = Request.all
+    elsif current_user.type == "Provider"
+      puts "provider"
+      @provider_location = Provider.find(current_user.id).location.city
+      @requests = Request.all.filter { |req| req.location.city == @provider_location && req.status == "reported" }
+    elsif current_user.type == "Driver"
+      driver_requests
     end
+    puts @requests
     render json: @requests, status: :ok
   end
 

@@ -1,7 +1,7 @@
 // RequestShow.jsx
 import { Box, Button, Dialog, DialogTitle, Grid } from "@mui/material";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate, useParams, Form } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams, Form, redirect } from "react-router-dom";
 import { CableContext } from "../../context/cable";
 import { fetchData } from "../../services/fetchData";
 import RequestMap from "./RequestMap";
@@ -16,11 +16,15 @@ export async function loader ({params}){
 export async function action ({request,params}){
   const formData = await request.formData()
   const updates = Object.fromEntries(formData);
+   if ('location_attributes' in updates && !!updates['location_attributes'].length) {
+    updates['location_attributes'] =  JSON.parse(updates['location_attributes'])
+  }
   const data = await fetchData({
     url: `/api/requests/${params.id}`,
     method: "PATCH",
     submittedData: {"request": updates},
   })
+  !!data && redirect(`/requests/${params.id}`)
 }
 
 export default function RequestShow() {
@@ -40,7 +44,7 @@ export default function RequestShow() {
 
   // Memoize coordinates so reference is stable between renders unless values change
   const requestCoords = useMemo(() => {
-    if (!request?.location) return null;
+    if (!request?.location?.district) return null;
     return [
       Number(request.location.latitude),
       Number(request.location.longitude)

@@ -19,6 +19,7 @@ import Signout, {
  import RequestShow, {loader as reqShowLoader, action as reqShowAction} from "./components/request/RequestShow.jsx";
 import reportWebVitals from "./reportWebVitals";
 import LoadingPage from "./LoadingPage";
+import RequestIndex, {loader as reqIndexLoader} from "./components/request/RequestIndex.jsx";
 const {user} = await apploader()
 console.log(user)
 const router = createBrowserRouter([
@@ -63,6 +64,14 @@ const router = createBrowserRouter([
       {
         path: "/requests/",
         children: [
+          {
+            index: true, 
+            element:  <RequestIndex/>,
+        loader: reqIndexLoader,
+        HydrateFallback: ()=> <LoadingPage>
+          <p>fetching requests. . .</p>
+        </LoadingPage>
+          },
           {
             path: "/requests/create",
             element:<RequestCreate/>,
