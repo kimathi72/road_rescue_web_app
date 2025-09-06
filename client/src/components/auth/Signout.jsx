@@ -3,8 +3,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { fetchData } from "../../services/fetchData";
 
 export async function loader (){
-  await fetchData({
-    url: 'api/logout', 
+  await fetch('api/logout',{
     method: "DELETE"
   })
   localStorage.clear()

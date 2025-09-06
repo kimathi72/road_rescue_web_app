@@ -108,6 +108,8 @@ GEM
       net-http
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.5.1)
+      activesupport (>= 7)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
@@ -218,6 +220,7 @@ DEPENDENCIES
   debug
   dotenv-rails
   faker
+  groupdate
   jwt (~> 2.7)
   net-http
   pg (~> 1.1)

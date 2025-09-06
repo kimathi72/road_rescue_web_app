@@ -34,18 +34,15 @@ Rails.application.routes.draw do
   resources :requests do
     resources :locations, controller: "locations"
   end
-  resources :reports do
-    collection do
-      get :admin
-      get :provider
-      get :driver
-    end
-  end
+  resources :reports
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post "/auth", to: "auth#create"
   get "/request/:user_id", to: "requests#queue"
   get "/me", to: "users#me"
   delete "/logout", to: "auth#destroy"
+  # get "/reports/provider/:id", to: "reports#provider"
+  # get "/reports/driver/:id", to: "reports#driver"
+  # get "/reports", to: "reports#admin"
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end

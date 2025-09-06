@@ -37,7 +37,7 @@ export default function App() {
     >
        <NavBar type={!!user && user.type}/>
       <CableProvider>
-        <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 8}} sx={{overflowY: "auto"}}>
+        <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 9}} sx={{overflowY: "auto"}}>
           <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
             Welcome {!!user ? user.name : "to Road Rescue"}
           </Typography>

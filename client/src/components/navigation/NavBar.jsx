@@ -11,7 +11,7 @@ export default function NavBar({ type }) {
     const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
-    <Grid container size={{xs: 12, md: 12, lg: 3}}  justifyContent={'space-between'} alignItems={'flex-start'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} >
+    <Grid container size={{xs: 12, md: 12, lg: 2}}  justifyContent={'space-between'} alignItems={'flex-start'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} >
       <Grid 
       container
        size={{xs: 2, md: 2, lg: 12}} 

@@ -3,13 +3,14 @@ import HomeIcon from '@mui/icons-material/Home';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import PaidIcon from '@mui/icons-material/Paid';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 export default function DriverNav() {
     const links = [
-        {url: '/',text: "Home",icon: <HomeIcon/>},
         {url:'/requests/create',text: "Request Rescue",icon: <LibraryAddIcon/> },
         {url: '/requests/queue',text: "My Requests",icon: <WorkHistoryIcon/> },
+        {url: '/reports',text: "Reports",icon: <SummarizeIcon/>},
         {url: '/invoices',text: "Invoices",icon: <PaidIcon/> },
     ]
   return (

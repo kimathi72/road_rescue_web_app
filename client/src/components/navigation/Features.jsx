@@ -24,7 +24,7 @@ export default function FeaturesSection() {
 
   return (
     <section className="bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-6 text-center">
+      <div className="max-w-6xl mx-auto px-6 text-center" style={{ padding: "1rem" ,backgroundColor: "rgba(189, 200, 201, 0.5)"}}>
         <h4 className="text-3xl font-bold text-gray-800 mb-8">
           Why Join RoadRescue?
         </h4>

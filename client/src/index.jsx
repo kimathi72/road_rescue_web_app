@@ -22,6 +22,8 @@ import LoadingPage from "./LoadingPage";
 import RequestIndex, {loader as reqIndexLoader} from "./components/request/RequestIndex.jsx";
 import InvoicesList, {loader as invListLoader} from "./components/invoice/InvoiceList.jsx";
 import InvoiceShow , {loader as invShowLoader , action as invShowAction} from "./components/invoice/InvoiceShow.jsx";
+import InvoiceEdit, {action as reqEditAction} from "./components/invoice/InvoiceEdit.jsx"
+import Reports, {loader as repLoader} from "./components/reports/Reports.jsx";
 const {user} = await apploader()
 console.log(user)
 const router = createBrowserRouter([
@@ -39,7 +41,9 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>"hello"</div>,
+          element: <Reports/>, 
+          loader: repLoader
+           
       },
       {
         path: "/signin",
@@ -75,8 +79,18 @@ const router = createBrowserRouter([
             element: <InvoiceShow />, 
             loader: invShowLoader, 
             action: invShowAction
+          }, 
+          {
+            path: "/invoices/:invoiceId/edit",
+            element: <InvoiceEdit/>,
+            action: reqEditAction
           }
         ]
+      },
+      {
+        path:'/reports',
+        element: <Reports/>,
+        loader: repLoader
       },
       {
         path: "/requests/",

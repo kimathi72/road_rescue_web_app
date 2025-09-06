@@ -18,8 +18,7 @@ class AuthController < ApplicationController
   def destroy
     session.delete :user_id
     session.delete :user_type
-    # head :no_content
-    render json: {}, status: :ok
+    head :no_content
   end
 
   private

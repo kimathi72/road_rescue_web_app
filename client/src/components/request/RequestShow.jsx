@@ -135,6 +135,11 @@ export default function RequestShow() {
           </p>
         )}
       </Grid>
+      <Grid>
+        {
+          !!request?.invoice?.total && <p>Invoiced Amount:   <span style={{color: "salmon", fontWeight: "bolder"}}>${request.invoice.total}</span></p>
+        }
+      </Grid>
 
       {/* Example action buttons (keep existing logic) */}
       {!request?.provider && request?.status === "reported" && user?.type === "Provider" && (
@@ -154,6 +159,9 @@ export default function RequestShow() {
       {request?.invoice && (user?.type === "Provider") && (
         <Button variant="contained" fullWidth color="secondary" onClick={() => navigate(`/invoices/${request.invoice.id}`)}>Proceed to Invoice</Button>
       )}
+      {
+        !!request?.invoice?.is_submitted && user?.type === "Driver" && ( <Button variant="contained" fullWidth color="error" onClick={() => navigate(`/invoices/${request.invoice.id}`)}>Proceed to Payments</Button>)
+      }
     </Grid>
   ) : (
     <p>Loading Request…</p>

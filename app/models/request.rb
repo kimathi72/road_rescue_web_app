@@ -28,4 +28,8 @@ class Request < ApplicationRecord
   def driver_id
     self.vehicle.driver.id
   end
+
+  def issue
+    self.service.name
+  end
 end

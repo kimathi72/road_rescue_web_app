@@ -11,9 +11,9 @@ export default function Nav({type}) {
      const {pathname} = useLocation()
 
   return (
-    <nav>
+    <nav >
         <List id="navLinks" >
-          <Stack sx={{flexWrap: "wrap", gap: '0.2rem'}} direction={{xs: "column", sm: "column", md: "row", lg: "column"}} spacing={2}>
+          <Stack width={'100%'} sx={{flexWrap: "wrap", gap: '0.2rem'}} direction={{xs: "column", sm: "column", md: "row", lg: "column"}} spacing={2}>
           {
         !!type &&  type === "Admin" && (
             <AdminNav/>
