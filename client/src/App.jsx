@@ -21,13 +21,11 @@ export async function loader() {
 export default function App() {
   const { user } = useLoaderData();
   const navigate = useNavigate();
-useEffect(()=>{
- !token && navigate("/"); 
-},[token])
+
   useEffect(() => {
     
-    !user && navigate("/signin");
-  }, [user, navigate]);
+    !token && navigate("/signin");
+  }, [token, navigate]);
 
   return (
     <Grid container direction={'column'} width={'100%'} height={'100%'}>
@@ -37,7 +35,7 @@ useEffect(()=>{
       direction={{ xs: "column", md: "column", lg: "row" }}
       justifyContent={"center"}
     >
-      {!!user && <NavBar type={!!user && user.type}/>}
+       <NavBar type={!!user && user.type}/>
       <CableProvider>
         <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 9}} sx={{overflowY: "auto"}}>
           <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
