@@ -24,8 +24,7 @@ import InvoicesList, {loader as invListLoader} from "./components/invoice/Invoic
 import InvoiceShow , {loader as invShowLoader , action as invShowAction} from "./components/invoice/InvoiceShow.jsx";
 import InvoiceEdit, {action as reqEditAction} from "./components/invoice/InvoiceEdit.jsx"
 import Reports, {loader as repLoader} from "./components/reports/Reports.jsx";
-const {user} = await apploader()
-console.log(user)
+
 const router = createBrowserRouter([
   {
     path: "/",
