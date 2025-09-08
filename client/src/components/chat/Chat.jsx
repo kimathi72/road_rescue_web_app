@@ -7,11 +7,15 @@ import { fetchData } from '../../services/fetchData'
 
 export async function loader ({params}){
   const {chatId} = params
+  const {user} = await fetchData({
+    url: "/api/me",
+    method: "GET"
+  })
   const messages = await fetchData({
     url: `/api/chats/${!!chatId && chatId}/messages`,
     method: "GET",
   })
-  return {messages}
+  return {messages, user}
 }
 export async function action ({request,params}){
   const formData = await request.formData()
@@ -25,8 +29,8 @@ export async function action ({request,params}){
  inputDiv.value= ''
 }
 
-export default function Chat({user}) {
-const {messages} = useLoaderData()
+export default function Chat() {
+const {messages, user} = useLoaderData()
 
   return (
     <Grid container direction={'column'} size={{xs:12, md:12, lg:8}}  sx={{boxShadow: "2px 2px 2px 2px #888888",backgroundColor: "AppWorkspace", borderRadius: "5px"}}>

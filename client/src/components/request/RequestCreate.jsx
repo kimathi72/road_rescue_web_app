@@ -5,13 +5,17 @@ import { Button, Grid, MenuItem, TextField } from '@mui/material'
 import MapPicker from '../location/MapPicker.jsx'
 import useDocumentTitle from '../../hooks/useDocumentTitle.js'
 
-export async function loader (userId){
+export async function loader (){
+   const {user} = await fetchData({
+      url: "/api/me",
+      method: "GET"
+    })
   const services = await fetchData({
     url: '/api/services',
     method: "GET"
   })
   const vehicles = await fetchData({
-    url: `/api/drivers/${userId}}/vehicles/`,
+    url: `/api/drivers/${!!user && user.id}}/vehicles/`,
     method: "GET"
   })
   return {services, vehicles}

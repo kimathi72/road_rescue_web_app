@@ -4,9 +4,13 @@ import RequestsList from './RequestsList'
 import { fetchData } from '../../services/fetchData'
 import { useLoaderData } from 'react-router-dom'
 
-export async function loader (userId){
+export async function loader (){
+   const {user} = await fetchData({
+    url: "/api/me",
+    method: "GET"
+  })
   const requests = await fetchData({
-    url: `/api/users/${userId}/requests`,
+    url: `/api/users/${!!user && user.id}/requests`,
     method: "GET"
   })
   return {requests}

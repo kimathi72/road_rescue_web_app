@@ -62,7 +62,7 @@ const router = createBrowserRouter([
       },
        {
             path: "/chats/:chatId",
-            element: <Chat user={user}/>,
+            element: <Chat/>,
             loader: chatLoader,
             action: chatAction
           }
@@ -106,13 +106,13 @@ const router = createBrowserRouter([
           {
             path: "/requests/create",
             element:<RequestCreate/>,
-            ...(!!user && {loader: async()=> servicesLoader(user.id)}),
+            loader: servicesLoader,
             action: reqAction
           },
           {
             path: "/requests/queue", 
             element: <RequestQueue/>,
-            ...(!!user && {loader: async()=>reqQueLoader(user.id)}),
+            loader: reqQueLoader,
           },
           {
             path: "/requests/:id",
