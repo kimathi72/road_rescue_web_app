@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
+
   namespace :api do
     resources :admins
     resources :invoices do
@@ -6,7 +8,6 @@ Rails.application.routes.draw do
     end
     resources :invoice_items
     resources :incident_photos
-    mount ActionCable.server => "/cable"
 
     resources :users do
       resources :requests, only: [:index], controller: "requests"

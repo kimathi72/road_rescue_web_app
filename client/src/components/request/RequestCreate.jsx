@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { fetchData } from '../../services/fetchData'
 import { Form, redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom'
 import { Button, Grid, MenuItem, TextField } from '@mui/material'
@@ -6,6 +6,7 @@ import MapPicker from '../location/MapPicker.jsx'
 import useDocumentTitle from '../../hooks/useDocumentTitle.js'
 
 export async function loader (){
+  
    const {user} = await fetchData({
       url: "/api/me",
       method: "GET"
@@ -15,7 +16,7 @@ export async function loader (){
     method: "GET"
   })
   const vehicles = await fetchData({
-    url: `/api/drivers/${!!user && user.id}}/vehicles/`,
+    url: user.type === "Driver" ? `/api/drivers/${!!user && user.id}}/vehicles/` : `/api/vehicles`,
     method: "GET"
   })
   return {services, vehicles}
@@ -36,6 +37,7 @@ export async function action({request}){
 }
 
 export default function RequestCreate() {
+  
   const {services, vehicles} = useLoaderData()
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";

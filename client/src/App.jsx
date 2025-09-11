@@ -35,11 +35,11 @@ export default function App() {
       direction={{ xs: "column", md: "column", lg: "row" }}
       justifyContent={"center"}
     >
-       <NavBar type={!!user && user.type}/>
+       <NavBar type={user?.type}/>
       <CableProvider>
         <Grid container padding={"1rem"} direction={"column"} size={{xs: 12, md:12, lg: 9}} sx={{overflowY: "auto"}}>
           <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
-            Welcome {!!user ? user.name : "to Road Rescue"}
+            Welcome {user?.name || "to Road Rescue"}
           </Typography>
           <Outlet />
         </Grid>
