@@ -10,6 +10,7 @@ export default function DriverNav() {
     const links = [
         {url:'/requests/create',text: "Request Rescue",icon: <LibraryAddIcon/> },
         {url: '/requests/queue',text: "My Requests",icon: <WorkHistoryIcon/> },
+        {url: '/vehicles', text: "My vehicles", icon: "🚗"},
         {url: '/reports',text: "Reports",icon: <SummarizeIcon/>},
         {url: '/invoices',text: "Invoices",icon: <PaidIcon/> },
     ]

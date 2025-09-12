@@ -24,7 +24,8 @@ import InvoicesList, {loader as invListLoader} from "./components/invoice/Invoic
 import InvoiceShow , {loader as invShowLoader , action as invShowAction} from "./components/invoice/InvoiceShow.jsx";
 import InvoiceEdit, {action as reqEditAction} from "./components/invoice/InvoiceEdit.jsx"
 import Reports, {loader as repLoader} from "./components/reports/Reports.jsx";
-import RequestsGroups , {loader as reqGrpLoader} from "./components/request/RequestsGroups.jsx";
+import RequestsGroups , {loader as reqGrpLoader, action  as reqGrpAction} from "./components/request/RequestsGroups.jsx";
+import VehicleIndex, {loader as vehLoader, action as vehAction} from "./components/vehicle/VehicleIndex.jsx";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,11 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup/>,
         action: signupAction,
+      },{
+        path: "/vehicles/",
+        element: <VehicleIndex/>,
+        loader: vehLoader,
+        action: vehAction
       },
        {
             path: "/chats/:chatId",
@@ -124,6 +130,7 @@ const router = createBrowserRouter([
             path: "/requests/grouped/:userId",
             element: <RequestsGroups/>,
             loader: reqGrpLoader,
+            action: reqGrpAction
           }
           
         ]

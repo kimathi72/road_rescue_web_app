@@ -15,6 +15,9 @@ export async function loader (){
 export async function action({request,params}){
  const formData = await request.formData()
  const updates = Object.fromEntries(formData)
+   if ('location_attributes' in updates && !!updates['location_attributes'].length) {
+    updates['location_attributes'] =  JSON.parse(updates['location_attributes'])
+  }
  const data = await fetchData({
     url: `/api/users/${params.userId}`,
     method: "PATCH",

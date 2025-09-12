@@ -1,19 +1,37 @@
 import VehicleList from './VehicleList'
 import VehicleCreate from './VehicleCreate'
-import { Route, Routes} from 'react-router-dom'
+import { Route, Routes, useLoaderData} from 'react-router-dom'
 import {Grid} from '@mui/material'
+import { fetchData } from '../../services/fetchData'
 
-export default function VehicleIndex({user, handleSubmit}) {
-    
+export async function loader ({params}){
+  const {user} = await fetchData({
+    url: 'api/me',
+    method: "GET"
+  })
+  const vehicles = await fetchData({
+    url: `/api/drivers/${params.userId}/vehicles`,
+    method: "GET"
+  })
+  return {vehicles, user}
+}
+export async function action ({request}){
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData)
+  const data = fetchData({
+    url: '/api/vehicles',
+    method: "POST",
+    submittedData: {'vehicle': updates}
+  })
+}
+
+export default function VehicleIndex() {
+    const {vehicles, user} = useLoaderData()
   return (
-    <Grid>
-      
-    <Routes>
-      <Route path='/' element={<VehicleList /> }/>
-      <Route path='/create' element={<VehicleCreate user={user} handleSubmit={handleSubmit}/> }/>
-        
-               
-    </Routes>
+    <Grid container direction={'column'}>
+      <VehicleCreate user={user}/>
+      <VehicleList vehicles={vehicles}/>
+                     
     </Grid>
   )
 }
