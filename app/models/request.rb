@@ -32,4 +32,8 @@ class Request < ApplicationRecord
   def issue
     self.service.name
   end
+
+  def city_tag
+    self.location.city || self.location.district
+  end
 end

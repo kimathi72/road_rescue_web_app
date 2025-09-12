@@ -24,6 +24,7 @@ import InvoicesList, {loader as invListLoader} from "./components/invoice/Invoic
 import InvoiceShow , {loader as invShowLoader , action as invShowAction} from "./components/invoice/InvoiceShow.jsx";
 import InvoiceEdit, {action as reqEditAction} from "./components/invoice/InvoiceEdit.jsx"
 import Reports, {loader as repLoader} from "./components/reports/Reports.jsx";
+import RequestsGroups , {loader as reqGrpLoader} from "./components/request/RequestsGroups.jsx";
 
 const router = createBrowserRouter([
   {
@@ -119,7 +120,11 @@ const router = createBrowserRouter([
             loader: reqShowLoader,
             action: reqShowAction,
            
-          },
+          },{
+            path: "/requests/grouped/:userId",
+            element: <RequestsGroups/>,
+            loader: reqGrpLoader,
+          }
           
         ]
       }

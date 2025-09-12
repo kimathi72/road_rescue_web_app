@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     get "/request/:user_id", to: "requests#queue"
     get "/me", to: "users#me"
     delete "/logout", to: "auth#destroy"
+    get "/city_requests", to: "requests#requests_grouped_by_cities"
   end
   # get "/reports/provider/:id", to: "reports#provider"
   # get "/reports/driver/:id", to: "reports#driver"

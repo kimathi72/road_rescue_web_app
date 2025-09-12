@@ -38,6 +38,19 @@ module Api
     end
 
     def destroy
+      @request.delete
+      head :no_content
+    end
+
+    def requests_grouped_by_cities
+      @requests = Request.all.where(status: "reported").includes(location:).group_by { |req| req.location[:city] || "Unknown" }
+      puts @requests
+      # Transform grouped hash into an array of { city, count } hashes
+      city_counts = @requests.map do |city, reqs|
+        { city: city, count: reqs.length }
+      end
+
+      render json: city_counts, status: :ok
     end
 
     private

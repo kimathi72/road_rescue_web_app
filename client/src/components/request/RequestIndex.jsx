@@ -1,6 +1,6 @@
 // src/pages/RequestIndex.jsx
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Navigate, useLoaderData } from "react-router-dom";
 import RequestsList from "./RequestsList";
 import { fetchData } from "../../services/fetchData";
 
@@ -46,7 +46,7 @@ export default function RequestIndex() {
     <RequestsList title={title} requests={requests} />
   ) : (<>
     {
-      user?.type == "Provider" &&<p>No Requests posted at your location... please Change location</p>
+      user?.type == "Provider" && <Navigate to={`/requests/grouped/${user?.id}`}/>
     }
     {
       user?.type == "Driver" && <p>No Requests created yet. . . please navigate to create request</p>
