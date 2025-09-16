@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Grid, Stack, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { Form } from "react-router-dom";
 
@@ -6,42 +6,51 @@ export default function VehicleCreate({user}) {
 
 
   return (
-    <Form method="post">
-      <h2 className="pageTitle"> Add a new vehicle</h2>
-      <Stack
-        direction={"row"}
-        flexWrap={"wrap"}
-        alignItems={"center"}
-        gap={"1rem"}
-        justifyContent={"center"}
-        spacing={2}
-      >
+    <Grid  container direction={'column'} padding={5} bgcolor={'white'} textAlign={'center'} sx={{mb:4}}>
+      <h3 style={{color: "green" }}>Enter new vehicle details</h3>
+    <Form id='addVehicleForm' method="post">
         <input
         type="hidden"
         name="driver_id"
         value={user?.id}
         />
-        <TextField
+        <label>
+          <span>Plate number</span>
+ <TextField
           label="Plate Number"
           name="plate_number"
           required
         />
-        <TextField label="Vehicle Make" name="make" onChange={handleChange} />
-
-        <TextField
+        </label>
+       
+        <label>
+          <span>Make</span>
+          <TextField label="Vehicle Make" name="make" />
+          </label>
+        <label>
+          <span>Model</span>
+ <TextField
           label="Model of Vehicle"
           name="model"
-          required
         />
+        </label>
+       
+        <label>
+          <span>Color</span>
         <TextField label="Vehicle Color" name="color" />
-        <TextField
+        </label>
+        <label>
+          <span>Year</span>
+          <TextField
           label="Year of Manufacture"
           name="year"
         />
-      </Stack>
+        </label>
+        
       <Button fullWidth variant="contained" color="success" type="submit">
         Add Vehicle
       </Button>
     </Form>
+    </Grid>
   );
 }

@@ -44,7 +44,7 @@ module Api
       driver = Driver.find(current_user.id)
       authorize_driver!(driver)
 
-      requests = driver.requests
+      requests = driver.requests.includes(:location)
       invoices = driver.invoices
 
       render json: {

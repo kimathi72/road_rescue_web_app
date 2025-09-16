@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :mpesas
   mount ActionCable.server => "/cable"
 
   namespace :api do
@@ -44,9 +45,13 @@ Rails.application.routes.draw do
     get "/me", to: "users#me"
     delete "/logout", to: "auth#destroy"
     get "/city_requests", to: "requests#requests_grouped_by_cities"
+    post "stkpush", to: "mpesas#stkpush"
+    post "stkquery", to: "mpesas#stkquery"
+    post "/callback_url", to: "mpesas#stkreceive"
   end
   # get "/reports/provider/:id", to: "reports#provider"
   # get "/reports/driver/:id", to: "reports#driver"
   # get "/reports", to: "reports#admin"
+
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end

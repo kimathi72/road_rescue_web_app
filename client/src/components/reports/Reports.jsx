@@ -156,7 +156,6 @@ export default function Reports() {
                 <TableRow>
                   <TableCell>Request #</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>City</TableCell>
                   <TableCell>Date</TableCell>
                 </TableRow>
               </TableHead>
@@ -165,7 +164,6 @@ export default function Reports() {
                   <TableRow key={req.id}>
                     <TableCell>{req.id}</TableCell>
                     <TableCell>{req.status}</TableCell>
-                    <TableCell>{req.location?.city}</TableCell>
                     <TableCell>
                       {new Date(req.created_at).toLocaleDateString()}
                     </TableCell>

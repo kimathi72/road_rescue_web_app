@@ -32,6 +32,12 @@ module ForthYearProject
     config.middleware.use ActionDispatch::Session::CookieStore
 
     # Use SameSite=Strict for all cookies to help protect against CSRF
-
+    # config/application.rb
+    config.before_configuration do
+      env_file = Rails.root.join("config", "local_env.yml")
+      if File.exist?(env_file)
+        YAML.load_file(env_file).each { |key, value| ENV[key.to_s] = value }
+      end
+    end
   end
 end

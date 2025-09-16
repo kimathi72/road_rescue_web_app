@@ -10,7 +10,7 @@ import { Button } from '@mui/material';
 export default function ProviderNav() {
     const links = [
        {
-            url: '/requests',text:'Open Requests',icon: <RequestPageIcon/>
+            url: '/requests',text:'Requests',icon: <RequestPageIcon/>
         },{
             url: '/requests/queue',text: "My Jobs",icon: <WorkHistoryIcon/> 
         },{
@@ -28,7 +28,7 @@ export default function ProviderNav() {
         links.map(link=>{
           return  <li key={link.text}>
                 <NavLink to={link.url}>
-                    <Button fullWidth color='default' startIcon={link.icon}>{link.text}</Button>
+                    <Button fullWidth color='secondary' variant='contained' startIcon={link.icon}>{link.text}</Button>
                 </NavLink>
             </li>
         })

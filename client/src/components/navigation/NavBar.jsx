@@ -8,17 +8,17 @@ import TemporaryDrawer from "./Drawer";
 
 export default function NavBar({ type }) {
       const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+    const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
-    <Grid container size={{xs: 12, md: 12, lg: 2}}  justifyContent={'space-between'} alignItems={'flex-start'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} >
+    <Grid container size={{xs: 12, md: 12, lg: 2}} padding={1}  justifyContent={'space-between'} alignItems={'flex-start'} id="navBar" direction={{xs:'row', md: 'row', lg: 'column'}} >
       <Grid 
       container
-       size={{xs: 2, md: 2, lg: 12}} 
+       size={{xs: 1.5, md: 1.5, lg: 12}} 
        id="logoDiv">
-        <img src={logo} alt="logo"/>
+        <img width={'inherit'} src={logo} alt="logo"/>
       </Grid>
-      <Grid>
+      <Grid container size={{xs: 10.5, md: 10.5, lg: 12}} justifyContent={{xs: 'flex-end', md: "flex-end", lg: "center"}} alignItems={'center'} >
       {isDesktop ? <Nav type={type}/> : <TemporaryDrawer><Nav type={type}/></TemporaryDrawer>}
       </Grid>
     </Grid>

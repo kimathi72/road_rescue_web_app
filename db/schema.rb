@@ -10,9 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_06_070501) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_16_082429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "access_tokens", force: :cascade do |t|
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "admins", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -68,6 +74,19 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_06_070501) do
     t.datetime "updated_at", null: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "mpesas", force: :cascade do |t|
+    t.string "phoneNumber"
+    t.string "amount"
+    t.string "checkoutRequestID"
+    t.string "merchantRequestID"
+    t.string "mpesaReceiptNumber"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "invoice_id", null: false
+    t.integer "status", default: 0, null: false
+    t.index ["invoice_id"], name: "index_mpesas_on_invoice_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -145,6 +164,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_06_070501) do
   add_foreign_key "invoices", "requests"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
+  add_foreign_key "mpesas", "invoices"
   add_foreign_key "notifications", "requests"
   add_foreign_key "provider_services", "services"
   add_foreign_key "provider_services", "users", column: "provider_id"

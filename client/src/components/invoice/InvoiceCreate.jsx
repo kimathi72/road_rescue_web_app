@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function InvoiceCreate({invoiceId}) {
+export default function InvoiceCreate({invoiceId, onItemAdded}) {
   const [item, setItem] = useState({});
   useEffect(() => {
    !!invoiceId && setItem((prev) => ({ ...prev, "invoice_id": invoiceId }));
@@ -29,6 +29,7 @@ export default function InvoiceCreate({invoiceId}) {
     });
     const data = await res.json()
     console.log(data)
+    onItemAdded(data)
   };
   return (
     <Grid container direction={"column"} gap={"2rem"}>

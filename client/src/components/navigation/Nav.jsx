@@ -13,7 +13,7 @@ export default function Nav({type}) {
   return (
     <nav >
         <List id="navLinks" >
-          <Stack width={'100%'} sx={{flexWrap: "wrap", gap: '0.2rem'}} direction={{xs: "column", sm: "column", md: "row", lg: "column"}} spacing={2}>
+          <Stack width={'100%'} sx={{display: 'flex' ,justifyContent: 'center', alignItems: 'center'}} direction={"column"} spacing={2}>
           {
         !!type &&  type === "Admin" && (
             <AdminNav/>
@@ -26,7 +26,7 @@ export default function Nav({type}) {
           )}
           <li key={'auth'}>
             {!!type ? (
-              <NavLink to={"/signout"}><Button fullWidth color="warning" startIcon={<LogoutIcon/>}>Sign Out</Button></NavLink>
+              <NavLink to={"/signout"}><Button fullWidth color="warning" variant='contained' startIcon={<LogoutIcon/>}>Sign Out</Button></NavLink>
             ) : !type && (pathname === '/signin' ? (
               <NavLink to='/signup'><Button fullWidth color='default' variant='contained' startIcon={<PersonAddIcon/>}>Sign Up</Button></NavLink>
             ) : pathname === '/signup' && <NavLink to={'/signin'}><Button fullWidth color='default' variant='contained' startIcon={<LoginIcon/>}>Sign in</Button></NavLink>

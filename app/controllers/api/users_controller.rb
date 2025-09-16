@@ -27,6 +27,11 @@ module Api
       @token = encode_token(user_id: @user.id)
       session[:user_id] = @user.id
       session[:user_type] = @user.type
+      NotificationService.new.send_notification(
+        to: @user.email,
+        subject: "Welcome to Road Rescue App!",
+        html_content: "<h1>Hello #{@user.name}</h1><p>Thanks for joining!</p>",
+      )
       render json: { user: UserSerializer.new(@user), jwt: @token }, status: :created
     end
 

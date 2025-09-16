@@ -1,6 +1,6 @@
 import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { CableProvider } from "./context/cable";
-import { BottomNavigation, BottomNavigationAction, Grid, Typography } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Grid, Paper, Typography } from "@mui/material";
 import { fetchData } from "./services/fetchData";
 import NavBar from "./components/navigation/NavBar";
 import { useEffect, useState } from "react";
@@ -46,11 +46,19 @@ export default function App() {
       </CableProvider>
       
     </Grid>
-    <BottomNavigation
-      showLabels
-      >
-        <BottomNavigationAction label={`Road Rescue App - ${new Date().getFullYear()}`}/>
-      </BottomNavigation>
+    <Paper elevation={3} sx={{mt: 'auto', position: 'fixed', bottom: 0, left: 0, right: 0, padding: 0.5, textAlign: 'center'}}>
+      <p>
+         © Road Rescue App - {new Date().getFullYear()} Developed by{" "}
+        <a
+          href="https://github.com/kimathi72"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#4cafef" }}
+        >
+          Roy Kimathi
+        </a>
+      </p>
+      </Paper>
     </Grid>
   );
 }

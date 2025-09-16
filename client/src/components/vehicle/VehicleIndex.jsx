@@ -6,11 +6,11 @@ import { fetchData } from '../../services/fetchData'
 
 export async function loader ({params}){
   const {user} = await fetchData({
-    url: 'api/me',
+    url: '/api/me',
     method: "GET"
   })
   const vehicles = await fetchData({
-    url: `/api/drivers/${params.userId}/vehicles`,
+    url: `/api/drivers/${!!user && user.id}/vehicles`,
     method: "GET"
   })
   return {vehicles, user}
@@ -23,6 +23,8 @@ export async function action ({request}){
     method: "POST",
     submittedData: {'vehicle': updates}
   })
+  !!data.error ? window.location.reload() : console.log(data.error)
+  !!data && window.location.reload()
 }
 
 export default function VehicleIndex() {

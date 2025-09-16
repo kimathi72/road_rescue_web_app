@@ -11,8 +11,8 @@ export default function TemporaryDrawer({ children }) {
 
   return (
      <div>
-      <Button onClick={toggleDrawer(true)} startIcon={<MenuIcon/>}>Open Menu</Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Button color="default" onClick={toggleDrawer(true)} startIcon={<MenuIcon/>}>Open Menu</Button>
+      <Drawer open={open} onClose={toggleDrawer(false)} sx={{'& .MuiDrawer-paper': {boxSizing: 'border-box', display:'flex', width: 250, padding: 0.5, alignItems: 'flex-start',backgroundColor: 'rgba(245, 238, 237, 0.96)'}}}>
         {children}
       </Drawer>
     </div>
