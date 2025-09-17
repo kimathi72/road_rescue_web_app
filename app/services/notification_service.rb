@@ -14,16 +14,16 @@ class NotificationService
   # @param html_content [String] HTML body
   # @param from_email [String] Sender email (default: no-reply)
   # @param from_name [String] Sender name (default: "Your App")
-  def send_notification(to:, subject:, html_content:, from_email: "kimathiwaweru@gmail.com", from_name: "Road Rescue App")
+  def send_notification(to:, subject:, html_content:, from_email: "no-reply@roadreascueapp.dedyn.io", from_name: "Road Rescue App")
     recipients = Array(to).map { |email| { email: email } }
 
     email = Brevo::SendSmtpEmail.new(
       sender: { email: from_email, name: from_name },
       to: recipients,
       subject: subject,
-      html_content: html_content,
+      htmlContent: html_content,
     )
-
+    puts email
     begin
       result = @api.send_transac_email(email)
       Rails.logger.info("Email sent: #{result.to_json}")
