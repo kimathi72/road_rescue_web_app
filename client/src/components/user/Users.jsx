@@ -15,7 +15,7 @@ export default function Users() {
   const { users: initialUsers } = useLoaderData();
   const [users, setUsers] = useState(initialUsers);
 
-  // ✅ Toggle approval (approve or unapprove)
+  //  Toggle approval (approve or unapprove)
   const toggleApproval = async (id, approved) => {
     // Optimistic update
     setUsers((prev) =>
@@ -38,8 +38,8 @@ export default function Users() {
 
       alert(
         !approved
-          ? "✅ Provider approved successfully"
-          : "🚫 Provider unapproved successfully"
+          ? "Provider approved successfully"
+          : " Provider unapproved successfully"
       );
     } catch (err) {
       console.error(err);
@@ -51,7 +51,7 @@ export default function Users() {
         )
       );
 
-      alert(`❌ Failed to update provider: ${err.message}`);
+      alert(`Failed to update provider: ${err.message}`);
     }
   };
 
