@@ -46,7 +46,7 @@ export default function RequestCreate() {
   return (
     
       <Form method='post' id='requestForm'>
-        <h3>Create Rescue Request</h3>
+        <h3 style={{color: "green", textAlign:"center"}}>Create Rescue Request</h3>
         <div>
           <label className="block text-sm font-medium">Pickup Location</label>
           <MapPicker/>
