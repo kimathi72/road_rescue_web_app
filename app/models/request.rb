@@ -1,34 +1,39 @@
 class Request < ApplicationRecord
   belongs_to :service
-  belongs_to :user
   belongs_to :vehicle
+  belongs_to :provider, class_name: "Provider", optional: true
+  belongs_to :location, optional: true
   has_many :notifications
+  has_one :chat
+  has_one :invoice
+  accepts_nested_attributes_for :location, :chat, :invoice
+  after_create :create_chat
+  after_create :create_invoice
+  after_create :create_location
   # validates :user_is_provider
-  enum status: ["reported", "pending", "resolved"]
+  enum :status, {
+         :reported => 0,
+         :accepted => 1,
+         :resolved => 2,
+         :cancelled => 3,
+       }
 
-  def service_type
-    self.service[:name]
+  def serialize
+    serialized_request = ActiveModelSerializers::Adapter::Json.new(
+      RequestSerializer.new(self)
+    ).serializable_hash
+    serialized_request[:request]
   end
 
-  def vehicle_plate
-    self.vehicle.plate_number
+  def driver_id
+    self.vehicle.driver.id
   end
 
-  def provider_name
-    self.user.name
+  def issue
+    self.service.name
   end
 
-  def city
-    self.location.city
+  def city_tag
+    self.location.city || self.location.district
   end
-
-  def request_location
-    self.location[:city]
-  end
-
-  # private
-
-  # def user_is_provider
-  #   errors.add(:user, "user must be provider") unless self.user.role == "provider"
-  # end
 end

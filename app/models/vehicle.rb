@@ -1,14 +1,8 @@
 class Vehicle < ApplicationRecord
-  belongs_to :user
-  has_many :incidents, dependent: :destroy
-  has_many :claims, through: :incidents
+  belongs_to :driver, class_name: "Driver"
+
   has_many :requests, dependent: :destroy
-  has_one :insurance_policy
-  validates :user_id, presence: true
+
+  # validates :driver_id, presence: trues
   validates :plate_number, uniqueness: { case_sensitive: false }
-  # validates :user_is_driver
-  # private
-  # def user_is_driver
-  #   errors.add(:user, "user must be driver") unless user
-  # end
 end

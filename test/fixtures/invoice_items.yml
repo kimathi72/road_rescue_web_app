@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  invoice: one
+  description: MyText
+  charge: 1.5
+
+two:
+  invoice: two
+  description: MyText
+  charge: 1.5

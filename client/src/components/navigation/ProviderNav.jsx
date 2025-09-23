@@ -1,0 +1,37 @@
+import React from 'react'
+import HomeIcon from '@mui/icons-material/Home';
+import RequestPageIcon from '@mui/icons-material/RequestPage';
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import PaidIcon from '@mui/icons-material/Paid';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { NavLink } from 'react-router-dom';
+import { Button } from '@mui/material';
+export default function ProviderNav() {
+    const links = [
+       {
+            url: '/requests',text:'Requests',icon: <RequestPageIcon/>
+        },{
+            url: '/requests/queue',text: "My Jobs",icon: <WorkHistoryIcon/> 
+        },{
+            url: '/invoices',text: "Invoices",icon: <PaidIcon/>
+        }, {
+            url: '/reports',
+            text: 'Reports',
+            icon: <SummarizeIcon/>
+        },{
+            url: '/profile',text:'Profile',icon: <AccountBoxIcon/>
+        },
+    ]
+  return (
+    <>{
+        links.map(link=>{
+          return  <li key={link.text}>
+                <NavLink to={link.url}>
+                    <Button fullWidth color='secondary' variant='contained' startIcon={link.icon}>{link.text}</Button>
+                </NavLink>
+            </li>
+        })
+    }</>
+  )
+}

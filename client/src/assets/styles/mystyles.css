@@ -3,19 +3,27 @@
     margin: 1rem;
     padding: 1rem;
     flex-direction: column;
-    gap: 1;
+    width: 100%;
+    gap: 2rem;
     justify-self: center;
     align-items: center;
-    background: #fff;
-    border: 1px solid black;
+    border-radius: 1rem;
 }
-.Navbar{
-    color: azure;
-    background: darkslategrey;
-    text-decoration: ;
+.navBar{
+    margin: 0.5rem;
+    a {
+        color: #4c4b4b;
+    }
+    a:hover{
+        color: #000;
+    }
 }
 .mainDiv{
-    background: snow;
+    background: #fff;
+    width: auto;
+    height: 100%;
+    border-radius: 1rem;
+
 }
 .innerDiv{
     display: flex;
@@ -52,4 +60,33 @@
     text-decoration: underline;
    }
 
+}
+.listSelect{
+    li{
+        padding: 0.5rem;
+        color: cadetblue
+    }
+    li:hover{
+        color: #fff;
+        background-color: cadetblue;
+    }
+}
+.pageTitle{
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: rgb(10, 10, 10);
+}
+.sent{
+    margin-bottom: 0.5rem;
+    align-self:flex-end;
+    width: 18rem;
+    min-height: fit-content;
+
+}
+.received{
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+    width: 18rem;
+    min-height: fit-content;
 }

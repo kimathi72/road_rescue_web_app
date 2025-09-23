@@ -1,0 +1,5 @@
+class Chat < ApplicationRecord
+  belongs_to :request, optional: true
+  has_many :messages
+  accepts_nested_attributes_for :messages
+end

@@ -10,84 +10,83 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_18_052031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "assessments", force: :cascade do |t|
-    t.bigint "claim_id", null: false
-    t.string "report_url"
-    t.float "estimated_cost"
+  create_table "access_tokens", force: :cascade do |t|
+    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["claim_id"], name: "index_assessments_on_claim_id"
-    t.index ["user_id"], name: "index_assessments_on_user_id"
   end
 
-  create_table "claims", force: :cascade do |t|
-    t.integer "status"
-    t.float "approved_amount"
-    t.date "payout_date"
+  create_table "admins", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "incident_id", null: false
-    t.index ["incident_id"], name: "index_claims_on_incident_id"
   end
 
-  create_table "incident_abstacts", force: :cascade do |t|
-    t.string "public_id"
-    t.bigint "incident_id", null: false
+  create_table "chats", force: :cascade do |t|
+    t.bigint "request_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["incident_id"], name: "index_incident_abstacts_on_incident_id"
+    t.index ["request_id"], name: "index_chats_on_request_id"
   end
 
-  create_table "incident_photos", force: :cascade do |t|
-    t.bigint "incident_id", null: false
-    t.text "image_url"
+  create_table "drivers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["incident_id"], name: "index_incident_photos_on_incident_id"
   end
 
-  create_table "incidents", force: :cascade do |t|
-    t.bigint "vehicle_id", null: false
-    t.bigint "location_id", null: false
-    t.datetime "date_happened"
+  create_table "invoice_items", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
     t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "cost"
+    t.integer "quantity"
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "request_id", null: false
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_incidents_on_location_id"
-    t.index ["vehicle_id"], name: "index_incidents_on_vehicle_id"
-  end
-
-  create_table "insurance_policies", force: :cascade do |t|
-    t.bigint "vehicle_id", null: false
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "coverage_type"
-    t.float "premium_amount"
-    t.integer "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["vehicle_id"], name: "index_insurance_policies_on_vehicle_id"
-  end
-
-  create_table "insurances", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean "is_submitted", default: false
+    t.float "total", default: 0.0
+    t.index ["request_id"], name: "index_invoices_on_request_id"
   end
 
   create_table "locations", force: :cascade do |t|
     t.float "latitude"
     t.float "longitude"
     t.string "city"
-    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "district"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "mpesas", force: :cascade do |t|
+    t.string "phoneNumber"
+    t.string "amount"
+    t.string "checkoutRequestID"
+    t.string "merchantRequestID"
+    t.string "mpesaReceiptNumber"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "invoice_id", null: false
+    t.integer "status", default: 0, null: false
+    t.index ["invoice_id"], name: "index_mpesas_on_invoice_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -100,27 +99,32 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
     t.index ["request_id"], name: "index_notifications_on_request_id"
   end
 
+  create_table "provider_services", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.bigint "service_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_provider_services_on_provider_id"
+    t.index ["service_id"], name: "index_provider_services_on_service_id"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "requests", force: :cascade do |t|
     t.integer "service_id"
     t.string "request_description"
-    t.integer "status"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
     t.bigint "location_id"
-    t.bigint "vehicle_id", null: false
-    t.index ["location_id"], name: "index_requests_on_location_id"
-    t.index ["user_id"], name: "index_requests_on_user_id"
-    t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"
-  end
-
-  create_table "reviews", force: :cascade do |t|
-    t.string "remark"
-    t.integer "rating"
-    t.bigint "request_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["request_id"], name: "index_reviews_on_request_id"
+    t.bigint "vehicle_id", null: false
+    t.bigint "provider_id"
+    t.index ["location_id"], name: "index_requests_on_location_id"
+    t.index ["provider_id"], name: "index_requests_on_provider_id"
+    t.index ["vehicle_id"], name: "index_requests_on_vehicle_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -134,36 +138,43 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_29_020614) do
     t.string "password_digest"
     t.string "phone"
     t.string "name"
-    t.integer "role"
+    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
+    t.string "business_name"
+    t.string "license_info"
+    t.text "service_area"
+    t.decimal "rating_avg", default: "0.0"
+    t.boolean "approved", default: false
+    t.boolean "availability", default: false
     t.index ["location_id"], name: "index_users_on_location_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "make"
     t.string "model"
     t.string "year"
     t.string "plate_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_vehicles_on_user_id"
+    t.string "color"
+    t.bigint "driver_id", null: false
+    t.index ["driver_id"], name: "index_vehicles_on_driver_id"
   end
 
-  add_foreign_key "assessments", "claims"
-  add_foreign_key "assessments", "users"
-  add_foreign_key "claims", "incidents"
-  add_foreign_key "incident_abstacts", "incidents"
-  add_foreign_key "incident_photos", "incidents"
-  add_foreign_key "incidents", "locations"
-  add_foreign_key "incidents", "vehicles"
-  add_foreign_key "insurance_policies", "vehicles"
+  add_foreign_key "chats", "requests"
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoices", "requests"
+  add_foreign_key "messages", "chats"
+  add_foreign_key "messages", "users"
+  add_foreign_key "mpesas", "invoices"
   add_foreign_key "notifications", "requests"
+  add_foreign_key "provider_services", "services"
+  add_foreign_key "provider_services", "users", column: "provider_id"
   add_foreign_key "requests", "locations"
-  add_foreign_key "requests", "users"
+  add_foreign_key "requests", "users", column: "provider_id"
   add_foreign_key "requests", "vehicles"
   add_foreign_key "users", "locations"
-  add_foreign_key "vehicles", "users"
+  add_foreign_key "vehicles", "users", column: "driver_id"
 end
