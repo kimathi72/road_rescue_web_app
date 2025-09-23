@@ -80,15 +80,14 @@ flowchart LR
 ### Backend Setup
 ```bash
 git clone <repo-url>
-cd backend
+cd <repo>
 bundle install
 rails db:create db:migrate db:seed
 ```
 
 ### Frontend Setup
 ```bash
-cd frontend
-npm install
+npm install --prefix client
 ```
 
 ---
