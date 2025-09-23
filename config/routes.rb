@@ -15,8 +15,6 @@ Rails.application.routes.draw do
       resources :chats, only: [:index, :show], controller: "chats"
     end
 
-    resources :notifications
-
     resources :chats do
       resources :messages, only: [:index, :show], controller: "messages"
     end
@@ -38,9 +36,10 @@ Rails.application.routes.draw do
       resources :locations, controller: "locations"
     end
     resources :reports
-
+    resources :mailings, only: [:create]
     # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
     post "/auth", to: "auth#create"
+    post "/mailings", to: "mailings#create"
     get "/request/:user_id", to: "requests#queue"
     get "/me", to: "users#me"
     delete "/logout", to: "auth#destroy"

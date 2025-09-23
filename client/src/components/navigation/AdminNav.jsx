@@ -8,26 +8,14 @@ import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 export default function AdminNav() {
     const links = [
-        {
-            url: '/',
-            text: 'Dashboard',
-            icon: <DashboardIcon/>    
-        },{
+      {
             url: '/users',
             text: 'Manage Users',
             icon: <GroupIcon/>    
         },{
-            url: '/requests' ,
-            text: 'Manage Requests', 
-            icon: <RequestPageIcon/>
-        },{
             url: '/reports',
             text: 'Reports',  
             icon: <SummarizeIcon/>  
-        },{
-            url: '/settings',
-            text: "Settings",
-            icon: <SettingsIcon/>
         }
 
     ]
@@ -37,7 +25,7 @@ export default function AdminNav() {
         links.map((link)=>{
           return  <li key={link.text}>
             <NavLink to={link.url}>
-                <Button fullWidth color='default' startIcon={link.icon}>{link.text}</Button>
+                <Button fullWidth color='primary' variant='contained' startIcon={link.icon}>{link.text}</Button>
             </NavLink>
             </li>
         })

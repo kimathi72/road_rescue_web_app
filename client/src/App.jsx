@@ -46,7 +46,7 @@ export default function App() {
       </CableProvider>
       
     </Grid>
-    <Paper elevation={3} sx={{mt: 'auto', position: 'fixed', bottom: 0, left: 0, right: 0, padding: 0.5, textAlign: 'center'}}>
+    <Paper elevation={3} sx={{mt: '1rem', position: 'fixed', bottom: 0, left: 0, right: 0, padding: 0.5, textAlign: 'center'}}>
       <p>
          © Road Rescue App - {new Date().getFullYear()} Developed by{" "}
         <a

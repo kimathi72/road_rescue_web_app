@@ -12,6 +12,17 @@ export async function action({request, params}){
     method: "POST",
     submittedData: {user: updates}
   })
+  !!data && await fetchData({
+      url: "/api/mailings",
+      method: "POST",
+      submittedData: {
+        notification: {
+          to: data.user.email,
+          subject: "Welcome to Road Rescue App!",
+          html_content: `<h1>Hello ${data.user.name}</h1><p>Sign up request has been received, Account created successfully!</p>`,
+        },
+      },
+    });
    !!data && ("jwt" in data) && localStorage.setItem("jwt", data.jwt)
 }
 

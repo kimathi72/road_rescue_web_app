@@ -16,7 +16,7 @@ export default function NavBar({ type }) {
       container
        size={{xs: 1.5, md: 1.5, lg: 12}} 
        id="logoDiv">
-        <img width={'inherit'} src={logo} alt="logo"/>
+        <a href="/"><img width={'inherit'} src={logo} alt="logo"/></a>
       </Grid>
       <Grid container size={{xs: 10.5, md: 10.5, lg: 12}} justifyContent={{xs: 'flex-end', md: "flex-end", lg: "center"}} alignItems={'center'} >
       {isDesktop ? <Nav type={type}/> : <TemporaryDrawer><Nav type={type}/></TemporaryDrawer>}

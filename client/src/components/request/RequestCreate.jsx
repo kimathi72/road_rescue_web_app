@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { fetchData } from '../../services/fetchData'
 import { Form, redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom'
-import { Button, Grid, MenuItem, TextField } from '@mui/material'
+import { Button,  MenuItem, TextField } from '@mui/material'
 import MapPicker from '../location/MapPicker.jsx'
 import useDocumentTitle from '../../hooks/useDocumentTitle.js'
 
@@ -44,9 +44,9 @@ export default function RequestCreate() {
   
   useDocumentTitle('Road Rescue - Create Request ')
   return (
-    <Grid container size={{xs:12, md:12, lg:8}} direction={'column'} alignItems={'center'} gap={'2rem'}>
-      <h1>Create Rescue Request</h1>
+    
       <Form method='post' id='requestForm'>
+        <h3>Create Rescue Request</h3>
         <div>
           <label className="block text-sm font-medium">Pickup Location</label>
           <MapPicker/>
@@ -87,13 +87,10 @@ export default function RequestCreate() {
             sx={{background:"white"}}
             name='request_description'
             multiline 
-            minRows={2}
             />
           </div>
         <Button fullWidth color='warning' variant='contained' type='submit' disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit Request"}</Button>
       </Form>
-
-    </Grid>
   )
 }
 

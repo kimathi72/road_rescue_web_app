@@ -26,6 +26,8 @@ import InvoiceEdit, {action as reqEditAction} from "./components/invoice/Invoice
 import Reports, {loader as repLoader} from "./components/reports/Reports.jsx";
 import RequestsGroups , {loader as reqGrpLoader, action  as reqGrpAction} from "./components/request/RequestsGroups.jsx";
 import VehicleIndex, {loader as vehLoader, action as vehAction} from "./components/vehicle/VehicleIndex.jsx";
+import RoleIndex, {loader as roleLoader} from "./components/auth/RoleIndex.jsx";
+import Users, {loader as userLoader} from "./components/user/Users.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,8 +44,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-          element: <Reports/>, 
-          loader: repLoader
+          element: <RoleIndex/>, 
+          loader: roleLoader
            
       },
       {
@@ -96,6 +98,10 @@ const router = createBrowserRouter([
         path:'/reports',
         element: <Reports/>,
         loader: repLoader
+      },{
+        path: '/users',
+        element: <Users/>,
+        loader: userLoader
       },
       {
         path: "/requests/",

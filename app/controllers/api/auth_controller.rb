@@ -10,11 +10,8 @@ module Api
         token = encode_token({ user_id: @user.id })
         session[:user_id] = @user.id
         session[:user_type] = @user.type
-        NotificationService.new.send_notification(
-          to: @user.email,
-          subject: "Welcome Back to Road Rescue App!",
-          html_content: "<h1>Hello #{@user.name}</h1><p>Sign in request has been received, authorization successful!</p>",
-        )
+        @user.update(availability: true) if @user.type == "Provider"
+
         render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
       else
         render json: { message: "Invalid email or password" }, status: :unauthorized
@@ -22,6 +19,8 @@ module Api
     end
 
     def destroy
+      @user = current_user
+      @user.update(availability: false) if @user.type == "Provider"
       session.delete :user_id
       session.delete :user_type
       head :no_content

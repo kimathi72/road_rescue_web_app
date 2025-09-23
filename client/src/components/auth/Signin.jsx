@@ -6,12 +6,24 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 import FeaturesSection from "../navigation/Features";
 
 export async function action({ request, params }) {
+
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   const data = await fetchData({
     url: "/api/auth",
     method: "POST",
     submittedData: { user: updates },
+  });
+  !!data && await fetchData({
+    url: "/api/mailings",
+    method: "POST",
+    submittedData: {
+      notification: {
+        to: data.user.email,
+        subject: "Welcome Back to Road Rescue App!",
+        html_content: `<h1>Hello ${data.user.name}</h1><p>Sign in request has been received, authorization successful!</p>`,
+      },
+    },
   });
   !!data && "jwt" in data && localStorage.setItem("jwt", data.jwt);
 }

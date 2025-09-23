@@ -11,9 +11,7 @@ module Api
       elsif current_user.type == "Admin"
         @requests = Request.all
       elsif current_user.type == "Provider"
-        puts "provider"
-        @provider_location = Provider.find(current_user.id).location.city
-        @requests = Request.all.filter { |req| req.location.city == @provider_location && req.status == "reported" }
+        @requests = Request.all.filter { |req| req.status == "reported" }
       elsif current_user.type == "Driver"
         driver_requests
       end

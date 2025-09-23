@@ -14,6 +14,8 @@ export async function fetchData ({url, method,submittedData}){
         },
         ...(!!submittedData &&{ body: JSON.stringify(submittedData)})
     })
-    const data = await res?.json() || null
+    if (res.status === 204) return null;
+    // if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+    const data = await res?.json() 
     return data
 }
