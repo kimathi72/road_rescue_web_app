@@ -112,14 +112,13 @@ FRONTEND_URL=http://localhost:3000
 
 **Backend:**
 ```bash
-cd backend
+cd <repo>
 bin/rails server
 ```
 
 **Frontend:**
 ```bash
-cd frontend
-npm start
+npm start --prefix client
 ```
 
 ---
