@@ -1,23 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useLoaderData } from "react-router-dom";
 import {
   Grid,
   Button,
   Typography,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Alert,
   CircularProgress,
+  Paper,
 } from "@mui/material";
-import { fetchData } from "../../services/fetchData";
 import { CableContext } from "../../context/cable";
+import { fetchData } from "../../services/fetchData";
 import PaymentConfirmDialog from "../payment/PaymentConfirmDialog";
-import InvoiceCreate from "./InvoiceCreate";
+import InvoiceItemsManager from "./InvoiceItemsManager";
 
 export async function loader({ params }) {
   const { user } = await fetchData({ url: "/api/me" });
@@ -29,10 +23,6 @@ export default function InvoiceShow() {
   const { user, invoice } = useLoaderData();
   const cableContext = useContext(CableContext);
 
-  const canAddItems = user.type === "Provider" && invoice.request.provider_id === user.id;
-  const canPay = user.type === "Driver" && invoice.is_submitted;
-  const canUndo = user.type === "Admin" && invoice.is_submitted;
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
@@ -40,168 +30,166 @@ export default function InvoiceShow() {
   const [error, setError] = useState(null);
   const [items, setItems] = useState(invoice.invoice_items || []);
 
-  // 📡 Subscribe to MpesaChannel for real-time updates
+  const canAddItems = user.type === "Provider" && invoice.request.provider_id === user.id;
+  const canPay = user.type === "Driver" && invoice.is_submitted;
+  const canPromptDriver = user.type === "Provider" && invoice.request.provider_id === user.id && !invoice.is_submitted;
+
+  // Compute total dynamically
+  const total = useMemo(() => {
+    return items.reduce(
+      (sum, item) => sum + Number(item.cost || 0) * Number(item.quantity || 1),
+      0
+    );
+  }, [items]);
+
+  // Real-time payment updates
   useEffect(() => {
     if (!checkoutId || !cableContext?.cable) return;
 
     const channel = cableContext.cable.subscriptions.create(
       { channel: "MpesaChannel", checkoutRequestID: checkoutId },
       {
-        connected() {
-          console.log("Subscribed to Mpesa updates:", checkoutId);
-        },
         received(data) {
-          console.log("Received STK update:", data);
-
-          // Defensive checks
-          if (!data || !data.status) {
-            setError("Invalid payment update received.");
-            setLoadingPayment(false);
-            return;
-          }
-
+          if (!data || !data.status) return setError("Invalid payment update received.");
           setPaymentStatus(data.status);
           setLoadingPayment(false);
-
-          if (data.status === "failed") {
-            setError(data.message || "Payment failed. Please try again.");
-          } else if (data.status === "success") {
-            setLoadingPayment(false);
-            setPaymentStatus(data.status)
-            // Optionally refresh invoice items or mark invoice paid
-            alert(`Payment successful! Response: ${data.message || "N/A"}`);
-          }
-        },
-        disconnected() {
-          console.warn("Disconnected from MpesaChannel");
         },
       }
     );
-
   }, [checkoutId, cableContext]);
 
-  // 💳 Handle "Pay Now" confirmation
+  // Driver initiates payment
   const handlePayConfirm = async ({ phone_number }) => {
     setLoadingPayment(true);
     setError(null);
-    setPaymentStatus("Processing…");
 
     try {
       const res = await fetchData({
         url: "/api/stkpush",
         method: "POST",
         submittedData: {
-          mpesa: {
-            invoice_id: invoice.id,
-            amount: invoice.total,
-            phoneNumber: phone_number,
-          },
+          mpesa: { invoice_id: invoice.id, amount: total, phoneNumber: phone_number },
         },
       });
 
-      if (res?.CheckoutRequestID) {
-        setCheckoutId(res.CheckoutRequestID);
-        setDialogOpen(false);
-      } else {
-        throw new Error("Invalid STK push response");
-      }
+      if (res?.CheckoutRequestID) setCheckoutId(res.CheckoutRequestID);
+      else throw new Error("Invalid STK push response");
     } catch (err) {
       console.error(err);
       setError("Could not initiate payment.");
       setLoadingPayment(false);
-      setPaymentStatus(null);
     }
   };
 
-  const handleItemAdded = (newItem) => {
-    setItems((prev) => [...prev, newItem]);
+  // Provider prompts driver to pay
+  const handlePromptDriver = async () => {
+    setLoadingPayment(true);
+    setError(null);
+
+    try {
+      const res = await fetchData({
+        url: "/api/invoices/prompt_payment",
+        method: "POST",
+        submittedData: { invoice_id: invoice.id },
+      });
+
+      if (res?.success) {
+        setPaymentStatus("Driver Notified");
+      } else {
+        throw new Error("Failed to notify driver");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Could not prompt driver.");
+    } finally {
+      setLoadingPayment(false);
+    }
+  };
+
+  const handleItemsChange = (updatedItem, type) => {
+    if (type === "add") setItems((prev) => [...prev, updatedItem]);
+    else if (type === "edit")
+      setItems((prev) => prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
+    else if (type === "delete") setItems((prev) => prev.filter((i) => i.id !== updatedItem.id));
   };
 
   return (
-    <Grid container direction="column" spacing={3} sx={{ p: 3 }}>
-      <Grid>
-        <Typography variant="h5" gutterBottom>
-          Invoice #{invoice.id}
-        </Typography>
-        <Typography>
-          Request #{invoice.request_id} — Status: {invoice.status} — Total:{" "}
-          <strong>KES {invoice.total}</strong>
-        </Typography>
+    <Grid container spacing={3} sx={{ p: { xs: 2, md: 4 } }}>
+      {/* Header */}
+      <Grid item xs={12}>
+        <Paper sx={{ p: 2 }}>
+          <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+            <Grid item xs={12} md={8}>
+              <Typography variant="h5" gutterBottom>
+                Invoice #{invoice.id}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                Request #{invoice.request_id} — Status: {invoice.status}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography
+                variant="h6"
+                color="primary"
+                sx={{ textAlign: { xs: "left", md: "right" }, fontWeight: "bold" }}
+              >
+                Total: KES {total}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
       </Grid>
 
-      {error && (
-        <Grid>
-          <Alert severity="error">{error}</Alert>
-        </Grid>
-      )}
+      {/* Alerts */}
+      {error && <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>}
       {paymentStatus && !error && (
-        <Grid>
+        <Grid item xs={12}>
           <Alert severity={paymentStatus === "success" ? "success" : "info"}>
             Payment status: {paymentStatus}
           </Alert>
         </Grid>
       )}
 
-      <Grid>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Quantity</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Cost</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {items.length > 0 ? (
-                items.map((item) => (
-                  <TableRow key={item.id || item.description}>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell>KES {item.cost}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={3}>No items added yet.</TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      {/* Invoice Items */}
+      <Grid item xs={12}>
+        <InvoiceItemsManager
+          invoiceId={invoice.id}
+          initialItems={items}
+          onItemsChange={handleItemsChange}
+        />
       </Grid>
 
-      {canAddItems && (
-        <Grid>
-          <InvoiceCreate invoiceId={invoice.id} onItemAdded={handleItemAdded} />
-        </Grid>
-      )}
-
-      <Grid container spacing={2}>
+      {/* Buttons */}
+      <Grid item xs={12} md={4}>
         {canPay && (
-          <Grid container width={"100%"}>
-            <Button
+          <Button
             fullWidth
-              variant="contained"
-              onClick={() => setDialogOpen(true)}
-              disabled={loadingPayment}
-            >
-              {loadingPayment ? <CircularProgress size={20} /> : "Pay Now"}
-            </Button>
-          </Grid>
+            variant="contained"
+            color="success"
+            onClick={() => setDialogOpen(true)}
+            disabled={loadingPayment}
+          >
+            {loadingPayment ? <CircularProgress size={20} /> : "Pay Now"}
+          </Button>
         )}
-        {canUndo && (
-          <Grid container width={"100%"}>
-            <Button fullWidth variant="outlined" color="error">
-              Undo Submission
-            </Button>
-          </Grid>
+        {canPromptDriver && (
+          <Button
+            fullWidth
+            variant="outlined"
+            color="warning"
+            onClick={handlePromptDriver}
+            disabled={loadingPayment}
+            sx={{ mt: canPay ? 2 : 0 }}
+          >
+            {loadingPayment ? <CircularProgress size={20} /> : "Prompt Driver to Pay"}
+          </Button>
         )}
       </Grid>
 
+      {/* Payment Dialog */}
       <PaymentConfirmDialog
         open={dialogOpen}
-        amount={invoice.total}
+        amount={total}
         phone={user.phone}
         loading={loadingPayment}
         onClose={() => setDialogOpen(false)}

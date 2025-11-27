@@ -6,7 +6,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./index.css";
-import App, { loader as apploader } from "./App";
+import App from "./App";
 import Chat, {
   loader as chatLoader,
   action as chatAction,
@@ -61,7 +61,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    loader: apploader,
     HydrateFallback: () => (
       <LoadingPage>
         {" "}
