@@ -130,7 +130,6 @@ i {
   align-items: center;
   color: #FACC15;
   padding: 1rem;
-  background: linear-gradient(85deg, #271111 15%, #b9a996 80%);
   border: 1px solid #fcce99;
   border-radius: 0.5rem;
 }
@@ -158,7 +157,6 @@ i {
   align-items: center;
   color: #FACC15;
   padding: 1rem;
-  background: linear-gradient(85deg, #111827 15%, #96a5b9 80%);
   border: 1px solid #fcce99;
   border-radius: 0.5rem;
 }

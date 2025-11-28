@@ -1,5 +1,6 @@
+// Full updated InvoiceShow.jsx with driver-phone fallback + redirect to chat
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
   Grid,
   Button,
@@ -21,6 +22,7 @@ export async function loader({ params }) {
 
 export default function InvoiceShow() {
   const { user, invoice } = useLoaderData();
+  const navigate = useNavigate();
   const cableContext = useContext(CableContext);
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,25 +34,24 @@ export default function InvoiceShow() {
 
   const canAddItems = user.type === "Provider" && invoice.request.provider_id === user.id;
   const canPay = user.type === "Driver" && invoice.is_submitted;
-  const canPromptDriver = user.type === "Provider" && invoice.request.provider_id === user.id && !invoice.is_submitted;
+  const canPromptDriver = user.type === "Provider" && invoice.request.provider_id === user.id;
 
-  // Compute total dynamically
   const total = useMemo(() => {
-    return items.reduce(
-      (sum, item) => sum + Number(item.cost || 0) * Number(item.quantity || 1),
-      0
-    );
+    return items.reduce((sum, i) => sum + Number(i.cost || 0) * Number(i.quantity || 1), 0);
   }, [items]);
 
-  // Real-time payment updates
   useEffect(() => {
     if (!checkoutId || !cableContext?.cable) return;
 
-    const channel = cableContext.cable.subscriptions.create(
+    cableContext.cable.subscriptions.create(
       { channel: "MpesaChannel", checkoutRequestID: checkoutId },
       {
         received(data) {
-          if (!data || !data.status) return setError("Invalid payment update received.");
+          if (!data?.status) {
+            setError("Invalid payment update received.");
+            setLoadingPayment(false);
+            return;
+          }
           setPaymentStatus(data.status);
           setLoadingPayment(false);
         },
@@ -58,71 +59,65 @@ export default function InvoiceShow() {
     );
   }, [checkoutId, cableContext]);
 
-  // Driver initiates payment
-  const handlePayConfirm = async ({ phone_number }) => {
+  const triggerSTKPush = async (phoneNumber) => {
     setLoadingPayment(true);
     setError(null);
+    setPaymentStatus("Processing…");
 
     try {
       const res = await fetchData({
         url: "/api/stkpush",
         method: "POST",
         submittedData: {
-          mpesa: { invoice_id: invoice.id, amount: total, phoneNumber: phone_number },
+          mpesa: {
+            invoice_id: invoice.id,
+            amount: total,
+            phoneNumber,
+          },
         },
       });
 
-      if (res?.CheckoutRequestID) setCheckoutId(res.CheckoutRequestID);
-      else throw new Error("Invalid STK push response");
+      if (res?.CheckoutRequestID) {
+        setCheckoutId(res.CheckoutRequestID);
+        setDialogOpen(false);
+      } else {
+        throw new Error("Invalid STK push response");
+      }
     } catch (err) {
       console.error(err);
       setError("Could not initiate payment.");
       setLoadingPayment(false);
+      setPaymentStatus(null);
     }
   };
 
-  // Provider prompts driver to pay
-  const handlePromptDriver = async () => {
-    setLoadingPayment(true);
-    setError(null);
+  const handlePayConfirm = ({ phone_number }) => {
+    triggerSTKPush(phone_number);
+  };
 
-    try {
-      const res = await fetchData({
-        url: "/api/invoices/prompt_payment",
-        method: "POST",
-        submittedData: { invoice_id: invoice.id },
-      });
+  const handlePromptDriverPayment = () => {
+    const driverPhone = invoice?.request?.driver?.phone;
+    if (!driverPhone) return;
+    triggerSTKPush(driverPhone);
+  };
 
-      if (res?.success) {
-        setPaymentStatus("Driver Notified");
-      } else {
-        throw new Error("Failed to notify driver");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Could not prompt driver.");
-    } finally {
-      setLoadingPayment(false);
-    }
+  const handleMissingDriverPhone = () => {
+    navigate(`/chats/${invoice.request_id}`);
   };
 
   const handleItemsChange = (updatedItem, type) => {
-    if (type === "add") setItems((prev) => [...prev, updatedItem]);
-    else if (type === "edit")
-      setItems((prev) => prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
-    else if (type === "delete") setItems((prev) => prev.filter((i) => i.id !== updatedItem.id));
+    if (type === "add") setItems((p) => [...p, updatedItem]);
+    if (type === "edit") setItems((p) => p.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
+    if (type === "delete") setItems((p) => p.filter((i) => i.id !== updatedItem.id));
   };
 
   return (
     <Grid container spacing={3} sx={{ p: { xs: 2, md: 4 } }}>
-      {/* Header */}
       <Grid item xs={12}>
         <Paper sx={{ p: 2 }}>
-          <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+          <Grid container spacing={2} justifyContent="space-between" alignItems="center">
             <Grid item xs={12} md={8}>
-              <Typography variant="h5" gutterBottom>
-                Invoice #{invoice.id}
-              </Typography>
+              <Typography variant="h5">Invoice #{invoice.id}</Typography>
               <Typography variant="subtitle1" color="text.secondary">
                 Request #{invoice.request_id} — Status: {invoice.status}
               </Typography>
@@ -140,8 +135,12 @@ export default function InvoiceShow() {
         </Paper>
       </Grid>
 
-      {/* Alerts */}
-      {error && <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>}
+      {error && (
+        <Grid item xs={12}>
+          <Alert severity="error">{error}</Alert>
+        </Grid>
+      )}
+
       {paymentStatus && !error && (
         <Grid item xs={12}>
           <Alert severity={paymentStatus === "success" ? "success" : "info"}>
@@ -150,7 +149,6 @@ export default function InvoiceShow() {
         </Grid>
       )}
 
-      {/* Invoice Items */}
       <Grid item xs={12}>
         <InvoiceItemsManager
           invoiceId={invoice.id}
@@ -159,7 +157,6 @@ export default function InvoiceShow() {
         />
       </Grid>
 
-      {/* Buttons */}
       <Grid item xs={12} md={4}>
         {canPay && (
           <Button
@@ -172,21 +169,35 @@ export default function InvoiceShow() {
             {loadingPayment ? <CircularProgress size={20} /> : "Pay Now"}
           </Button>
         )}
+
         {canPromptDriver && (
-          <Button
-            fullWidth
-            variant="outlined"
-            color="warning"
-            onClick={handlePromptDriver}
-            disabled={loadingPayment}
-            sx={{ mt: canPay ? 2 : 0 }}
-          >
-            {loadingPayment ? <CircularProgress size={20} /> : "Prompt Driver to Pay"}
-          </Button>
+          <>
+            {invoice?.request?.driver?.phone ? (
+              <Button
+                fullWidth
+                variant="outlined"
+                color="warning"
+                onClick={handlePromptDriverPayment}
+                disabled={loadingPayment}
+                sx={{ mt: 2 }}
+              >
+                {loadingPayment ? <CircularProgress size={20} /> : "Prompt Driver to Pay"}
+              </Button>
+            ) : (
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleMissingDriverPhone}
+                sx={{ mt: 2 }}
+              >
+                Ask Driver for Phone Number
+              </Button>
+            )}
+          </>
         )}
       </Grid>
 
-      {/* Payment Dialog */}
       <PaymentConfirmDialog
         open={dialogOpen}
         amount={total}
